@@ -2,6 +2,31 @@ import type { Post, Notification } from "@/types";
 
 export const FEED_DATA: Post[] = [
   {
+    id: 14,
+    user: "Katsuya", initial: "K",
+    item: "お猪口",
+    relation: "友達", scene: "手土産", price: "〜3,000円",
+    about: "大学の同期。二十歳になったばかり。",
+    reason: "陶器市で素敵なお猪口を発見。お互いに二十歳になってお酒が飲めるようになったので、一緒に飲みたいという気持ちを込めて。",
+    reaction: "素直に喜んでくれた。仲良いグループみんなにあげたので、一体感みたいなのがより強くなった気がした。",
+    likes: 0, date: "5月",
+    persona: ["お酒好き", "同期", "グループ"],
+    vibes: ["一緒に楽しめるものがよかった", "一体感が生まれそう", "この出会いを形にしたかった"],
+  },
+  {
+    id: 15,
+    user: "WAEI", initial: "W",
+    item: "メイソンピアソン ヘアブラシ",
+    relation: "恋人", scene: "記念日", price: "それ以上",
+    about: "100均のものでも壊れるまで長く使う人",
+    reason: "ほかの有名プロダクトはあったけど、「長く使う人」にずっとついて行ってくれるだろうプロダクトはこのブランドだけだった。髪を梳かすときは相手の後頭部で顔は見えないけど、自分があげたブラシが見えるならとても良い時間になるなとも思ったから。",
+    reaction: "突然突撃してケーキと一緒にあげて喜んでくれた！",
+    likes: 0, date: "12月",
+    url: "https://www.masonpearson.jp/",
+    persona: ["ものを大切にする", "長く使う", "丁寧な暮らし"],
+    vibes: ["ずっと使い続けてほしい", "毎日の時間に自分がいてほしい", "ちゃんと見てたことが伝わる"],
+  },
+  {
     id: 9,
     user: "shizuru", initial: "S",
     item: "ブルーボトルコーヒー インスタントコーヒーセット（ブライト・エスプレッソ）",
@@ -12,6 +37,7 @@ export const FEED_DATA: Post[] = [
     likes: 0, date: "4月",
     url: "https://store.bluebottlecoffee.jp/products/s346",
     persona: ["コーヒー好き", "カフェ好き", "出張多い", "ハードワーカー"],
+    vibes: ["旅先でふと思い出してほしい", "さりげなく気遣いが伝わる", "その人の日常に自然と馴染む"],
   },
   {
     id: 10,
@@ -24,6 +50,7 @@ export const FEED_DATA: Post[] = [
     likes: 0, date: "3月",
     url: "https://mall.line.me/sb/maisonmargiela/7723390",
     persona: ["おしゃれ好き", "センスいい", "香り好き", "ハードワーカー", "忙しそう"],
+    vibes: ["辛い時にそっとそばにいてあげられる", "ちゃんと聞いてたよが伝わる", "気分の切り替えに使ってほしい"],
   },
   {
     id: 11,
@@ -36,6 +63,7 @@ export const FEED_DATA: Post[] = [
     likes: 0, date: "4月",
     url: "https://www.castagna.co.jp/pasticceria/cannelegiftset/",
     persona: ["甘いもの好き", "食いしん坊", "グルメ好き"],
+    vibes: ["その子自身のためのものにしたかった", "嬉しさをお返ししたかった", "贈った後の顔が浮かんだ"],
   },
   {
     id: 12,
@@ -48,6 +76,7 @@ export const FEED_DATA: Post[] = [
     likes: 0, date: "4月",
     url: "https://teapond.jp/collections/gift/products/tts0003",
     persona: ["紅茶好き", "カフェ好き", "インドア派", "おうち時間好き"],
+    vibes: ["新居でふと思い出してほしい", "この場所の記憶を持って行ってほしい", "落ち着いた時間に使ってほしい"],
   },
   {
     id: 13,
@@ -60,6 +89,7 @@ export const FEED_DATA: Post[] = [
     likes: 0, date: "12月",
     url: "https://csonline.cifaka.jp/?pid=64257741",
     persona: ["コーヒー好き", "甘いもの好き", "グルメ好き", "ハードワーカー", "花が好き"],
+    vibes: ["プロだからこそ逆張りしたかった", "ふたりで楽しんでほしかった", "ありがとうをそっと添えたい"],
   },
 ];
 

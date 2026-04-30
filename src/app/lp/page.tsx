@@ -64,9 +64,7 @@ export default function LpPage() {
             LP{" "}
             <Link href="/lp/v1" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>v1</Link>
             {"　"}
-            <Link href="/lp/v2" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>v2</Link>
-            {"　"}
-            <strong style={{ color: "#E8502A" }}>v3（最新）</strong>
+            <strong style={{ color: "#E8502A" }}>v2（最新）</strong>
           </div>
         </div>
 

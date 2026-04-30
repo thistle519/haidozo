@@ -49,10 +49,9 @@ export default function LpV1Page() {
         {/* Version bar */}
         <div style={{ background: "#2B3467", padding: "8px 0", textAlign: "center" }}>
           <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}>
-            LP v1（初期版）
-            <Link href="/lp/v2" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>v2</Link>
+            LP <strong style={{ color: "rgba(255,255,255,0.9)" }}>v1</strong>
             　｜
-            <Link href="/lp" style={{ color: "#E8502A", fontWeight: 700, textDecoration: "underline" }}>最新版を見る</Link>
+            <Link href="/lp" style={{ color: "#E8502A", fontWeight: 700, textDecoration: "underline" }}>最新版（v2）を見る</Link>
           </div>
         </div>
 

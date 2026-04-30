@@ -14,6 +14,7 @@ export interface Post {
   reason: string;      // なぜこれを選んだか（必須）
   reaction?: string;   // 贈った時のこと（任意）
   persona?: string[];  // どんな人タグ（検索用）
+  vibes?: string[];    // このエピソードの何が素敵か（共感タグ）
   likes: number;
   date: string;
   url?: string;
