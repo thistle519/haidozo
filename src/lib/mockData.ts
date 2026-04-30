@@ -59,7 +59,11 @@ export const FEED_DATA: Post[] = [
 ];
 
 export const NOTIFICATIONS: Notification[] = [
-  { id: 1, type: "like", user: "haru_present", initial: "H", text: "あなたの投稿にいいねしました", sub: "ブルーボトルコーヒー インスタントコーヒーセット", time: "3分前", unread: true },
-  { id: 2, type: "like", user: "nana_memo", initial: "N", text: "あなたの投稿にいいねしました", sub: "メゾン マルジェラ「レプリカ」フレグランス", time: "1時間前", unread: true },
-  { id: 3, type: "follow", user: "aoi_gift", initial: "A", text: "フォローしました", time: "昨日", unread: false },
+  { id: 1, type: "like", user: "yuki_chan", initial: "Y", text: "いいねしました", sub: "メゾン マルジェラ「レプリカ」フレグランス ディスカバリーコレクション", time: "さっき", unread: true },
+  { id: 2, type: "like", user: "haru_okuri", initial: "H", text: "いいねしました", sub: "TAKIBI BAKERY クリスマスシュトーレン ＋ 旅する紅茶 ＋ 小花束", time: "12分前", unread: true },
+  { id: 3, type: "like", user: "momo_gift", initial: "M", text: "いいねしました", sub: "「立町カヌレ」カヌレギフトセット（15個入り）", time: "1時間前", unread: true },
+  { id: 4, type: "follow", user: "nana_present", initial: "N", text: "フォローしました", sub: "", time: "3時間前", unread: false },
+  { id: 5, type: "like", user: "sora_memo", initial: "S", text: "いいねしました", sub: "ブルーボトルコーヒー インスタントコーヒーセット（ブライト・エスプレッソ）", time: "昨日", unread: false },
+  { id: 6, type: "like", user: "rio_gift", initial: "R", text: "いいねしました", sub: "TEAPOND ポーチ入り ティータイムセット", time: "昨日", unread: false },
+  { id: 7, type: "follow", user: "kana_log", initial: "K", text: "フォローしました", sub: "", time: "2日前", unread: false },
 ];

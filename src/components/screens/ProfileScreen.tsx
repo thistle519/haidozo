@@ -13,7 +13,7 @@ interface ProfileScreenProps {
 
 export default function ProfileScreen({ likes, onTapPost }: ProfileScreenProps) {
   const [tab, setTab] = useState<"posts" | "likes">("posts");
-  const myPosts = FEED_DATA.slice(0, 3);
+  const myPosts = FEED_DATA.filter((p) => p.user === "shizuru");
   const likedPosts = FEED_DATA.filter((p) => likes[p.id]);
   const items = tab === "posts" ? myPosts : likedPosts;
 
@@ -26,17 +26,17 @@ export default function ProfileScreen({ likes, onTapPost }: ProfileScreenProps) 
           display: "flex", alignItems: "center", justifyContent: "center",
           fontSize: 30, fontWeight: 800, color: "var(--color-accent)",
         }}>
-          M
+          S
         </div>
-        <div style={{ fontSize: 17, fontWeight: 700, color: "var(--color-fg)", marginBottom: 3 }}>miku_gifts</div>
-        <div style={{ fontSize: 13, color: "var(--color-fg-muted)", marginBottom: 20 }}>贈り物が好きな人 🎁</div>
+        <div style={{ fontSize: 17, fontWeight: 700, color: "var(--color-fg)", marginBottom: 3 }}>shizuru</div>
+        <div style={{ fontSize: 13, color: "var(--color-fg-muted)", marginBottom: 20 }}>贈り物の記録</div>
 
         <div style={{
           display: "flex", justifyContent: "center",
           background: "var(--color-surface)", borderRadius: 20, padding: "16px 0",
           border: "1px solid var(--color-border)", marginBottom: 4,
         }}>
-          {([{ n: 12, label: "投稿" }, { n: 84, label: "いいね" }, { n: 27, label: "フォロワー" }] as const).map((s, i) => (
+          {([{ n: myPosts.length, label: "投稿" }, { n: 7, label: "いいね" }, { n: 12, label: "フォロワー" }] as const).map((s, i) => (
             <div key={s.label} style={{
               flex: 1, textAlign: "center",
               borderRight: i < 2 ? "1px solid var(--color-border)" : "none",
