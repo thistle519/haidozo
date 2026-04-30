@@ -10,9 +10,10 @@ export interface Post {
   relation: Relation;
   scene: Scene;
   price: PriceRange;
-  about: string;      // 贈った相手のこと（この人はこういう人）
-  reason: string;     // なぜこれを選んだか（必須・140字）
-  reaction?: string;  // 贈った時のこと（任意）
+  about: string;       // 贈った相手のこと（この人はこういう人）
+  reason: string;      // なぜこれを選んだか（必須）
+  reaction?: string;   // 贈った時のこと（任意）
+  persona?: string[];  // どんな人タグ（検索用）
   likes: number;
   date: string;
   url?: string;

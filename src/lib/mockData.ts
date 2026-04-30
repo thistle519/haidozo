@@ -11,6 +11,7 @@ export const FEED_DATA: Post[] = [
     reaction: "たまたまお誕生日当日にお会いするタイミングがあって、その場でお渡しできた",
     likes: 0, date: "4月",
     url: "https://store.bluebottlecoffee.jp/products/s346",
+    persona: ["コーヒー好き", "カフェ好き", "出張多い", "ハードワーカー"],
   },
   {
     id: 10,
@@ -22,6 +23,7 @@ export const FEED_DATA: Post[] = [
     reaction: undefined,
     likes: 0, date: "3月",
     url: "https://mall.line.me/sb/maisonmargiela/7723390",
+    persona: ["おしゃれ好き", "センスいい", "香り好き", "ハードワーカー", "忙しそう"],
   },
   {
     id: 11,
@@ -33,6 +35,7 @@ export const FEED_DATA: Post[] = [
     reaction: undefined,
     likes: 0, date: "4月",
     url: "https://www.castagna.co.jp/pasticceria/cannelegiftset/",
+    persona: ["甘いもの好き", "食いしん坊", "グルメ好き"],
   },
   {
     id: 12,
@@ -44,6 +47,7 @@ export const FEED_DATA: Post[] = [
     reaction: "新居で紅茶を飲む時にふと思い出してくれたらいいな",
     likes: 0, date: "4月",
     url: "https://teapond.jp/collections/gift/products/tts0003",
+    persona: ["紅茶好き", "カフェ好き", "インドア派", "おうち時間好き"],
   },
   {
     id: 13,
@@ -55,6 +59,7 @@ export const FEED_DATA: Post[] = [
     reaction: undefined,
     likes: 0, date: "12月",
     url: "https://csonline.cifaka.jp/?pid=64257741",
+    persona: ["コーヒー好き", "甘いもの好き", "グルメ好き", "ハードワーカー", "花が好き"],
   },
 ];
 
