@@ -27,7 +27,7 @@ export default function LikesScreen({ likes, onTapPost }: LikesScreenProps) {
         </div>
         <div style={{ fontSize: 16, fontWeight: 700, color: "var(--color-fg)" }}>まだいいねがありません</div>
         <div style={{ fontSize: 13, color: "var(--color-fg-muted)", lineHeight: 1.8 }}>
-          気になったギフトにいいねすると<br />ここにまとめて表示されます
+          気になったプレゼントにいいねすると<br />ここにまとめて表示されます
         </div>
       </div>
     );

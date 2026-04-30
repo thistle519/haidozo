@@ -23,12 +23,12 @@ interface Insight { credo: string; tip: string[] }
 
 const INSIGHT: Record<string, Insight> = {
   "友達_誕生日":        { credo: "相手の「好き」に寄り添うと、一番喜ばれる", tip: ["日常使いできるもの", "その人の趣味に関係するもの"] },
-  "友達_なんでもない日": { credo: "「なんでもない日」に贈るギフトは、それだけで特別になる", tip: ["高価すぎないけど、ちゃんと選んだとわかるもの", "一緒に体験できるもの"] },
+  "友達_なんでもない日": { credo: "「なんでもない日」に贈るプレゼントは、それだけで特別になる", tip: ["高価すぎないけど、ちゃんと選んだとわかるもの", "一緒に体験できるもの"] },
   "友達_送別":          { credo: "新生活を応援する気持ちが伝わるものがぴったり", tip: ["新居で使えるもの", "引越し後も思い出になるもの"] },
   "友達_手土産":        { credo: "手土産は「その場が楽しくなる」ものが正解", tip: ["一緒に食べられるもの", "見た目が可愛いもの"] },
-  "友達_お礼":          { credo: "「ありがとう」が伝わる、素直なギフトが響く", tip: ["相手が好きなジャンルのもの", "普段自分では買わないちょっといいもの"] },
+  "友達_お礼":          { credo: "「ありがとう」が伝わる、素直なプレゼントが響く", tip: ["相手が好きなジャンルのもの", "普段自分では買わないちょっといいもの"] },
   "先生・恩師_お礼":    { credo: "長年のお礼は「あなただから選んだ」という気持ちが一番伝わる", tip: ["相手の趣味や仕事にまつわるもの", "長く使えるもの"] },
-  "先生・恩師_誕生日":  { credo: "敬意とあたたかさを両立したギフトが喜ばれる", tip: ["品があって実用的なもの", "季節感のあるもの"] },
+  "先生・恩師_誕生日":  { credo: "敬意とあたたかさを両立したプレゼントが喜ばれる", tip: ["品があって実用的なもの", "季節感のあるもの"] },
   "先生・恩師_送別":    { credo: "「お世話になりました」の気持ちを形にするなら、記憶に残るものを", tip: ["贈り手の気持ちが伝わるもの", "一緒に消費できるもの"] },
   "恋人_誕生日":        { credo: "サプライズより「ちゃんと見てる」が伝わるものが刺さる", tip: ["相手が好きなブランド・ジャンル", "一緒に使えるもの"] },
   "家族_誕生日":        { credo: "家族だからこそ、改めて「ありがとう」が伝わるものを", tip: ["日常使いで喜ばれるもの", "少し特別感のあるもの"] },
@@ -37,7 +37,7 @@ const INSIGHT: Record<string, Insight> = {
 function getInsight(relation: Relation | null, scene: Scene | null): Insight | null {
   if (!relation || !scene) return null;
   const key = `${relation}_${scene}`;
-  return INSIGHT[key] ?? { credo: "その人のことを思って選んだ、というのが一番のギフト", tip: ["相手の趣味に関係するもの", "日常使いできるもの"] };
+  return INSIGHT[key] ?? { credo: "その人のことを思って選んだ、というのが一番のプレゼント", tip: ["相手の趣味に関係するもの", "日常使いできるもの"] };
 }
 
 // ────────────────────────────────────
@@ -46,14 +46,14 @@ function getInsight(relation: Relation | null, scene: Scene | null): Insight | n
 interface Store { name: string; desc: string; url: string; tags: string[] }
 
 const STORES: Store[] = [
-  { name: "Blue Bottle Coffee", desc: "コーヒーギフトセット", url: "https://store.bluebottlecoffee.jp", tags: ["コーヒー", "カフェ", "出張", "ハードワーク"] },
-  { name: "TEAPOND", desc: "紅茶・ティーギフト", url: "https://teapond.jp", tags: ["紅茶", "ティー", "インドア", "おうち"] },
+  { name: "Blue Bottle Coffee", desc: "コーヒープレゼントセット", url: "https://store.bluebottlecoffee.jp", tags: ["コーヒー", "カフェ", "出張", "ハードワーク"] },
+  { name: "TEAPOND", desc: "紅茶・ティープレゼント", url: "https://teapond.jp", tags: ["紅茶", "ティー", "インドア", "おうち"] },
   { name: "Maison Margiela", desc: "フレグランス・香水", url: "https://www.maisonmargiela.com/ja-jp", tags: ["おしゃれ", "香り", "フレグランス", "ブランド"] },
-  { name: "立町カヌレ（Castagna）", desc: "カヌレギフトセット", url: "https://www.castagna.co.jp/pasticceria/cannelegiftset/", tags: ["スイーツ", "カヌレ", "甘い", "グルメ"] },
+  { name: "立町カヌレ（Castagna）", desc: "カヌレプレゼントセット", url: "https://www.castagna.co.jp/pasticceria/cannelegiftset/", tags: ["スイーツ", "カヌレ", "甘い", "グルメ"] },
   { name: "TAKIBI BAKERY", desc: "クラフトベーカリー・焼き菓子", url: "https://csonline.cifaka.jp", tags: ["シュトーレン", "ベーカリー", "グルメ"] },
-  { name: "Anny", desc: "ギフト専門ECサイト", url: "https://anny.gift", tags: [] },
-  { name: "TANP", desc: "ギフト・贈り物選びサービス", url: "https://tanp.jp", tags: [] },
-  { name: "お花の定期便 bloomee", desc: "お花ギフト", url: "https://bloomeelife.com", tags: ["花", "フラワー", "お花"] },
+  { name: "Anny", desc: "プレゼント専門ECサイト", url: "https://anny.gift", tags: [] },
+  { name: "TANP", desc: "プレゼント・贈り物選びサービス", url: "https://tanp.jp", tags: [] },
+  { name: "お花の定期便 bloomee", desc: "お花プレゼント", url: "https://bloomeelife.com", tags: ["花", "フラワー", "お花"] },
 ];
 
 function getStores(posts: Post[], query: string): Store[] {
@@ -294,14 +294,14 @@ export default function SearchScreen({ likes, onTapPost }: SearchScreenProps) {
         ) : (
           <>
             <div style={{ fontSize: 12, color: "var(--color-fg-muted)", fontWeight: 600, marginBottom: 12, letterSpacing: "0.04em" }}>
-              おすすめのギフト
+              おすすめのプレゼント
             </div>
             <PrimaryCard post={primary!} likes={likes} onTapPost={onTapPost} />
 
             {secondaries.length > 0 && (
               <>
                 <div style={{ fontSize: 12, color: "var(--color-fg-muted)", fontWeight: 600, marginBottom: 10, letterSpacing: "0.04em" }}>
-                  他にも似たギフト
+                  他にも似たプレゼント
                 </div>
                 {secondaries.map((p) => (
                   <SecondaryCard key={p.id} post={p} likes={likes} onTapPost={onTapPost} />
@@ -354,7 +354,7 @@ export default function SearchScreen({ likes, onTapPost }: SearchScreenProps) {
       {/* タイトル */}
       <div style={{ marginBottom: 24 }}>
         <div style={{ fontSize: 22, fontWeight: 800, color: "var(--color-fg)", letterSpacing: "-0.5px", lineHeight: 1.3, marginBottom: 6 }}>
-          一緒にギフトを探そう
+          一緒にプレゼントを探そう
         </div>
         <div style={{ fontSize: 13, color: "var(--color-fg-muted)", lineHeight: 1.7 }}>
           贈る相手のことを教えてもらえると、より近い提案ができます

@@ -13,7 +13,7 @@ interface TopNavProps {
 
 const titles: Partial<Record<Screen, string>> = {
   compose: "贈り物を記録する",
-  detail: "ギフトの詳細",
+  detail: "プレゼントの詳細",
   notif: "通知",
 };
 

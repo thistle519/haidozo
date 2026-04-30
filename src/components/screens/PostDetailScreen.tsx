@@ -115,7 +115,7 @@ export default function PostDetailScreen({ post, liked, onLike }: PostDetailScre
 
         {related.length > 0 && (
           <div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "var(--color-fg-muted)", marginBottom: 12, letterSpacing: "0.04em" }}>似たギフト</div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "var(--color-fg-muted)", marginBottom: 12, letterSpacing: "0.04em" }}>似たプレゼント</div>
             {related.map((p) => (
               <div key={p.id} style={{
                 background: "var(--color-surface)", border: "1px solid var(--color-border)",
