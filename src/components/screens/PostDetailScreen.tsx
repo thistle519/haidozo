@@ -5,6 +5,7 @@ import Avatar from "@/components/ui/Avatar";
 import PostTags from "@/components/ui/PostTags";
 import Icon from "@/components/ui/Icon";
 import { FEED_DATA } from "@/lib/mockData";
+import { useOgpImage } from "@/lib/useOgpImage";
 
 interface PostDetailScreenProps {
   post: Post;
@@ -16,6 +17,7 @@ export default function PostDetailScreen({ post, liked, onLike }: PostDetailScre
   const related = FEED_DATA.filter(
     (p) => p.id !== post.id && (p.relation === post.relation || p.scene === post.scene)
   ).slice(0, 3);
+  const ogpImage = useOgpImage(post.url);
 
   return (
     <div style={{ paddingBottom: 100 }}>
@@ -23,8 +25,12 @@ export default function PostDetailScreen({ post, liked, onLike }: PostDetailScre
         height: 260,
         background: "var(--color-accent-light)",
         display: "flex", alignItems: "center", justifyContent: "center",
+        overflow: "hidden",
       }}>
-        <Icon name="gift" size={56} color="var(--color-accent)" strokeWidth={1.2} />
+        {ogpImage
+          ? <img src={ogpImage} alt={post.item} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          : <Icon name="gift" size={56} color="var(--color-accent)" strokeWidth={1.2} />
+        }
       </div>
 
       <div style={{ padding: "20px 20px 0" }}>

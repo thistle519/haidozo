@@ -4,6 +4,7 @@ import type { Post } from "@/types";
 import Avatar from "@/components/ui/Avatar";
 import PostTags from "@/components/ui/PostTags";
 import Icon from "@/components/ui/Icon";
+import { useOgpImage } from "@/lib/useOgpImage";
 
 interface FeedScreenProps {
   posts: Post[];
@@ -13,6 +14,7 @@ interface FeedScreenProps {
 }
 
 function FeedCard({ post, liked, onLike, onTap }: { post: Post; liked: boolean; onLike: (id: number) => void; onTap: (post: Post) => void }) {
+  const ogpImage = useOgpImage(post.url);
   return (
     <div
       onClick={() => onTap(post)}
@@ -30,8 +32,12 @@ function FeedCard({ post, liked, onLike, onTap }: { post: Post; liked: boolean; 
         height: 160,
         background: "var(--color-surface-alt)",
         display: "flex", alignItems: "center", justifyContent: "center",
+        overflow: "hidden",
       }}>
-        <Icon name="gift" size={42} color="var(--color-fg-subtle)" strokeWidth={1.4} />
+        {ogpImage
+          ? <img src={ogpImage} alt={post.item} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          : <Icon name="gift" size={42} color="var(--color-fg-subtle)" strokeWidth={1.4} />
+        }
       </div>
       <div style={{ padding: "14px 16px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>

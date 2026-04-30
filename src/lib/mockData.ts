@@ -9,6 +9,7 @@ export const FEED_DATA: Post[] = [
   { id: 6, user: "tomo_rec", initial: "T", item: "スターバックス カード（チャージ済み）", relation: "上司", scene: "お礼", price: "〜3,000円", note: "いつもお世話になっています。難しい案件を一緒に乗り越えた感謝を込めて", likes: 7, date: "4月" },
   { id: 7, user: "aoi_gift", initial: "A", item: "ミナ ペルホネン ハンカチーフ", relation: "家族", scene: "誕生日", price: "〜5,000円", note: "姉の誕生日。シンプルで上品なものが好きな人なので迷わず選べた", likes: 15, date: "1月", url: "https://example.com", episode: "毎年何を贈るか悩むけど、今年は即決できた。大事に使ってほしい。" },
   { id: 8, user: "kei_note", initial: "K", item: "ネスプレッソ ヴァーチュオ スターターセット", relation: "恋人", scene: "なんでもない日", price: "それ以上", note: "家でゆっくりカフェ気分になれるように。休日の朝が変わった", likes: 52, date: "12月", episode: "コーヒー好きな彼女へのサプライズ。顔が輝いてたのが最高だった。" },
+  { id: 9, user: "shizuru", initial: "S", item: "ブルーボトルコーヒー インスタントコーヒーセット（ブライト・エスプレッソ）", relation: "先生・恩師", scene: "誕生日", price: "〜3,000円", note: "出張先の部屋にコーヒーメーカーがあって、朝コーヒー飲めるのが嬉しいってSNSに書いてたのを覚えてた。それが頭にあったので即決できた", likes: 0, date: "4月", url: "https://store.bluebottlecoffee.jp/products/s346", episode: "たまたまお誕生日当日にお会いするタイミングがあって、急いで選んだ。出張先の部屋にコーヒーメーカーがあって朝コーヒー飲めるのが嬉しいってSNSに書いてたのを覚えてて、それで旅先に持っていけるインスタントにしようとすぐ決まった。かさばらないし、ブルーボトルなら間違いないと思って。" },
 ];
 
 export const NOTIFICATIONS: Notification[] = [

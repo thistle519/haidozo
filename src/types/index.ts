@@ -1,4 +1,4 @@
-export type Relation = "恋人" | "友達" | "家族" | "上司" | "同僚";
+export type Relation = "恋人" | "友達" | "家族" | "上司" | "同僚" | "先生・恩師";
 export type PriceRange = "〜3,000円" | "〜5,000円" | "〜10,000円" | "それ以上";
 export type Scene = "誕生日" | "記念日" | "お礼" | "送別" | "なんでもない日";
 

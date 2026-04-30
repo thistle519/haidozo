@@ -5,7 +5,7 @@ import type { Relation, PriceRange, Scene } from "@/types";
 import TagChip from "@/components/ui/TagChip";
 import Icon from "@/components/ui/Icon";
 
-const RELATIONS: Relation[] = ["恋人", "友達", "家族", "上司", "同僚"];
+const RELATIONS: Relation[] = ["恋人", "友達", "家族", "上司", "同僚", "先生・恩師"];
 const PRICES: PriceRange[] = ["〜3,000円", "〜5,000円", "〜10,000円", "それ以上"];
 const SCENES: Scene[] = ["誕生日", "記念日", "お礼", "送別", "なんでもない日"];
 
@@ -136,12 +136,12 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
         <div style={{ marginBottom: 28 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
             <StepBadge n={4} done={!!note} />
-            <div style={{ fontSize: 15, fontWeight: 500, color: "var(--color-fg)" }}>ひとことどうぞ</div>
+            <div style={{ fontSize: 15, fontWeight: 500, color: "var(--color-fg)" }}>なぜこれを選んだの？</div>
           </div>
           <textarea
             value={note}
             onChange={(e) => { if (e.target.value.length <= 140) setNote(e.target.value); }}
-            placeholder="贈ったときのエピソードや気持ちを書いてみてください"
+            placeholder="この人のここが好きだから、とか。こういうのが好きって知ってたから、とか。"
             rows={4}
             style={{ ...inputStyle, resize: "none", lineHeight: 1.7 }}
             onFocus={(e) => (e.target.style.borderColor = "var(--color-accent)")}
