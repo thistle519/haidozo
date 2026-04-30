@@ -64,7 +64,7 @@ function FeedCard({ post, liked, onLike, onTap }: { post: Post; liked: boolean; 
           <PostTags post={post} small />
         </div>
         <div style={{ fontSize: 15, fontWeight: 500, color: "var(--color-fg)", marginBottom: 6, lineHeight: 1.4 }}>{post.item}</div>
-        <div style={{ fontSize: 13, color: "var(--color-fg-muted)", lineHeight: 1.7 }}>{post.note}</div>
+        <div style={{ fontSize: 13, color: "var(--color-fg-muted)", lineHeight: 1.7 }}>{post.reason ?? post.note}</div>
       </div>
     </div>
   );

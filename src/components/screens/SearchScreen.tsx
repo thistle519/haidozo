@@ -23,7 +23,7 @@ export default function SearchScreen({ likes, onTapPost }: SearchScreenProps) {
   const results = FEED_DATA.filter((p) =>
     (!selRelation || p.relation === selRelation) &&
     (!selPrice || p.price === selPrice) &&
-    (!query || p.item.includes(query) || p.note.includes(query))
+    (!query || p.item.includes(query) || p.reason?.includes(query) || p.about?.includes(query))
   );
 
   return (
@@ -99,7 +99,7 @@ export default function SearchScreen({ likes, onTapPost }: SearchScreenProps) {
                 fontSize: 12, color: "var(--color-fg-muted)", lineHeight: 1.6,
                 overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box",
                 WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
-              } as React.CSSProperties}>{p.note}</div>
+              } as React.CSSProperties}>{p.reason ?? p.note}</div>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 3, color: "var(--color-fg-subtle)", fontSize: 12, flexShrink: 0, paddingTop: 2 }}>
               <Icon name="heart" size={12} color="var(--color-fg-subtle)" />

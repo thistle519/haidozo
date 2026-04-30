@@ -66,21 +66,31 @@ export default function PostDetailScreen({ post, liked, onLike }: PostDetailScre
           {post.item}
         </div>
 
+        {post.about && (
+          <div style={{
+            background: "var(--color-surface-alt)", border: "1px solid var(--color-border)",
+            borderRadius: 16, padding: "14px 16px", marginBottom: 12,
+          }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: "var(--color-fg-muted)", letterSpacing: "0.05em", marginBottom: 8 }}>贈った相手のこと</div>
+            <div style={{ fontSize: 14, color: "var(--color-fg)", lineHeight: 1.8 }}>{post.about}</div>
+          </div>
+        )}
+
         <div style={{
           background: "var(--color-surface)", border: "1px solid var(--color-border)",
-          borderRadius: 16, padding: "14px 16px", marginBottom: 16,
+          borderRadius: 16, padding: "14px 16px", marginBottom: 12,
         }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: "var(--color-fg-muted)", letterSpacing: "0.05em", marginBottom: 8 }}>ひとこと</div>
-          <div style={{ fontSize: 14, color: "var(--color-fg)", lineHeight: 1.8 }}>{post.note}</div>
+          <div style={{ fontSize: 11, fontWeight: 600, color: "var(--color-fg-muted)", letterSpacing: "0.05em", marginBottom: 8 }}>なぜこれを選んだか</div>
+          <div style={{ fontSize: 14, color: "var(--color-fg)", lineHeight: 1.8 }}>{post.reason ?? post.note}</div>
         </div>
 
-        {post.episode && (
+        {post.reaction && (
           <div style={{
             background: "var(--color-sage-light)", border: "1px solid rgba(245,194,16,0.3)",
-            borderRadius: 16, padding: "14px 16px", marginBottom: 16,
+            borderRadius: 16, padding: "14px 16px", marginBottom: 12,
           }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: "#8B6F00", letterSpacing: "0.05em", marginBottom: 8 }}>エピソード</div>
-            <div style={{ fontSize: 14, color: "var(--color-fg)", lineHeight: 1.8 }}>{post.episode}</div>
+            <div style={{ fontSize: 11, fontWeight: 600, color: "#8B6F00", letterSpacing: "0.05em", marginBottom: 8 }}>贈った時のこと</div>
+            <div style={{ fontSize: 14, color: "var(--color-fg)", lineHeight: 1.8 }}>{post.reaction}</div>
           </div>
         )}
 

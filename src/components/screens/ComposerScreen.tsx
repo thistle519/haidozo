@@ -39,14 +39,15 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
   const [relation, setRelation] = useState<Relation | null>(null);
   const [price, setPrice] = useState<PriceRange | null>(null);
   const [itemName, setItemName] = useState("");
-  const [note, setNote] = useState("");
+  const [about, setAbout] = useState("");
+  const [reason, setReason] = useState("");
   const [expanded, setExpanded] = useState(false);
   const [scene, setScene] = useState<Scene | null>(null);
   const [url, setUrl] = useState("");
-  const [episode, setEpisode] = useState("");
+  const [reaction, setReaction] = useState("");
   const [posted, setPosted] = useState(false);
 
-  const canPost = !!(relation && price && itemName.trim() && note.trim());
+  const canPost = !!(relation && price && itemName.trim() && reason.trim());
 
   const handlePost = () => {
     if (!canPost) return;
@@ -135,12 +136,29 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
         {/* Step 4 */}
         <div style={{ marginBottom: 28 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-            <StepBadge n={4} done={!!note} />
+            <StepBadge n={4} done={!!about} />
+            <div style={{ fontSize: 15, fontWeight: 500, color: "var(--color-fg)" }}>贈った相手のこと</div>
+          </div>
+          <textarea
+            value={about}
+            onChange={(e) => setAbout(e.target.value)}
+            placeholder="どんな人？好きなもの、よく話してたこと、その人らしさ、など"
+            rows={3}
+            style={{ ...inputStyle, resize: "none", lineHeight: 1.7 }}
+            onFocus={(e) => (e.target.style.borderColor = "var(--color-accent)")}
+            onBlur={(e) => (e.target.style.borderColor = "var(--color-border)")}
+          />
+        </div>
+
+        {/* Step 5 */}
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+            <StepBadge n={5} done={!!reason} />
             <div style={{ fontSize: 15, fontWeight: 500, color: "var(--color-fg)" }}>なぜこれを選んだの？</div>
           </div>
           <textarea
-            value={note}
-            onChange={(e) => { if (e.target.value.length <= 140) setNote(e.target.value); }}
+            value={reason}
+            onChange={(e) => { if (e.target.value.length <= 200) setReason(e.target.value); }}
             placeholder="この人のここが好きだから、とか。こういうのが好きって知ってたから、とか。"
             rows={4}
             style={{ ...inputStyle, resize: "none", lineHeight: 1.7 }}
@@ -149,9 +167,9 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
           />
           <div style={{
             textAlign: "right", fontSize: 12, marginTop: 4,
-            color: note.length > 120 ? "var(--color-accent)" : "var(--color-fg-subtle)",
+            color: reason.length > 170 ? "var(--color-accent)" : "var(--color-fg-subtle)",
           }}>
-            {note.length} / 140
+            {reason.length} / 200
           </div>
         </div>
 
@@ -191,10 +209,10 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
               />
             </div>
             <div>
-              <div style={{ fontSize: 13, fontWeight: 500, color: "var(--color-fg)", marginBottom: 8 }}>エピソード詳細</div>
+              <div style={{ fontSize: 13, fontWeight: 500, color: "var(--color-fg)", marginBottom: 8 }}>贈った時のこと</div>
               <textarea
-                value={episode} onChange={(e) => setEpisode(e.target.value)}
-                placeholder="もう少し詳しいエピソードを..."
+                value={reaction} onChange={(e) => setReaction(e.target.value)}
+                placeholder="渡した時の反応、その場の雰囲気、など"
                 rows={3}
                 style={{ ...inputStyle, borderRadius: 12, padding: "10px 14px", background: "var(--color-bg)", resize: "none", lineHeight: 1.7 }}
               />
