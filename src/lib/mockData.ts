@@ -1,6 +1,9 @@
 import type { Post, Notification } from "@/types";
 
 export const FEED_DATA: Post[] = [
+  { id: 9, user: "shizuru", initial: "S", item: "ブルーボトルコーヒー インスタントコーヒーセット（ブライト・エスプレッソ）", relation: "先生・恩師", scene: "誕生日", price: "〜3,000円", note: "出張先の部屋にコーヒーメーカーがあって、朝コーヒー飲めるのが嬉しいってSNSに書いてたのを覚えてた。それが頭にあったので即決できた", likes: 0, date: "4月", url: "https://store.bluebottlecoffee.jp/products/s346", episode: "たまたまお誕生日当日にお会いするタイミングがあって、急いで選んだ。出張先の部屋にコーヒーメーカーがあって朝コーヒー飲めるのが嬉しいってSNSに書いてたのを覚えてて、それで旅先に持っていけるインスタントにしようとすぐ決まった。かさばらないし、ブルーボトルなら間違いないと思って。" },
+  { id: 10, user: "shizuru", initial: "S", item: "メゾン マルジェラ「レプリカ」フレグランス ディスカバリーコレクション", relation: "友達", scene: "誕生日", price: "〜5,000円", note: "仕事で辛くなった時に気持ちを切り替えるために香水を使うって、昔一緒に香水屋さんに寄った時に話してくれたのを覚えてた。いつもハードワークな子だから、そんな時に使ってねって気持ちで", likes: 0, date: "3月", url: "https://mall.line.me/sb/maisonmargiela/7723390", episode: "普段からずっとつけるわけじゃないけど、スイッチを切り替えるために香りを使うって言ってたのがずっと頭に残ってた。ディスカバリーセットなら色んな香りを試せるから、気分によって使い分けられると思って選んだ。" },
+  { id: 11, user: "shizuru", initial: "S", item: "「立町カヌレ」カヌレギフトセット（15個入り）", relation: "友達", scene: "なんでもない日", price: "〜5,000円", note: "カヌレが大好きって聞いてたから、お腹いっぱい食べてほしくててんこ盛りの詰め合わせにした。前にうちに来てくれた時、私の大好きなピエールエルメをたくさん買ってきてくれたのが嬉しかったので、同じことを私からも返したかった", likes: 0, date: "4月", url: "https://www.castagna.co.jp/pasticceria/cannelegiftset/", episode: "同棲してる子のおうちへの手土産。同棲相手もいるから基本シェアになるけど、その子自身のためのものにしたかった。カヌレ好きって知ってたし、てんこ盛りで渡したら絶対喜ぶと思って。ピエールエルメの時の嬉しさを返せた気がした。" },
   { id: 1, user: "miku_gifts", initial: "M", item: "ジョーマローン ピオニー & ブラッシュ コロン", relation: "友達", scene: "誕生日", price: "〜5,000円", note: "去年からずっと欲しいって言ってたやつ。ラッピングも可愛くてよかった", likes: 23, date: "4月", url: "https://example.com", episode: "大学の友達で、毎年誕生日にプレゼント交換してる。今年は絶対これだと思ってた。" },
   { id: 2, user: "haru_present", initial: "H", item: "ル・クルーゼ ミニ ピコ・オーブン", relation: "恋人", scene: "記念日", price: "〜10,000円", note: "一緒に料理したいねって話してたから。色はシグネチャー・ブルー", likes: 41, date: "3月", episode: "付き合って2年の記念日。二人で料理できるものがよかった。" },
   { id: 3, user: "sato_gift", initial: "S", item: "ほぼ日手帳 weeks + カバー", relation: "同僚", scene: "送別", price: "〜3,000円", note: "異動する同僚へ。毎日持ち歩いてくれたら嬉しいな", likes: 18, date: "3月" },
@@ -9,7 +12,6 @@ export const FEED_DATA: Post[] = [
   { id: 6, user: "tomo_rec", initial: "T", item: "スターバックス カード（チャージ済み）", relation: "上司", scene: "お礼", price: "〜3,000円", note: "いつもお世話になっています。難しい案件を一緒に乗り越えた感謝を込めて", likes: 7, date: "4月" },
   { id: 7, user: "aoi_gift", initial: "A", item: "ミナ ペルホネン ハンカチーフ", relation: "家族", scene: "誕生日", price: "〜5,000円", note: "姉の誕生日。シンプルで上品なものが好きな人なので迷わず選べた", likes: 15, date: "1月", url: "https://example.com", episode: "毎年何を贈るか悩むけど、今年は即決できた。大事に使ってほしい。" },
   { id: 8, user: "kei_note", initial: "K", item: "ネスプレッソ ヴァーチュオ スターターセット", relation: "恋人", scene: "なんでもない日", price: "それ以上", note: "家でゆっくりカフェ気分になれるように。休日の朝が変わった", likes: 52, date: "12月", episode: "コーヒー好きな彼女へのサプライズ。顔が輝いてたのが最高だった。" },
-  { id: 9, user: "shizuru", initial: "S", item: "ブルーボトルコーヒー インスタントコーヒーセット（ブライト・エスプレッソ）", relation: "先生・恩師", scene: "誕生日", price: "〜3,000円", note: "出張先の部屋にコーヒーメーカーがあって、朝コーヒー飲めるのが嬉しいってSNSに書いてたのを覚えてた。それが頭にあったので即決できた", likes: 0, date: "4月", url: "https://store.bluebottlecoffee.jp/products/s346", episode: "たまたまお誕生日当日にお会いするタイミングがあって、急いで選んだ。出張先の部屋にコーヒーメーカーがあって朝コーヒー飲めるのが嬉しいってSNSに書いてたのを覚えてて、それで旅先に持っていけるインスタントにしようとすぐ決まった。かさばらないし、ブルーボトルなら間違いないと思って。" },
 ];
 
 export const NOTIFICATIONS: Notification[] = [
