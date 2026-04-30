@@ -19,8 +19,8 @@ import NotificationScreen from "@/components/screens/NotificationScreen";
 type Screen = "feed" | "search" | "compose" | "detail" | "likes" | "profile" | "notif";
 
 export default function ClientShell() {
-  const [screen, setScreen] = useState<Screen>("feed");
-  const [prevScreen, setPrev] = useState<Screen>("feed");
+  const [screen, setScreen] = useState<Screen>("search");
+  const [prevScreen, setPrev] = useState<Screen>("search");
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [likes, setLikes] = useState<Record<number, boolean>>({});
   const [toast, setToast] = useState<string | null>(null);
@@ -32,7 +32,7 @@ export default function ClientShell() {
   }, [screen]);
 
   const goBack = useCallback(() => {
-    setScreen(prevScreen === "compose" ? "feed" : prevScreen);
+    setScreen(prevScreen === "compose" ? "search" : prevScreen);
   }, [prevScreen]);
 
   const onLike = useCallback((id: number) => {
@@ -51,7 +51,7 @@ export default function ClientShell() {
 
   const onPost = useCallback(() => {
     setTimeout(() => {
-      navigate("feed");
+      navigate("search");
       setToast("投稿しました！みんなに届きます");
     }, 400);
   }, [navigate]);
