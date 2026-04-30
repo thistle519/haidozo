@@ -2,7 +2,7 @@
 
 type IconName =
   | "home" | "search" | "heart" | "heart-fill" | "user" | "plus"
-  | "arrow-left" | "chevron-down" | "chevron-up" | "image" | "link"
+  | "arrow-left" | "arrow-right" | "chevron-down" | "chevron-up" | "image" | "link"
   | "check" | "gift" | "bell" | "share" | "external-link"
   | "grid" | "list" | "edit" | "settings" | "filter";
 
@@ -22,6 +22,7 @@ const paths: Record<IconName, React.ReactNode> = {
   user: <><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></>,
   plus: <><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></>,
   "arrow-left": <polyline points="15 18 9 12 15 6"/>,
+  "arrow-right": <polyline points="9 18 15 12 9 6"/>,
   "chevron-down": <polyline points="6 9 12 15 18 9"/>,
   "chevron-up": <polyline points="18 15 12 9 6 15"/>,
   image: <><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></>,

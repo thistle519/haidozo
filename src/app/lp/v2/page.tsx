@@ -3,8 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "haidozo — 相手が喜ぶシーンを想像する、プレゼント選び",
-  description: "誰かのエピソードから、あなたのプレゼントのストーリーを考える。",
+  title: "haidozo v2 — どんな風に喜んでほしいか、から始めよう",
+  description: "誰かの「こんな喜び方をしてほしかった」から、あなたのプレゼントのアウトカムが見つかる。",
 };
 
 const EPISODES = [
@@ -61,12 +61,10 @@ export default function LpPage() {
         {/* Version bar */}
         <div style={{ background: "#2B3467", padding: "8px 0", textAlign: "center" }}>
           <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}>
-            LP{" "}
-            <Link href="/lp/v1" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>v1</Link>
-            {"　"}
-            <Link href="/lp/v2" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>v2</Link>
-            {"　"}
-            <strong style={{ color: "#E8502A" }}>v3（最新）</strong>
+            LP <Link href="/lp/v1" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>v1</Link>
+            　<strong style={{ color: "rgba(255,255,255,0.9)" }}>v2</strong>
+            　｜
+            <Link href="/lp" style={{ color: "#E8502A", fontWeight: 700, textDecoration: "underline" }}>最新版を見る</Link>
           </div>
         </div>
 
@@ -96,14 +94,14 @@ export default function LpPage() {
               fontWeight: 800, lineHeight: 1.18, letterSpacing: "-1.5px",
               color: "#2B3467", maxWidth: 800, margin: "0 auto 28px",
             }}>
-              相手が喜ぶシーンを想像する、<br />プレゼント選び
+              どんな風に喜んでほしいか、<br />から始めよう
             </h1>
             <p style={{
               fontSize: "clamp(15px, 1.8vw, 18px)",
               color: "#8B93B8", lineHeight: 1.85,
               maxWidth: 520, margin: "0 auto 44px",
             }}>
-              誰かのエピソードから、あなたのプレゼントのストーリーを考える。
+              誰かの「こんな贈り方をしたかった」に共鳴しながら、<br />あなたのプレゼントのアウトカムが見えてくる。
             </p>
             <Link href="/" style={{
               display: "inline-flex", alignItems: "center", gap: 8,
@@ -124,11 +122,11 @@ export default function LpPage() {
             <p className="eyebrow">THE PROBLEM</p>
             <h2 className="h2">「何を買うか」より先に、考えたいこと</h2>
             <p style={{ fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 800, color: "#E8502A", lineHeight: 1.5, marginBottom: 24, maxWidth: 600 }}>
-              「渡した後の、あの人の顔」
+              「この人に、どんな風に喜んでほしいか」
             </p>
             <p className="lead" style={{ maxWidth: 560 }}>
-              誰かが「こんな気持ちで選んだ」エピソードを読みながら、自分が何を贈りたいかが見えてくる。
-              haidozo は、答えを渡すんじゃなく、視点を渡す場所。
+              アイテムを検索する前に、贈った後の場面を想像できると、選ぶ基準が変わる。
+              haidozo は、その人と似た誰かが「こんな気持ちで選んだ」エピソードを起点に、あなた自身の答えを見つける場所。
             </p>
           </div>
         </section>
@@ -186,7 +184,7 @@ export default function LpPage() {
             <p className="eyebrow">HOW IT WORKS</p>
             <h2 className="h2">エピソードから、自分の答えが見えてくる</h2>
             <p className="lead" style={{ maxWidth: 560, marginBottom: 0 }}>
-              1問1答じゃない。誰かの「こんな贈り方をしたかった」に共鳴しながら、贈りたい気持ちの方向性が見えてくる。
+              1問1答じゃない。誰かの「こんな贈り方をしたかった」に共鳴しながら、自分のプレゼントの方向性を発見していく。
             </p>
 
             <div className="flow-cards">
@@ -350,7 +348,7 @@ export default function LpPage() {
               haidozo
             </div>
             <p style={{ fontSize: "clamp(16px, 2vw, 20px)", color: "rgba(255,255,255,0.5)", lineHeight: 1.8, marginBottom: 40 }}>
-              あの人が喜ぶ場面を想像しながら、<br />プレゼントを選ぼう。
+              あの人に、こんな風に喜んでほしい。<br />その気持ちを、プレゼントに変えよう。
             </p>
             <Link href="/" style={{
               display: "inline-flex", alignItems: "center", gap: 8,

@@ -201,13 +201,32 @@ interface SearchScreenProps {
 }
 
 export default function SearchScreen({ likes, onTapPost }: SearchScreenProps) {
+  const [phase, setPhase] = useState<"browse" | "annotate" | "axis" | "results">("browse");
+
+  // browse phase
+  const [filterRelation, setFilterRelation] = useState<Relation | null>(null);
+  const [episodeIndex, setEpisodeIndex] = useState(0);
+
+  // annotate / axis
+  const [resonatedId, setResonatedId] = useState<number | null>(null);
+  const [myContext, setMyContext] = useState("");
+
+  // results phase
   const [relation, setRelation] = useState<Relation | null>(null);
   const [scene, setScene] = useState<Scene | null>(null);
   const [price, setPrice] = useState<PriceRange | null>(null);
   const [query, setQuery] = useState("");
-  const [phase, setPhase] = useState<"select" | "results">("select");
 
-  const canSearch = relation !== null || scene !== null || query.trim() !== "";
+  const orderedEpisodes = useMemo(() => {
+    if (!filterRelation) return FEED_DATA;
+    return [
+      ...FEED_DATA.filter((p) => p.relation === filterRelation),
+      ...FEED_DATA.filter((p) => p.relation !== filterRelation),
+    ];
+  }, [filterRelation]);
+
+  const currentEpisode = orderedEpisodes[episodeIndex] ?? FEED_DATA[0];
+  const resonatedPost = FEED_DATA.find((p) => p.id === resonatedId) ?? null;
 
   const ranked = useMemo(() => {
     return [...FEED_DATA]
@@ -222,12 +241,342 @@ export default function SearchScreen({ likes, onTapPost }: SearchScreenProps) {
   const stores = useMemo(() => getStores(ranked.map((r) => r.post), query), [ranked, query]);
 
   const reset = () => {
+    setPhase("browse");
+    setEpisodeIndex(0);
+    setResonatedId(null);
+    setMyContext("");
     setRelation(null);
     setScene(null);
     setPrice(null);
     setQuery("");
-    setPhase("select");
   };
+
+  const handleYes = () => {
+    setResonatedId(currentEpisode.id);
+    setPhase("annotate");
+  };
+
+  const handleNo = () => {
+    setEpisodeIndex((i) => (i + 1) % orderedEpisodes.length);
+  };
+
+  const handleAnnotateSubmit = () => {
+    setPhase("axis");
+  };
+
+  const handleGoSearch = () => {
+    if (resonatedPost) {
+      setRelation(resonatedPost.relation);
+      setScene(resonatedPost.scene);
+      setQuery(myContext);
+    }
+    setPhase("results");
+  };
+
+  // ── ブラウズフェーズ ──────────────────
+  if (phase === "browse") {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <div style={{ flex: 1, overflowY: "auto", padding: "28px 20px 120px" }}>
+
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 22, fontWeight: 800, color: "var(--color-fg)", letterSpacing: "-0.5px", lineHeight: 1.3, marginBottom: 6 }}>
+              一緒にプレゼントを探そう
+            </div>
+            <div style={{ fontSize: 13, color: "var(--color-fg-muted)", lineHeight: 1.7 }}>
+              気になるエピソードを選んで、方向性を見つけよう
+            </div>
+          </div>
+
+          {/* 関係性フィルター */}
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 24 }}>
+            {RELATIONS.map((r) => (
+              <TagChip
+                key={r} label={r}
+                selected={filterRelation === r}
+                onClick={() => { setFilterRelation(filterRelation === r ? null : r); setEpisodeIndex(0); }}
+              />
+            ))}
+          </div>
+
+          {/* エピソードカード */}
+          <div style={{
+            background: "var(--color-surface)",
+            border: "1.5px solid var(--color-border)",
+            borderRadius: 20, padding: 20, marginBottom: 16,
+          }}>
+            <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
+              {[currentEpisode.relation, currentEpisode.scene, currentEpisode.price].map((tag) => (
+                <span key={tag} style={{
+                  fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 100,
+                  background: "var(--color-surface-alt)", color: "var(--color-fg-muted)",
+                }}>{tag}</span>
+              ))}
+            </div>
+
+            <div style={{ marginBottom: 14 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "var(--color-fg-subtle)", letterSpacing: "0.06em", marginBottom: 6 }}>
+                贈った相手のこと
+              </div>
+              <div style={{ fontSize: 14, color: "var(--color-fg)", lineHeight: 1.8 }}>
+                {currentEpisode.about}
+              </div>
+            </div>
+
+            <div style={{ height: 1, background: "var(--color-border)", margin: "14px 0" }} />
+
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "var(--color-fg-subtle)", letterSpacing: "0.06em", marginBottom: 6 }}>
+                なぜこれを選んだか
+              </div>
+              <div style={{ fontSize: 14, color: "var(--color-fg)", lineHeight: 1.8 }}>
+                {currentEpisode.reason}
+              </div>
+            </div>
+
+            <div style={{
+              marginTop: 14, paddingTop: 12, borderTop: "1px solid var(--color-border)",
+              fontSize: 12, color: "var(--color-fg-muted)", fontWeight: 500,
+            }}>
+              {currentEpisode.item}
+            </div>
+          </div>
+
+          {/* プログレス */}
+          <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 4 }}>
+            {orderedEpisodes.map((_, i) => (
+              <div key={i} style={{
+                width: i === episodeIndex ? 18 : 6, height: 6, borderRadius: 100,
+                background: i === episodeIndex ? "var(--color-accent)" : "var(--color-border)",
+                transition: "all 300ms ease", cursor: "pointer",
+              }} onClick={() => setEpisodeIndex(i)} />
+            ))}
+          </div>
+          <div style={{ textAlign: "center", fontSize: 11, color: "var(--color-fg-subtle)", marginBottom: 0 }}>
+            {episodeIndex + 1} / {orderedEpisodes.length}
+          </div>
+        </div>
+
+        <div style={{
+          flexShrink: 0, padding: "12px 20px 20px",
+          background: "linear-gradient(to top, var(--color-bg) 80%, transparent)",
+          display: "flex", flexDirection: "column", gap: 10,
+        }}>
+          <button
+            onClick={handleYes}
+            style={{
+              width: "100%", padding: 16, borderRadius: 100, border: "none",
+              background: "var(--color-accent)", color: "#fff",
+              fontSize: 16, fontWeight: 700, fontFamily: "inherit",
+              cursor: "pointer", boxShadow: "0 4px 20px rgba(232,80,42,0.35)",
+              transition: "all 220ms ease-out",
+            }}
+          >
+            これに近い！
+          </button>
+          <button
+            onClick={handleNo}
+            style={{
+              width: "100%", padding: 14, borderRadius: 100,
+              border: "1.5px solid var(--color-border)", background: "transparent",
+              color: "var(--color-fg-muted)", fontSize: 15, fontWeight: 500,
+              fontFamily: "inherit", cursor: "pointer",
+              transition: "all 220ms ease-out",
+            }}
+          >
+            ちょっと違うかも →
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── アノテートフェーズ ────────────────
+  if (phase === "annotate") {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <div style={{ flex: 1, overflowY: "auto", padding: "28px 20px 100px" }}>
+
+          <button
+            onClick={() => setPhase("browse")}
+            style={{
+              display: "flex", alignItems: "center", gap: 4,
+              background: "none", border: "none", cursor: "pointer",
+              fontSize: 13, color: "var(--color-fg-muted)", padding: 0, marginBottom: 28,
+            }}
+          >
+            <Icon name="arrow-left" size={16} color="var(--color-fg-muted)" />
+            戻る
+          </button>
+
+          {/* 選んだエピソード（小さく） */}
+          {resonatedPost && (
+            <div style={{
+              background: "var(--color-surface-alt)",
+              borderRadius: 14, padding: "12px 14px",
+              marginBottom: 28,
+              borderLeft: "3px solid var(--color-accent)",
+            }}>
+              <div style={{ fontSize: 10, color: "var(--color-accent)", fontWeight: 700, letterSpacing: "0.05em", marginBottom: 4 }}>
+                選んだエピソード
+              </div>
+              <div style={{ fontSize: 13, color: "var(--color-fg)", lineHeight: 1.7 }}>
+                {resonatedPost.reason}
+              </div>
+            </div>
+          )}
+
+          <div style={{ fontSize: 11, fontWeight: 700, color: "var(--color-accent)", letterSpacing: "0.08em", marginBottom: 8 }}>
+            もう少し教えて
+          </div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: "var(--color-fg)", lineHeight: 1.35, marginBottom: 8 }}>
+            贈る相手のこと、<br />どんな人ですか？
+          </div>
+          <div style={{ fontSize: 13, color: "var(--color-fg-muted)", lineHeight: 1.7, marginBottom: 24 }}>
+            何が好きか、どんな人柄か、最近あったこと…<br />思い浮かんだことをそのまま書いてみてください。
+          </div>
+
+          <div style={{
+            background: "var(--color-surface)",
+            border: `1.5px solid ${myContext ? "var(--color-accent)" : "var(--color-border)"}`,
+            borderRadius: 16, padding: "14px 16px",
+            transition: "border-color 150ms ease",
+          }}>
+            <textarea
+              value={myContext}
+              onChange={(e) => setMyContext(e.target.value)}
+              placeholder={"例：紅茶が好きで、先日引越しした\nいつも頑張ってて、ゆっくりできてなさそう\nコーヒー屋さんで働いてる"}
+              rows={4}
+              autoFocus
+              style={{
+                border: "none", outline: "none", background: "transparent",
+                fontSize: 14, color: "var(--color-fg)", width: "100%",
+                fontFamily: "inherit", resize: "none", lineHeight: 1.8,
+              }}
+            />
+          </div>
+        </div>
+
+        <div style={{
+          flexShrink: 0, padding: "12px 20px 20px",
+          background: "linear-gradient(to top, var(--color-bg) 80%, transparent)",
+          display: "flex", flexDirection: "column", gap: 10,
+        }}>
+          <button
+            onClick={handleAnnotateSubmit}
+            style={{
+              width: "100%", padding: 16, borderRadius: 100, border: "none",
+              background: "var(--color-accent)", color: "#fff",
+              fontSize: 16, fontWeight: 700, fontFamily: "inherit",
+              cursor: "pointer", boxShadow: "0 4px 20px rgba(232,80,42,0.35)",
+              transition: "all 220ms ease-out",
+            }}
+          >
+            軸を見つける
+          </button>
+          <button
+            onClick={handleAnnotateSubmit}
+            style={{
+              width: "100%", padding: 14, borderRadius: 100,
+              border: "none", background: "transparent",
+              color: "var(--color-fg-subtle)", fontSize: 13, fontWeight: 500,
+              fontFamily: "inherit", cursor: "pointer",
+            }}
+          >
+            スキップして探す
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── 軸フェーズ ────────────────────────
+  if (phase === "axis" && resonatedPost) {
+    const axisInsight = getInsight(resonatedPost.relation, resonatedPost.scene);
+    const axisCredo = axisInsight?.credo ?? "その人を想って選んだ、というのが伝わるもの";
+
+    return (
+      <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <div style={{ flex: 1, overflowY: "auto", padding: "40px 20px 120px" }}>
+
+          <div style={{
+            width: 56, height: 56, borderRadius: 100,
+            background: "var(--color-sage-light)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            marginBottom: 20,
+          }}>
+            <Icon name="check" size={26} color="#8B6F00" />
+          </div>
+
+          <div style={{ fontSize: 11, fontWeight: 700, color: "var(--color-accent)", letterSpacing: "0.08em", marginBottom: 8 }}>
+            軸が見えてきた
+          </div>
+          <div style={{ fontSize: 22, fontWeight: 800, color: "var(--color-fg)", lineHeight: 1.3, marginBottom: 28 }}>
+            じゃあこういう<br />軸ね！
+          </div>
+
+          <div style={{
+            background: "linear-gradient(135deg, var(--color-accent-light) 0%, #fff8f5 100%)",
+            border: "1.5px solid rgba(232,80,42,0.2)",
+            borderRadius: 20, padding: 20, marginBottom: 16,
+          }}>
+            <div style={{ fontSize: 10, color: "var(--color-accent)", fontWeight: 700, letterSpacing: "0.06em", marginBottom: 8 }}>
+              こんなプレゼントがしたい
+            </div>
+            <div style={{ fontSize: 17, fontWeight: 800, color: "var(--color-fg)", lineHeight: 1.55, marginBottom: myContext ? 16 : 0 }}>
+              {axisCredo}
+            </div>
+
+            {myContext && (
+              <>
+                <div style={{ height: 1, background: "rgba(232,80,42,0.15)", margin: "0 0 14px" }} />
+                <div style={{ fontSize: 10, color: "var(--color-fg-muted)", fontWeight: 700, letterSpacing: "0.06em", marginBottom: 6 }}>
+                  このひとのこと
+                </div>
+                <div style={{ fontSize: 13, color: "var(--color-fg)", lineHeight: 1.8 }}>
+                  {myContext}
+                </div>
+              </>
+            )}
+          </div>
+
+          <div style={{ fontSize: 12, color: "var(--color-fg-muted)", lineHeight: 1.7 }}>
+            {resonatedPost.relation}への{resonatedPost.scene}のプレゼントを探します
+          </div>
+        </div>
+
+        <div style={{
+          flexShrink: 0, padding: "12px 20px 20px",
+          background: "linear-gradient(to top, var(--color-bg) 80%, transparent)",
+          display: "flex", flexDirection: "column", gap: 10,
+        }}>
+          <button
+            onClick={handleGoSearch}
+            style={{
+              width: "100%", padding: 16, borderRadius: 100, border: "none",
+              background: "var(--color-accent)", color: "#fff",
+              fontSize: 16, fontWeight: 700, fontFamily: "inherit",
+              cursor: "pointer", boxShadow: "0 4px 20px rgba(232,80,42,0.35)",
+              transition: "all 220ms ease-out",
+            }}
+          >
+            この方向で探す
+          </button>
+          <button
+            onClick={() => { setPhase("browse"); setEpisodeIndex(0); setResonatedId(null); setMyContext(""); }}
+            style={{
+              width: "100%", padding: 14, borderRadius: 100,
+              border: "1.5px solid var(--color-border)", background: "transparent",
+              color: "var(--color-fg-muted)", fontSize: 15, fontWeight: 500,
+              fontFamily: "inherit", cursor: "pointer",
+            }}
+          >
+            もっと見てみる
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   // ── 結果フェーズ ──────────────────────
   if (phase === "results") {
@@ -356,110 +705,5 @@ export default function SearchScreen({ likes, onTapPost }: SearchScreenProps) {
     );
   }
 
-  // ── 選択フェーズ ──────────────────────
-  return (
-    <div style={{ padding: "28px 20px 100px" }}>
-      {/* タイトル */}
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ fontSize: 22, fontWeight: 800, color: "var(--color-fg)", letterSpacing: "-0.5px", lineHeight: 1.3, marginBottom: 6 }}>
-          一緒にプレゼントを探そう
-        </div>
-        <div style={{ fontSize: 13, color: "var(--color-fg-muted)", lineHeight: 1.7 }}>
-          贈る相手のことを教えてもらえると、より近い提案ができます
-        </div>
-      </div>
-
-      {/* ★ どんな人？ — メインフィールド */}
-      <div style={{ marginBottom: 28 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: "var(--color-fg)", marginBottom: 10 }}>
-          どんな人？
-        </div>
-        <div style={{
-          background: "var(--color-surface)",
-          border: `1.5px solid ${query ? "var(--color-accent)" : "var(--color-border)"}`,
-          borderRadius: 16, padding: "14px 16px",
-          transition: "border-color 150ms ease",
-        }}>
-          <textarea
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={"例：香水が好き\nマルジェラが好きそう、おしゃれな人\nコーヒーのプロだから違うものを贈りたい"}
-            rows={3}
-            style={{
-              border: "none", outline: "none", background: "transparent",
-              fontSize: 14, color: "var(--color-fg)", width: "100%",
-              fontFamily: "inherit", resize: "none", lineHeight: 1.7,
-            }}
-          />
-          {query && (
-            <div style={{ textAlign: "right" }}>
-              <span
-                onClick={() => setQuery("")}
-                style={{ fontSize: 11, color: "var(--color-fg-subtle)", cursor: "pointer" }}
-              >
-                クリア
-              </span>
-            </div>
-          )}
-        </div>
-        <div style={{ fontSize: 11, color: "var(--color-fg-subtle)", marginTop: 6, lineHeight: 1.6 }}>
-          「、」や改行で複数入力できます
-        </div>
-      </div>
-
-      {/* 区切り */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-        <div style={{ flex: 1, height: 1, background: "var(--color-border)" }} />
-        <span style={{ fontSize: 11, color: "var(--color-fg-subtle)", whiteSpace: "nowrap" }}>さらに絞り込む</span>
-        <div style={{ flex: 1, height: 1, background: "var(--color-border)" }} />
-      </div>
-
-      <div style={{ marginBottom: 22 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: "var(--color-fg)", marginBottom: 10 }}>誰に贈りたい？</div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          {RELATIONS.map((r) => (
-            <TagChip key={r} label={r} selected={relation === r} onClick={() => setRelation(relation === r ? null : r)} />
-          ))}
-        </div>
-      </div>
-
-      <div style={{ marginBottom: 22 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: "var(--color-fg)", marginBottom: 10 }}>どんな時に？</div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          {SCENES.map((s) => (
-            <TagChip key={s} label={s} selected={scene === s} onClick={() => setScene(scene === s ? null : s)} />
-          ))}
-        </div>
-      </div>
-
-      <div style={{ marginBottom: 32 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: "var(--color-fg)", marginBottom: 4 }}>
-          予算は？
-          <span style={{ fontSize: 11, fontWeight: 400, color: "var(--color-fg-muted)", marginLeft: 6 }}>任意</span>
-        </div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 10 }}>
-          {PRICES.map((p) => (
-            <TagChip key={p} label={p} selected={price === p} onClick={() => setPrice(price === p ? null : p)} />
-          ))}
-        </div>
-      </div>
-
-      <button
-        onClick={() => setPhase("results")}
-        disabled={!canSearch}
-        style={{
-          width: "100%", padding: "16px", borderRadius: 100,
-          background: canSearch ? "var(--color-accent)" : "var(--color-border)",
-          border: "none", cursor: canSearch ? "pointer" : "not-allowed",
-          fontSize: 16, fontWeight: 700,
-          color: canSearch ? "#fff" : "var(--color-fg-subtle)",
-          fontFamily: "inherit",
-          transition: "all 200ms ease",
-          boxShadow: canSearch ? "0 4px 16px rgba(232,80,42,0.35)" : "none",
-        }}
-      >
-        提案を見る
-      </button>
-    </div>
-  );
+  return null;
 }
