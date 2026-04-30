@@ -22,22 +22,22 @@ const PRICES: PriceRange[] = ["〜3,000円", "〜5,000円", "〜10,000円", "そ
 interface Insight { credo: string; tip: string[] }
 
 const INSIGHT: Record<string, Insight> = {
-  "友達_誕生日":        { credo: "相手の「好き」に寄り添うと、一番喜ばれる", tip: ["日常使いできるもの", "その人の趣味に関係するもの"] },
-  "友達_なんでもない日": { credo: "「なんでもない日」に贈るプレゼントは、それだけで特別になる", tip: ["高価すぎないけど、ちゃんと選んだとわかるもの", "一緒に体験できるもの"] },
-  "友達_送別":          { credo: "新生活を応援する気持ちが伝わるものがぴったり", tip: ["新居で使えるもの", "引越し後も思い出になるもの"] },
-  "友達_手土産":        { credo: "手土産は「その場が楽しくなる」ものが正解", tip: ["一緒に食べられるもの", "見た目が可愛いもの"] },
-  "友達_お礼":          { credo: "「ありがとう」が伝わる、素直なプレゼントが響く", tip: ["相手が好きなジャンルのもの", "普段自分では買わないちょっといいもの"] },
-  "先生・恩師_お礼":    { credo: "長年のお礼は「あなただから選んだ」という気持ちが一番伝わる", tip: ["相手の趣味や仕事にまつわるもの", "長く使えるもの"] },
-  "先生・恩師_誕生日":  { credo: "敬意とあたたかさを両立したプレゼントが喜ばれる", tip: ["品があって実用的なもの", "季節感のあるもの"] },
-  "先生・恩師_送別":    { credo: "「お世話になりました」の気持ちを形にするなら、記憶に残るものを", tip: ["贈り手の気持ちが伝わるもの", "一緒に消費できるもの"] },
-  "恋人_誕生日":        { credo: "サプライズより「ちゃんと見てる」が伝わるものが刺さる", tip: ["相手が好きなブランド・ジャンル", "一緒に使えるもの"] },
-  "家族_誕生日":        { credo: "家族だからこそ、改めて「ありがとう」が伝わるものを", tip: ["日常使いで喜ばれるもの", "少し特別感のあるもの"] },
+  "友達_誕生日":        { credo: "相手の「好き」に寄り添ったもの", tip: ["日常使いできるもの", "その人の趣味に関係するもの"] },
+  "友達_なんでもない日": { credo: "高価すぎないけど、ちゃんと選んだとわかるもの", tip: ["一緒に食べられるもの", "日常使いできるもの"] },
+  "友達_送別":          { credo: "新生活でも使えるもの・思い出になるもの", tip: ["新居で使えるもの", "引越し後も手元に残るもの"] },
+  "友達_手土産":        { credo: "その場が楽しくなる、一緒に食べられるもの", tip: ["見た目が可愛いもの", "シェアしやすいもの"] },
+  "友達_お礼":          { credo: "普段自分では買わない、ちょっといいもの", tip: ["相手が好きなジャンルのもの", "日常に寄り添えるもの"] },
+  "先生・恩師_お礼":    { credo: "「あなただから選んだ」と伝わるもの", tip: ["相手の趣味や仕事にまつわるもの", "長く使えるもの"] },
+  "先生・恩師_誕生日":  { credo: "品があって、実用的に使えるもの", tip: ["季節感のあるもの", "さりげなく気持ちが伝わるもの"] },
+  "先生・恩師_送別":    { credo: "一緒に消費できる、記憶に残るもの", tip: ["贈り手の気持ちが伝わるもの", "パートナーと楽しめるもの"] },
+  "恋人_誕生日":        { credo: "「ちゃんと見てる」が伝わるもの", tip: ["相手が好きなブランドに関係するもの", "一緒に使えるもの"] },
+  "家族_誕生日":        { credo: "日常使いで喜ばれる、少し特別なもの", tip: ["普段使いできるもの", "ちょっと贅沢なもの"] },
 };
 
 function getInsight(relation: Relation | null, scene: Scene | null): Insight | null {
   if (!relation || !scene) return null;
   const key = `${relation}_${scene}`;
-  return INSIGHT[key] ?? { credo: "その人のことを思って選んだ、というのが一番のプレゼント", tip: ["相手の趣味に関係するもの", "日常使いできるもの"] };
+  return INSIGHT[key] ?? { credo: "その人のことを思って選んだもの", tip: ["相手の趣味に関係するもの", "日常使いできるもの"] };
 }
 
 // ────────────────────────────────────
@@ -262,22 +262,30 @@ export default function SearchScreen({ likes, onTapPost }: SearchScreenProps) {
             marginBottom: 20,
           }}>
             <div style={{ fontSize: 10, color: "var(--color-accent)", fontWeight: 700, letterSpacing: "0.06em", marginBottom: 8 }}>
-              こんなこだわりがありそう
+              こんなプレゼントがしたい
             </div>
-            <div style={{ fontSize: 14, fontWeight: 700, color: "var(--color-fg)", lineHeight: 1.55, marginBottom: 12 }}>
-              「{insight.credo}」
+            <div style={{ fontSize: 15, fontWeight: 800, color: "var(--color-fg)", lineHeight: 1.5, marginBottom: 12 }}>
+              {insight.credo}
             </div>
-            <div style={{ fontSize: 10, color: "var(--color-fg-muted)", fontWeight: 600, letterSpacing: "0.04em", marginBottom: 6 }}>
-              ここから探してみるといいかも
+            <div style={{ fontSize: 10, color: "var(--color-fg-muted)", fontWeight: 600, letterSpacing: "0.04em", marginBottom: 8 }}>
+              あるいはこんなイメージ？
             </div>
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
               {insight.tip.map((t) => (
-                <span key={t} style={{
-                  fontSize: 12, background: "#fff", border: "1px solid rgba(232,80,42,0.2)",
-                  borderRadius: 100, padding: "4px 10px", color: "var(--color-fg)",
-                }}>
+                <button
+                  key={t}
+                  onClick={() => setQuery(t)}
+                  style={{
+                    fontSize: 12, background: query === t ? "var(--color-accent)" : "#fff",
+                    border: `1px solid ${query === t ? "var(--color-accent)" : "rgba(232,80,42,0.25)"}`,
+                    borderRadius: 100, padding: "5px 12px",
+                    color: query === t ? "#fff" : "var(--color-fg)",
+                    cursor: "pointer", fontFamily: "inherit", fontWeight: 500,
+                    transition: "all 150ms ease",
+                  }}
+                >
                   {t}
-                </span>
+                </button>
               ))}
             </div>
           </div>

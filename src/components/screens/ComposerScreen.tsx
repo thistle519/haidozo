@@ -79,7 +79,7 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <div style={{ flex: 1, overflowY: "auto", padding: "20px 20px 120px" }}>
+      <div style={{ flex: 1, overflowY: "auto", padding: "20px 20px 100px" }}>
 
         {/* Step 1 */}
         <div style={{ marginBottom: 28 }}>
@@ -122,14 +122,14 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
             onFocus={(e) => (e.target.style.borderColor = "var(--color-accent)")}
             onBlur={(e) => (e.target.style.borderColor = "var(--color-border)")}
           />
-          <div style={{
-            marginTop: 12, border: "1.5px dashed var(--color-border)", borderRadius: 16,
-            padding: 14, display: "flex", alignItems: "center", justifyContent: "center",
-            gap: 8, color: "var(--color-fg-muted)", fontSize: 13, cursor: "pointer",
-            background: "var(--color-surface)",
-          }}>
-            <Icon name="image" size={18} color="var(--color-fg-muted)" />
-            画像をアップロード（任意）
+          <div style={{ marginTop: 10 }}>
+            <input
+              type="url" value={url} onChange={(e) => setUrl(e.target.value)}
+              placeholder="商品URL（任意）https://..."
+              style={{ ...inputStyle, fontSize: 13, color: "var(--color-fg-muted)" }}
+              onFocus={(e) => { e.target.style.borderColor = "var(--color-accent)"; (e.target as HTMLInputElement).style.color = "var(--color-fg)"; }}
+              onBlur={(e) => { e.target.style.borderColor = "var(--color-border)"; if (!url) (e.target as HTMLInputElement).style.color = "var(--color-fg-muted)"; }}
+            />
           </div>
         </div>
 
@@ -201,20 +201,14 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
               </div>
             </div>
             <div>
-              <div style={{ fontSize: 13, fontWeight: 500, color: "var(--color-fg)", marginBottom: 8 }}>購入URL</div>
-              <input
-                type="url" value={url} onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://..."
-                style={{ ...inputStyle, borderRadius: 12, padding: "10px 14px", background: "var(--color-bg)" }}
-              />
-            </div>
-            <div>
               <div style={{ fontSize: 13, fontWeight: 500, color: "var(--color-fg)", marginBottom: 8 }}>贈った時のこと</div>
               <textarea
                 value={reaction} onChange={(e) => setReaction(e.target.value)}
                 placeholder="渡した時の反応、その場の雰囲気、など"
                 rows={3}
-                style={{ ...inputStyle, borderRadius: 12, padding: "10px 14px", background: "var(--color-bg)", resize: "none", lineHeight: 1.7 }}
+                style={{ ...inputStyle, resize: "none", lineHeight: 1.7 }}
+                onFocus={(e) => (e.target.style.borderColor = "var(--color-accent)")}
+                onBlur={(e) => (e.target.style.borderColor = "var(--color-border)")}
               />
             </div>
           </div>
@@ -223,9 +217,9 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
 
       {/* Post button */}
       <div style={{
-        position: "absolute", bottom: 72, left: 0, right: 0,
-        padding: "12px 20px",
-        background: "linear-gradient(to top, var(--color-bg) 70%, transparent)",
+        flexShrink: 0,
+        padding: "12px 20px 20px",
+        background: "linear-gradient(to top, var(--color-bg) 80%, transparent)",
       }}>
         <button
           onClick={handlePost}
