@@ -8,6 +8,7 @@ import { useOgpImage } from "@/lib/useOgpImage";
 import PostTags from "@/components/ui/PostTags";
 import TagChip from "@/components/ui/TagChip";
 import Icon from "@/components/ui/Icon";
+import GuidedScreen from "@/components/screens/GuidedScreen";
 
 // ────────────────────────────────────
 // 定数
@@ -272,6 +273,7 @@ interface SearchScreenProps {
 }
 
 export default function SearchScreen({ likes, onTapPost }: SearchScreenProps) {
+  const [mode, setMode] = useState<"guide" | "explore">("guide");
   const [phase, setPhase] = useState<"explore" | "vibe" | "axis" | "results">("explore");
 
   // explore phase
@@ -371,10 +373,47 @@ export default function SearchScreen({ likes, onTapPost }: SearchScreenProps) {
     setPhase("results");
   };
 
+  // ── モード切替タブ ───────────────────
+  const ModeTab = () => (
+    <div style={{
+      display: "flex", gap: 4, padding: "4px", borderRadius: 14,
+      background: "var(--color-surface-alt)", marginBottom: 28,
+    }}>
+      {(["guide", "explore"] as const).map((m) => (
+        <button
+          key={m}
+          onClick={() => setMode(m)}
+          style={{
+            flex: 1, padding: "9px 0", borderRadius: 10, border: "none",
+            background: mode === m ? "var(--color-surface)" : "transparent",
+            color: mode === m ? "var(--color-fg)" : "var(--color-fg-muted)",
+            fontSize: 13, fontWeight: mode === m ? 700 : 500,
+            fontFamily: "inherit", cursor: "pointer",
+            boxShadow: mode === m ? "0 1px 6px rgba(43,52,103,0.08)" : "none",
+            transition: "all 180ms ease-out",
+          }}
+        >
+          {m === "guide" ? "探す" : "相談する"}
+        </button>
+      ))}
+    </div>
+  );
+
+  // ── 探すモード（Gridエクスプローラー）──
+  if (mode === "guide") {
+    return (
+      <div style={{ padding: "20px 20px 0" }}>
+        <ModeTab />
+        <GuidedScreen onClose={() => setMode("explore")} />
+      </div>
+    );
+  }
+
   // ── Exploreフェーズ ──────────────────
   if (phase === "explore") {
     return (
       <div style={{ padding: "28px 20px 100px" }}>
+        <ModeTab />
         <div style={{ marginBottom: 24 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "var(--color-accent)", letterSpacing: "0.08em", marginBottom: 8 }}>プレゼントを一緒に考えよう</div>
           <div style={{ fontSize: 22, fontWeight: 800, color: "var(--color-fg)", letterSpacing: "-0.5px", lineHeight: 1.3 }}>誰へのどんな<br />プレゼントですか？</div>
