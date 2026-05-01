@@ -64,9 +64,7 @@ export default function LpPage() {
             LP{" "}
             <Link href="/lp/v1" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>v1</Link>
             {"　"}
-            <Link href="/lp/v2" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>v2</Link>
-            {"　"}
-            <strong style={{ color: "#E8502A" }}>v3（最新）</strong>
+            <strong style={{ color: "#E8502A" }}>v2（最新）</strong>
           </div>
         </div>
 
@@ -103,7 +101,7 @@ export default function LpPage() {
               color: "#8B93B8", lineHeight: 1.85,
               maxWidth: 520, margin: "0 auto 44px",
             }}>
-              誰かのエピソードを眺めながら、自分の「贈りたい視点」が見つかる。
+              誰かのエピソードから、あなたのプレゼントのストーリーを考える。
             </p>
             <Link href="/" style={{
               display: "inline-flex", alignItems: "center", gap: 8,
@@ -184,9 +182,9 @@ export default function LpPage() {
         <section className="section-alt">
           <div className="wrap">
             <p className="eyebrow">HOW IT WORKS</p>
-            <h2 className="h2">Instagramを眺めるように、プレゼントの方向性が見えてくる</h2>
+            <h2 className="h2">エピソードから、自分の答えが見えてくる</h2>
             <p className="lead" style={{ maxWidth: 560, marginBottom: 0 }}>
-              1問1答じゃない。エピソードのグリッドを眺めながら、気になるカードをタップして深掘りしていく感覚。
+              1問1答じゃない。誰かの「こんな贈り方をしたかった」に共鳴しながら、贈りたい気持ちの方向性が見えてくる。
             </p>
 
             <div className="flow-cards">
@@ -194,25 +192,25 @@ export default function LpPage() {
                 {
                   n: "01",
                   title: "誰に・どんな時を選ぶ",
-                  body: "贈る相手の関係性と場面を選ぶ。たった2タップで準備完了。",
+                  body: "贈る相手の関係性と場面を選ぶと、近いエピソードが出てくる。",
                   accent: false,
                 },
                 {
                   n: "02",
-                  title: "グリッドを眺める",
-                  body: "「こんな贈り方をしたかった」というエピソードのカードがずらっと出てくる。Instagramのように流しながら眺める感覚で。",
+                  title: "エピソードを眺める",
+                  body: "「こんな贈り方がしたかった」というリアルな記録を読んでいく。ピンとくるものを探す感覚で。",
                   accent: false,
                 },
                 {
                   n: "03",
-                  title: "気になるカードをタップ",
-                  body: "横スクロールで、画像 → 選んだ理由 → 相手のこと、と1枚の投稿をじっくり読める。関連エピソードも一緒に表示。",
+                  title: "「これに近い！」を選ぶ",
+                  body: "共鳴したエピソードを選ぶと、何がよかったか・自分の相手のことを少し掘り下げるステップへ。",
                   accent: true,
                 },
                 {
                   n: "04",
-                  title: "「この方向で探す」へ",
-                  body: "気に入った視点から、ギフト探しに進める。答えを押しつけるんじゃなく、自分の方向性が言葉になる。",
+                  title: "「じゃあこういう軸ね」が出てくる",
+                  body: "「こんなプレゼントがしたい」という自分の贈りたい気持ちの言葉が見つかる。そこから探せばいい。",
                   accent: false,
                 },
               ].map((step) => (
@@ -243,87 +241,85 @@ export default function LpPage() {
             <p className="eyebrow">TRY IT</p>
             <h2 className="h2">こんな体験ができます</h2>
             <p className="lead" style={{ maxWidth: 560, marginBottom: 48 }}>
-              グリッドのカードを眺めて、気になったものをタップ。横にスワイプしながら、選んだ理由・相手のことを読んでいく。
+              エピソードを見ながら「これに近い！」を選ぶと、「じゃあこういうプレゼントがしたいんだね」という軸が言葉になって出てくる。
             </p>
 
             {/* Mockup */}
             <div style={{
-              display: "flex", flexDirection: "column", gap: 24, alignItems: "center",
+              display: "flex", flexDirection: "column", gap: 16, alignItems: "center",
             }}>
-              {/* Grid mockup */}
+              {/* Episode card */}
               <div style={{
                 width: "100%", maxWidth: 420,
                 background: "#fff", border: "1.5px solid rgba(43,52,103,0.1)",
-                borderRadius: 24, padding: 20, boxShadow: "0 8px 32px rgba(43,52,103,0.08)",
+                borderRadius: 24, padding: 24, boxShadow: "0 8px 32px rgba(43,52,103,0.08)",
               }}>
-                <p style={{ fontSize: 11, fontWeight: 700, color: "#A0A8CC", letterSpacing: "0.06em", marginBottom: 14 }}>友達 / 誕生日</p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                  {[
-                    { bg: "linear-gradient(145deg, #C8D4F9, #98A8F0)", emoji: "🎂", label: "センスが伝わるもの", item: "AURALEE ニット" },
-                    { bg: "linear-gradient(145deg, #C8D4F9, #98A8F0)", emoji: "🌸", label: "一緒に楽しめるもの", item: "ムビチケ ペア" },
-                    { bg: "linear-gradient(145deg, #C8D4F9, #98A8F0)", emoji: "📚", label: "長く使えるもの", item: "図書カード" },
-                    { bg: "linear-gradient(145deg, #C8D4F9, #98A8F0)", emoji: "🎀", label: "その人らしいもの", item: "短歌集" },
-                  ].map((card, i) => (
-                    <div key={i} style={{
-                      background: card.bg,
-                      borderRadius: 16,
-                      aspectRatio: "3/4",
-                      display: "flex", flexDirection: "column",
-                      justifyContent: "space-between",
-                      padding: "12px 10px",
-                      position: "relative",
-                      overflow: "hidden",
-                      boxShadow: i === 0 ? "0 0 0 3px #E8502A" : undefined,
-                    }}>
-                      <span style={{ fontSize: 28 }}>{card.emoji}</span>
-                      <div>
-                        <p style={{ fontSize: 9, fontWeight: 700, color: "rgba(43,52,103,0.6)", marginBottom: 3 }}>{card.label}</p>
-                        <p style={{ fontSize: 11, fontWeight: 700, color: "#2B3467" }}>{card.item}</p>
-                      </div>
-                    </div>
+                <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+                  {["友達", "誕生日", "〜5,000円"].map((t) => (
+                    <span key={t} style={{
+                      fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 100,
+                      background: "rgba(43,52,103,0.06)", color: "#8B93B8",
+                    }}>{t}</span>
                   ))}
                 </div>
-                <p style={{ fontSize: 11, color: "#A0A8CC", textAlign: "center", marginTop: 12 }}>タップして詳しく見る</p>
+                <div style={{ marginBottom: 14 }}>
+                  <p style={{ fontSize: 10, fontWeight: 700, color: "#A0A8CC", letterSpacing: "0.06em", marginBottom: 6 }}>贈った相手のこと</p>
+                  <p style={{ fontSize: 14, color: "#2B3467", lineHeight: 1.8 }}>
+                    いつもハードワークで忙しそうな子。昔一緒に香水屋さんに寄ったとき、仕事で辛くなった時に気持ちを切り替えるために香りを使うって話してくれた
+                  </p>
+                </div>
+                <div style={{ height: 1, background: "rgba(43,52,103,0.08)", margin: "14px 0" }} />
+                <div style={{ marginBottom: 16 }}>
+                  <p style={{ fontSize: 10, fontWeight: 700, color: "#A0A8CC", letterSpacing: "0.06em", marginBottom: 6 }}>なぜこれを選んだか</p>
+                  <p style={{ fontSize: 14, color: "#2B3467", lineHeight: 1.8 }}>
+                    ディスカバリーセットなら色んな香りを試せるから、気分で使い分けられると思って
+                  </p>
+                </div>
+                <div style={{
+                  display: "flex", flexDirection: "column", gap: 10, marginTop: 8,
+                }}>
+                  <div style={{
+                    background: "#E8502A", borderRadius: 100, padding: "14px",
+                    textAlign: "center", fontSize: 15, fontWeight: 700, color: "#fff",
+                    boxShadow: "0 4px 16px rgba(232,80,42,0.3)",
+                  }}>
+                    これに近い！
+                  </div>
+                  <div style={{
+                    border: "1.5px solid rgba(43,52,103,0.12)", borderRadius: 100, padding: "12px",
+                    textAlign: "center", fontSize: 14, color: "#8B93B8", fontWeight: 500,
+                  }}>
+                    ちょっと違うかも →
+                  </div>
+                </div>
               </div>
 
               {/* Arrow */}
               <div style={{ fontSize: 24, color: "#E8502A", lineHeight: 1 }}>↓</div>
 
-              {/* Slide detail mockup */}
+              {/* Axis card */}
               <div style={{
                 width: "100%", maxWidth: 420,
-                background: "#fff", border: "2px solid rgba(232,80,42,0.2)",
+                background: "linear-gradient(135deg, rgba(232,80,42,0.07) 0%, #fff8f5 100%)",
+                border: "2px solid rgba(232,80,42,0.2)",
                 borderRadius: 24, padding: 24, boxShadow: "0 8px 32px rgba(232,80,42,0.08)",
               }}>
-                {/* Slide indicator */}
-                <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 18 }}>
-                  {[0,1,2].map(i => (
-                    <div key={i} style={{
-                      width: i === 0 ? 20 : 6, height: 6, borderRadius: 3,
-                      background: i === 0 ? "#E8502A" : "rgba(43,52,103,0.15)",
-                      transition: "width 200ms",
-                    }} />
-                  ))}
-                </div>
-                {/* Slide 1: image placeholder */}
+                <p style={{ fontSize: 11, fontWeight: 700, color: "#E8502A", letterSpacing: "0.08em", marginBottom: 10 }}>
+                  じゃあこういう軸ね
+                </p>
+                <p style={{ fontSize: 19, fontWeight: 800, color: "#2B3467", lineHeight: 1.5, marginBottom: 16 }}>
+                  辛い時に、そっとそばにいてあげられるもの
+                </p>
+                <div style={{ height: 1, background: "rgba(232,80,42,0.12)", marginBottom: 14 }} />
+                <p style={{ fontSize: 11, fontWeight: 700, color: "#A0A8CC", letterSpacing: "0.06em", marginBottom: 6 }}>
+                  このひとのこと
+                </p>
+                <p style={{ fontSize: 13, color: "#6B7280", lineHeight: 1.8, marginBottom: 20 }}>
+                  仕事が忙しくて、気持ちの切り替えが得意な子
+                </p>
                 <div style={{
-                  background: "linear-gradient(145deg, #C8D4F9, #98A8F0)",
-                  borderRadius: 16, height: 140,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  marginBottom: 16, fontSize: 48,
-                }}>
-                  🎂
-                </div>
-                <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
-                  {["友達", "誕生日"].map(t => (
-                    <span key={t} style={{ fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 100, background: "rgba(43,52,103,0.06)", color: "#8B93B8" }}>{t}</span>
-                  ))}
-                </div>
-                <p style={{ fontSize: 11, fontWeight: 700, color: "#A0A8CC", letterSpacing: "0.06em", marginBottom: 4 }}>AURALEE シルクウールニット</p>
-                <p style={{ fontSize: 12, color: "#8B93B8", marginBottom: 16 }}>← 左にスワイプで「選んだ理由」→</p>
-                <div style={{
-                  background: "#E8502A", borderRadius: 100, padding: "13px",
-                  textAlign: "center", fontSize: 14, fontWeight: 700, color: "#fff",
+                  background: "#E8502A", borderRadius: 100, padding: "14px",
+                  textAlign: "center", fontSize: 15, fontWeight: 700, color: "#fff",
                   boxShadow: "0 4px 16px rgba(232,80,42,0.3)",
                 }}>
                   この方向で探す
