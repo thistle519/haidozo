@@ -3,8 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "haidozo — 相手が喜ぶシーンを想像する、プレゼント選び",
-  description: "誰かのエピソードから、あなたのプレゼントのストーリーを考える。",
+  title: "haidozo — 考えた時間が、いちばんの贈り物になる",
+  description: "モノを探す前に、相手のことを思いめぐらせる。haidozoは「誰かを想って選ぶ時間」のためのサービス。",
 };
 
 const EPISODES = [
@@ -31,6 +31,33 @@ const EPISODES = [
   },
 ];
 
+const STEPS = [
+  {
+    n: "01",
+    title: "思い浮かべる",
+    body: "誰に、どんな場面で、どんな人か。条件ではなく「人柄」から始める、haidozoの入口はこれひとつ。",
+    accent: false,
+  },
+  {
+    n: "02",
+    title: "めぐらせる",
+    body: "「最近、その人が嬉しそうだったのは？」——問いに答えながら、誰かの『なぜ選んだか』をヒントに、想いのかけらを集めていく。",
+    accent: true,
+  },
+  {
+    n: "03",
+    title: "想いの一文になる",
+    body: "かけらが「こんなふうに喜んでほしい」という一文に結晶する。モノ選びはそのあと。方向が決まれば、もう迷わない。",
+    accent: false,
+  },
+  {
+    n: "04",
+    title: "贈って、記録する",
+    body: "考えた時間ごと記録に残す。あなたの「なぜ選んだか」が、次に誰かが思いめぐらせる時のヒントになる。",
+    accent: false,
+  },
+];
+
 export default function LpPage() {
   return (
     <>
@@ -45,15 +72,15 @@ export default function LpPage() {
         .h2 { font-size: clamp(26px, 3.5vw, 38px); font-weight: 800; line-height: 1.25; letter-spacing: -0.5px; color: #2B3467; margin-bottom: 20px; }
         .lead { font-size: clamp(14px, 1.5vw, 16px); color: #8B93B8; line-height: 1.9; }
         .grid-3 { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 48px; }
-        .steps { display: grid; grid-template-columns: 1fr; gap: 32px; margin-top: 48px; }
         .flow-cards { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 40px; }
+        .mock-row { display: flex; flex-direction: column; gap: 24px; align-items: center; }
         @media (min-width: 640px) {
           .grid-3 { grid-template-columns: repeat(3, 1fr); }
-          .steps { grid-template-columns: repeat(3, 1fr); }
           .flow-cards { grid-template-columns: repeat(2, 1fr); gap: 24px; }
         }
         @media (min-width: 768px) {
           .flow-cards { grid-template-columns: repeat(4, 1fr); }
+          .mock-row { flex-direction: row; align-items: stretch; justify-content: center; }
         }
       `}</style>
 
@@ -66,7 +93,9 @@ export default function LpPage() {
             {"　"}
             <Link href="/lp/v2" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>v2</Link>
             {"　"}
-            <strong style={{ color: "#E8502A" }}>v3（最新）</strong>
+            <Link href="/lp/v3" style={{ color: "rgba(255,255,255,0.7)", textDecoration: "underline" }}>v3</Link>
+            {"　"}
+            <strong style={{ color: "#E8502A" }}>v4（最新）</strong>
           </div>
         </div>
 
@@ -90,20 +119,21 @@ export default function LpPage() {
         {/* ── Hero ── */}
         <section style={{ padding: "100px 0 96px", textAlign: "center" }}>
           <div className="wrap">
-            <p className="eyebrow">GIFT DISCOVERY</p>
+            <p className="eyebrow">OMOI-MEGURI</p>
             <h1 style={{
-              fontSize: "clamp(36px, 6vw, 64px)",
-              fontWeight: 800, lineHeight: 1.18, letterSpacing: "-1.5px",
-              color: "#2B3467", maxWidth: 800, margin: "0 auto 28px",
+              fontSize: "clamp(34px, 5.6vw, 60px)",
+              fontWeight: 800, lineHeight: 1.25, letterSpacing: "-1.5px",
+              color: "#2B3467", maxWidth: 820, margin: "0 auto 28px",
             }}>
-              相手が喜ぶシーンを想像する、<br />プレゼント選び
+              考えた時間が、<br />いちばんの贈り物になる。
             </h1>
             <p style={{
               fontSize: "clamp(15px, 1.8vw, 18px)",
               color: "#8B93B8", lineHeight: 1.85,
-              maxWidth: 520, margin: "0 auto 44px",
+              maxWidth: 540, margin: "0 auto 44px",
             }}>
-              誰かのエピソードを眺めながら、自分の「贈りたい視点」が見つかる。
+              モノを探す前に、相手のことを思いめぐらせる。<br />
+              haidozoは「誰かを想って選ぶ時間」のためのサービス。
             </p>
             <Link href="/" style={{
               display: "inline-flex", alignItems: "center", gap: 8,
@@ -113,7 +143,7 @@ export default function LpPage() {
               boxShadow: "0 8px 28px rgba(232,80,42,0.38)",
               letterSpacing: "0.01em",
             }}>
-              一緒に考えてみる →
+              思いめぐらせてみる →
             </Link>
           </div>
         </section>
@@ -122,100 +152,29 @@ export default function LpPage() {
         <section className="section-alt">
           <div className="wrap">
             <p className="eyebrow">THE PROBLEM</p>
-            <h2 className="h2">「何を買うか」より先に、考えたいこと</h2>
-            <p style={{ fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 800, color: "#E8502A", lineHeight: 1.5, marginBottom: 24, maxWidth: 600 }}>
-              「渡した後の、あの人の顔」
+            <h2 className="h2">「探すツール」はあるのに、<br />「考える場所」がなかった</h2>
+            <p style={{ fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 800, color: "#E8502A", lineHeight: 1.5, marginBottom: 24, maxWidth: 640 }}>
+              そのプレゼント、どうして選んだの？
             </p>
             <p className="lead" style={{ maxWidth: 560 }}>
-              誰かが「こんな気持ちで選んだ」エピソードを読みながら、自分が何を贈りたいかが見えてくる。
-              haidozo は、答えを渡すんじゃなく、視点を渡す場所。
+              ECもSNSも「何を買うか」から始まる。でも、本当にいい贈り物は「あの人はどんな人か」から始まる。
+              haidozoは検索結果じゃなく、贈る相手のことを考えるプロセスそのものを真ん中に置きました。
             </p>
-          </div>
-        </section>
-
-        {/* ── Episodes ── */}
-        <section className="section">
-          <div className="wrap">
-            <p className="eyebrow">REAL EPISODES</p>
-            <h2 className="h2">「こんな贈り方がしたかった」が、ヒントになる</h2>
-            <p className="lead" style={{ maxWidth: 560 }}>
-              haidozo に記録されているのは、アイテム名だけじゃない。その人のこと、選んだ理由、贈った後に思い描いていた場面。
-            </p>
-            <div className="grid-3">
-              {EPISODES.map((ep, i) => (
-                <div key={i} style={{
-                  background: "#fff", border: "1px solid rgba(43,52,103,0.08)",
-                  borderRadius: 22, padding: "28px 24px 22px",
-                  boxShadow: "0 4px 20px rgba(43,52,103,0.06)",
-                  display: "flex", flexDirection: "column", gap: 0,
-                }}>
-                  {/* wish = アウトカム */}
-                  <div style={{
-                    background: "rgba(232,80,42,0.06)", borderRadius: 12,
-                    padding: "12px 14px", marginBottom: 18,
-                  }}>
-                    <p style={{ fontSize: 11, fontWeight: 700, color: "#E8502A", letterSpacing: "0.06em", marginBottom: 6 }}>
-                      こんな気持ちで選んだ
-                    </p>
-                    <p style={{ fontSize: 13, color: "#2B3467", lineHeight: 1.8, fontWeight: 500 }}>
-                      {ep.wish}
-                    </p>
-                  </div>
-                  {/* reason */}
-                  <div style={{ borderLeft: "2px solid rgba(43,52,103,0.12)", paddingLeft: 14, marginBottom: 20, flex: 1 }}>
-                    <p style={{ fontSize: 13, color: "#6B7280", lineHeight: 1.85 }}>
-                      {ep.reason}
-                    </p>
-                  </div>
-                  <div>
-                    <p style={{ fontSize: 12, fontWeight: 700, color: "#2B3467", marginBottom: 8 }}>{ep.item}</p>
-                    <span style={{
-                      fontSize: 11, background: "rgba(232,80,42,0.08)", color: "#E8502A",
-                      borderRadius: 100, padding: "4px 12px", fontWeight: 600,
-                    }}>{ep.tag}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 
         {/* ── How it works ── */}
-        <section className="section-alt">
+        <section className="section">
           <div className="wrap">
             <p className="eyebrow">HOW IT WORKS</p>
-            <h2 className="h2">Instagramを眺めるように、プレゼントの方向性が見えてくる</h2>
+            <h2 className="h2">入口はひとつ。「誰のことを考える？」から</h2>
             <p className="lead" style={{ maxWidth: 560, marginBottom: 0 }}>
-              1問1答じゃない。エピソードのグリッドを眺めながら、気になるカードをタップして深掘りしていく感覚。
+              フィルターで絞り込む検索ではなく、相手を思い浮かべることから始まる1本の道。
+              途中で出会う誰かのエピソードが、あなたの考えを進めてくれる。
             </p>
 
             <div className="flow-cards">
-              {[
-                {
-                  n: "01",
-                  title: "誰に・どんな時を選ぶ",
-                  body: "贈る相手の関係性と場面を選ぶ。たった2タップで準備完了。",
-                  accent: false,
-                },
-                {
-                  n: "02",
-                  title: "グリッドを眺める",
-                  body: "「こんな贈り方をしたかった」というエピソードのカードがずらっと出てくる。Instagramのように流しながら眺める感覚で。",
-                  accent: false,
-                },
-                {
-                  n: "03",
-                  title: "気になるカードをタップ",
-                  body: "横スクロールで、画像 → 選んだ理由 → 相手のこと、と1枚の投稿をじっくり読める。関連エピソードも一緒に表示。",
-                  accent: true,
-                },
-                {
-                  n: "04",
-                  title: "「この方向で探す」へ",
-                  body: "気に入った視点から、ギフト探しに進める。答えを押しつけるんじゃなく、自分の方向性が言葉になる。",
-                  accent: false,
-                },
-              ].map((step) => (
+              {STEPS.map((step) => (
                 <div key={step.n} style={{
                   background: step.accent ? "rgba(232,80,42,0.05)" : "#fff",
                   border: `1.5px solid ${step.accent ? "rgba(232,80,42,0.25)" : "rgba(43,52,103,0.08)"}`,
@@ -238,96 +197,95 @@ export default function LpPage() {
         </section>
 
         {/* ── Pseudo experience ── */}
-        <section className="section">
+        <section className="section-alt">
           <div className="wrap">
             <p className="eyebrow">TRY IT</p>
-            <h2 className="h2">こんな体験ができます</h2>
+            <h2 className="h2">考えの途中を、置いておける</h2>
             <p className="lead" style={{ maxWidth: 560, marginBottom: 48 }}>
-              グリッドのカードを眺めて、気になったものをタップ。横にスワイプしながら、選んだ理由・相手のことを読んでいく。
+              思いめぐらせた途中経過は「考え中の相手」として残る。
+              アプリを開くたび、検索バーじゃなく、あの人の顔が待っている。
             </p>
 
-            {/* Mockup */}
-            <div style={{
-              display: "flex", flexDirection: "column", gap: 24, alignItems: "center",
-            }}>
-              {/* Grid mockup */}
+            <div className="mock-row">
+              {/* 考え中カード mockup */}
               <div style={{
-                width: "100%", maxWidth: 420,
-                background: "#fff", border: "1.5px solid rgba(43,52,103,0.1)",
-                borderRadius: 24, padding: 20, boxShadow: "0 8px 32px rgba(43,52,103,0.08)",
+                width: "100%", maxWidth: 400,
+                background: "#FAF7F2", border: "1.5px solid rgba(43,52,103,0.1)",
+                borderRadius: 24, padding: 24, boxShadow: "0 8px 32px rgba(43,52,103,0.08)",
               }}>
-                <p style={{ fontSize: 11, fontWeight: 700, color: "#A0A8CC", letterSpacing: "0.06em", marginBottom: 14 }}>友達 / 誕生日</p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                  {[
-                    { bg: "linear-gradient(145deg, #C8D4F9, #98A8F0)", emoji: "🎂", label: "センスが伝わるもの", item: "AURALEE ニット" },
-                    { bg: "linear-gradient(145deg, #C8D4F9, #98A8F0)", emoji: "🌸", label: "一緒に楽しめるもの", item: "ムビチケ ペア" },
-                    { bg: "linear-gradient(145deg, #C8D4F9, #98A8F0)", emoji: "📚", label: "長く使えるもの", item: "図書カード" },
-                    { bg: "linear-gradient(145deg, #C8D4F9, #98A8F0)", emoji: "🎀", label: "その人らしいもの", item: "短歌集" },
-                  ].map((card, i) => (
-                    <div key={i} style={{
-                      background: card.bg,
-                      borderRadius: 16,
-                      aspectRatio: "3/4",
-                      display: "flex", flexDirection: "column",
-                      justifyContent: "space-between",
-                      padding: "12px 10px",
-                      position: "relative",
-                      overflow: "hidden",
-                      boxShadow: i === 0 ? "0 0 0 3px #E8502A" : undefined,
-                    }}>
-                      <span style={{ fontSize: 28 }}>{card.emoji}</span>
-                      <div>
-                        <p style={{ fontSize: 9, fontWeight: 700, color: "rgba(43,52,103,0.6)", marginBottom: 3 }}>{card.label}</p>
-                        <p style={{ fontSize: 11, fontWeight: 700, color: "#2B3467" }}>{card.item}</p>
+                <p style={{ fontSize: 11, fontWeight: 700, color: "#A0A8CC", letterSpacing: "0.06em", marginBottom: 14 }}>
+                  考え中の相手
+                </p>
+                <div style={{
+                  background: "#fff", border: "1px solid rgba(43,52,103,0.08)",
+                  borderRadius: 18, padding: 16, marginBottom: 12,
+                }}>
+                  <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 10 }}>
+                    <div style={{
+                      width: 42, height: 42, borderRadius: 100,
+                      background: "rgba(232,80,42,0.1)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: 16, fontWeight: 800, color: "#E8502A",
+                    }}>母</div>
+                    <div>
+                      <p style={{ fontSize: 14, fontWeight: 800, color: "#2B3467", marginBottom: 4 }}>お母さん</p>
+                      <div style={{ display: "flex", gap: 5 }}>
+                        {["家族", "誕生日"].map((t) => (
+                          <span key={t} style={{ fontSize: 10, fontWeight: 600, padding: "2px 8px", borderRadius: 100, background: "rgba(43,52,103,0.06)", color: "#8B93B8" }}>{t}</span>
+                        ))}
                       </div>
                     </div>
-                  ))}
+                  </div>
+                  <p style={{ fontSize: 12, color: "#8B93B8", lineHeight: 1.7, marginBottom: 12 }}>
+                    「最近vlogを始めて楽しそう。ネタになるものもいいかも」
+                  </p>
+                  <div style={{
+                    background: "#E8502A", borderRadius: 100, padding: "10px",
+                    textAlign: "center", fontSize: 13, fontWeight: 700, color: "#fff",
+                  }}>
+                    つづきを考える
+                  </div>
                 </div>
-                <p style={{ fontSize: 11, color: "#A0A8CC", textAlign: "center", marginTop: 12 }}>タップして詳しく見る</p>
+                <div style={{
+                  border: "1.5px dashed rgba(232,80,42,0.5)", borderRadius: 16,
+                  padding: "13px", textAlign: "center",
+                  fontSize: 13, fontWeight: 700, color: "#E8502A",
+                  background: "rgba(232,80,42,0.04)",
+                }}>
+                  ＋ 新しく思いめぐらせる
+                </div>
               </div>
 
-              {/* Arrow */}
-              <div style={{ fontSize: 24, color: "#E8502A", lineHeight: 1 }}>↓</div>
-
-              {/* Slide detail mockup */}
+              {/* 想いの一文 mockup */}
               <div style={{
-                width: "100%", maxWidth: 420,
+                width: "100%", maxWidth: 400,
                 background: "#fff", border: "2px solid rgba(232,80,42,0.2)",
                 borderRadius: 24, padding: 24, boxShadow: "0 8px 32px rgba(232,80,42,0.08)",
+                display: "flex", flexDirection: "column",
               }}>
-                {/* Slide indicator */}
-                <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 18 }}>
-                  {[0,1,2].map(i => (
-                    <div key={i} style={{
-                      width: i === 0 ? 20 : 6, height: 6, borderRadius: 3,
-                      background: i === 0 ? "#E8502A" : "rgba(43,52,103,0.15)",
-                      transition: "width 200ms",
-                    }} />
+                <p style={{ fontSize: 11, fontWeight: 700, color: "#A0A8CC", letterSpacing: "0.06em", marginBottom: 14 }}>
+                  めぐらせた先に
+                </p>
+                <div style={{
+                  background: "linear-gradient(135deg, rgba(232,80,42,0.08) 0%, #fff8f5 100%)",
+                  border: "1.5px solid rgba(232,80,42,0.25)",
+                  borderRadius: 16, padding: "16px 18px", marginBottom: 16,
+                }}>
+                  <p style={{ fontSize: 10, fontWeight: 700, color: "#E8502A", letterSpacing: "0.08em", marginBottom: 8 }}>
+                    こんなふうに喜んでほしい
+                  </p>
+                  <p style={{ fontSize: 16, fontWeight: 800, color: "#2B3467", lineHeight: 1.7 }}>
+                    出かける口実ごと、<br />プレゼントしたい
+                  </p>
+                </div>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 16 }}>
+                  {["出かける口実をあげたかった", "ふたりで楽しんでほしい"].map((v) => (
+                    <span key={v} style={{ fontSize: 11, padding: "4px 11px", borderRadius: 100, background: "rgba(232,80,42,0.08)", color: "#E8502A", fontWeight: 600 }}>{v}</span>
                   ))}
                 </div>
-                {/* Slide 1: image placeholder */}
-                <div style={{
-                  background: "linear-gradient(145deg, #C8D4F9, #98A8F0)",
-                  borderRadius: 16, height: 140,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  marginBottom: 16, fontSize: 48,
-                }}>
-                  🎂
-                </div>
-                <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
-                  {["友達", "誕生日"].map(t => (
-                    <span key={t} style={{ fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 100, background: "rgba(43,52,103,0.06)", color: "#8B93B8" }}>{t}</span>
-                  ))}
-                </div>
-                <p style={{ fontSize: 11, fontWeight: 700, color: "#A0A8CC", letterSpacing: "0.06em", marginBottom: 4 }}>AURALEE シルクウールニット</p>
-                <p style={{ fontSize: 12, color: "#8B93B8", marginBottom: 16 }}>← 左にスワイプで「選んだ理由」→</p>
-                <div style={{
-                  background: "#E8502A", borderRadius: 100, padding: "13px",
-                  textAlign: "center", fontSize: 14, fontWeight: 700, color: "#fff",
-                  boxShadow: "0 4px 16px rgba(232,80,42,0.3)",
-                }}>
-                  この方向で探す
-                </div>
+                <p style={{ fontSize: 12, color: "#8B93B8", lineHeight: 1.8, marginTop: "auto" }}>
+                  想いが一文になってから、モノに出会う。<br />近い記録とお店が、その下に並びます。
+                </p>
               </div>
             </div>
 
@@ -345,6 +303,52 @@ export default function LpPage() {
           </div>
         </section>
 
+        {/* ── Episodes ── */}
+        <section className="section">
+          <div className="wrap">
+            <p className="eyebrow">REAL EPISODES</p>
+            <h2 className="h2">あなたの「なぜ選んだか」が、<br />誰かのヒントになる</h2>
+            <p className="lead" style={{ maxWidth: 560 }}>
+              haidozoに残るのはアイテム名だけじゃない。その人のこと、選んだ理由、贈ったあとに思い描いていた場面。
+              考えて、贈って、記録する——そのループが、次に誰かが思いめぐらせる時間を支える。
+            </p>
+            <div className="grid-3">
+              {EPISODES.map((ep, i) => (
+                <div key={i} style={{
+                  background: "#fff", border: "1px solid rgba(43,52,103,0.08)",
+                  borderRadius: 22, padding: "28px 24px 22px",
+                  boxShadow: "0 4px 20px rgba(43,52,103,0.06)",
+                  display: "flex", flexDirection: "column", gap: 0,
+                }}>
+                  <div style={{
+                    background: "rgba(232,80,42,0.06)", borderRadius: 12,
+                    padding: "12px 14px", marginBottom: 18,
+                  }}>
+                    <p style={{ fontSize: 11, fontWeight: 700, color: "#E8502A", letterSpacing: "0.06em", marginBottom: 6 }}>
+                      こんなふうに喜んでほしかった
+                    </p>
+                    <p style={{ fontSize: 13, color: "#2B3467", lineHeight: 1.8, fontWeight: 500 }}>
+                      {ep.wish}
+                    </p>
+                  </div>
+                  <div style={{ borderLeft: "2px solid rgba(43,52,103,0.12)", paddingLeft: 14, marginBottom: 20, flex: 1 }}>
+                    <p style={{ fontSize: 13, color: "#6B7280", lineHeight: 1.85 }}>
+                      {ep.reason}
+                    </p>
+                  </div>
+                  <div>
+                    <p style={{ fontSize: 12, fontWeight: 700, color: "#2B3467", marginBottom: 8 }}>{ep.item}</p>
+                    <span style={{
+                      fontSize: 11, background: "rgba(232,80,42,0.08)", color: "#E8502A",
+                      borderRadius: 100, padding: "4px 12px", fontWeight: 600,
+                    }}>{ep.tag}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ── Final CTA ── */}
         <section style={{ background: "#2B3467", padding: "100px 0 112px", textAlign: "center" }}>
           <div className="wrap">
@@ -352,7 +356,7 @@ export default function LpPage() {
               haidozo
             </div>
             <p style={{ fontSize: "clamp(16px, 2vw, 20px)", color: "rgba(255,255,255,0.5)", lineHeight: 1.8, marginBottom: 40 }}>
-              あの人が喜ぶ場面を想像しながら、<br />プレゼントを選ぼう。
+              いま、誰のことを考えていますか？
             </p>
             <Link href="/" style={{
               display: "inline-flex", alignItems: "center", gap: 8,
@@ -361,7 +365,7 @@ export default function LpPage() {
               fontSize: 17, fontWeight: 700, textDecoration: "none",
               boxShadow: "0 8px 32px rgba(232,80,42,0.5)",
             }}>
-              一緒に考えてみる →
+              思いめぐらせてみる →
             </Link>
             <p style={{ fontSize: 12, color: "rgba(255,255,255,0.22)", marginTop: 22 }}>無料で使えます</p>
           </div>
