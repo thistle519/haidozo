@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import type { Post } from "@/types";
+import type { Post, Plan } from "@/types";
 import { FEED_DATA } from "@/lib/mockData";
 
 import TopNav from "@/components/layout/TopNav";
@@ -12,17 +12,34 @@ import FeedScreen from "@/components/screens/FeedScreen";
 import SearchScreen from "@/components/screens/SearchScreen";
 import ComposerScreen from "@/components/screens/ComposerScreen";
 import PostDetailScreen from "@/components/screens/PostDetailScreen";
-import LikesScreen from "@/components/screens/LikesScreen";
 import ProfileScreen from "@/components/screens/ProfileScreen";
 import NotificationScreen from "@/components/screens/NotificationScreen";
 
-type Screen = "feed" | "search" | "compose" | "detail" | "likes" | "profile" | "notif";
+type Screen = "feed" | "search" | "compose" | "detail" | "profile" | "notif";
+
+// デモ用：考え中のプラン
+const INITIAL_PLANS: Plan[] = [
+  {
+    id: 1,
+    label: "お母さん",
+    relation: "家族",
+    scene: "誕生日",
+    persona: ["お出かけ好き", "vlogger"],
+    loves: ["vlog撮影", "お出かけ"],
+    selectedIds: [25],
+    vibes: ["出かける口実をあげたかった"],
+    memo: "最近vlogを始めて楽しそう。ネタになるものもいいかも",
+    wish: "",
+    savedAt: "6月10日",
+  },
+];
 
 export default function ClientShell() {
   const [screen, setScreen] = useState<Screen>("search");
   const [prevScreen, setPrev] = useState<Screen>("search");
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [likes, setLikes] = useState<Record<number, boolean>>({});
+  const [plans, setPlans] = useState<Plan[]>(INITIAL_PLANS);
   const [toast, setToast] = useState<string | null>(null);
   const [notifSeen, setNotifSeen] = useState(false);
 
@@ -52,11 +69,18 @@ export default function ClientShell() {
   const onPost = useCallback(() => {
     setTimeout(() => {
       navigate("search");
-      setToast("投稿しました！みんなに届きます");
+      setToast("記録しました！誰かの思いめぐりのヒントになります");
     }, 400);
   }, [navigate]);
 
-  const likeCount = Object.values(likes).filter(Boolean).length;
+  const onSavePlan = useCallback((plan: Plan) => {
+    setPlans((ps) => {
+      const exists = ps.some((p) => p.id === plan.id);
+      return exists ? ps.map((p) => (p.id === plan.id ? plan : p)) : [plan, ...ps];
+    });
+    setToast("考え中に保存しました。いつでも続きから");
+  }, []);
+
   const showBottomNav = !["compose", "detail", "notif"].includes(screen);
 
   const renderScreen = () => {
@@ -64,17 +88,23 @@ export default function ClientShell() {
       case "feed":
         return <FeedScreen posts={FEED_DATA} likes={likes} onLike={onLike} onTapPost={onTapPost} />;
       case "search":
-        return <SearchScreen likes={likes} onTapPost={onTapPost} />;
+        return (
+          <SearchScreen
+            likes={likes}
+            onTapPost={onTapPost}
+            plans={plans}
+            onSavePlan={onSavePlan}
+            onCompose={() => navigate("compose")}
+          />
+        );
       case "compose":
         return <ComposerScreen onPost={onPost} />;
       case "detail":
         return selectedPost ? (
           <PostDetailScreen post={selectedPost} liked={!!likes[selectedPost.id]} onLike={onLike} />
         ) : null;
-      case "likes":
-        return <LikesScreen likes={likes} onTapPost={onTapPost} />;
       case "profile":
-        return <ProfileScreen likes={likes} onTapPost={onTapPost} />;
+        return <ProfileScreen likes={likes} onTapPost={onTapPost} onCompose={() => navigate("compose")} />;
       case "notif":
         return <NotificationScreen />;
       default:
@@ -105,7 +135,7 @@ export default function ClientShell() {
       </div>
 
       {showBottomNav
-        ? <BottomNav active={screen} onNav={navigate} likeCount={likeCount} />
+        ? <BottomNav active={screen} onNav={navigate} />
         : <div style={{ height: 72, background: "var(--color-bg)" }} />
       }
     </div>

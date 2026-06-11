@@ -2,15 +2,30 @@
 
 import Icon from "@/components/ui/Icon";
 
-type Screen = "feed" | "search" | "compose" | "detail" | "likes" | "profile" | "notif";
+type Screen = "feed" | "search" | "compose" | "detail" | "profile" | "notif";
 
 interface BottomNavProps {
   active: Screen;
   onNav: (screen: Screen) => void;
-  likeCount: number;
 }
 
+// 3タブ構成：フィード ｜ みつける（中央・メイン動線）｜ マイページ（きろく統合）
 export default function BottomNav({ active, onNav }: BottomNavProps) {
+  const sideTab = (id: Screen, icon: "home" | "user", label: string) => (
+    <div
+      onClick={() => onNav(id)}
+      style={{
+        display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
+        cursor: "pointer", padding: "4px 20px", borderRadius: 12, width: 96,
+      }}
+    >
+      <Icon name={icon} size={22} color={active === id ? "var(--color-accent)" : "var(--color-fg-muted)"} />
+      <span style={{ fontSize: 10, fontWeight: 500, color: active === id ? "var(--color-accent)" : "var(--color-fg-muted)" }}>
+        {label}
+      </span>
+    </div>
+  );
+
   return (
     <div style={{
       position: "fixed",
@@ -25,49 +40,38 @@ export default function BottomNav({ active, onNav }: BottomNavProps) {
       borderTop: "1px solid var(--color-border)",
       display: "flex",
       alignItems: "center",
-      justifyContent: "space-around",
-      padding: "8px 0 16px",
+      justifyContent: "space-between",
+      padding: "8px 12px 14px",
       zIndex: 10,
     }}>
-      {/* 探す */}
+      {sideTab("feed", "home", "フィード")}
+
+      {/* みつける（中央・メイン動線） */}
       <div
         onClick={() => onNav("search")}
         style={{
           display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
-          cursor: "pointer", padding: "4px 16px", borderRadius: 12,
+          cursor: "pointer", marginTop: -22,
         }}
       >
-        <Icon name="search" size={22} color={active === "search" ? "var(--color-accent)" : "var(--color-fg-muted)"} />
-        <span style={{ fontSize: 10, fontWeight: 500, color: active === "search" ? "var(--color-accent)" : "var(--color-fg-muted)" }}>
-          探す
-        </span>
-      </div>
-
-      {/* 投稿（中央ボタン） */}
-      <div onClick={() => onNav("compose")} style={{ cursor: "pointer" }}>
         <div style={{
-          width: 52, height: 52, borderRadius: 100,
+          width: 54, height: 54, borderRadius: 100,
           background: "var(--color-accent)",
           boxShadow: "0 4px 16px rgba(232,80,42,0.4)",
+          border: "3px solid var(--color-bg)",
           display: "flex", alignItems: "center", justifyContent: "center",
         }}>
-          <Icon name="plus" size={24} color="#fff" />
+          <Icon name="search" size={24} color="#fff" strokeWidth={2.2} />
         </div>
-      </div>
-
-      {/* マイページ */}
-      <div
-        onClick={() => onNav("profile")}
-        style={{
-          display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
-          cursor: "pointer", padding: "4px 16px", borderRadius: 12,
-        }}
-      >
-        <Icon name="user" size={22} color={active === "profile" ? "var(--color-accent)" : "var(--color-fg-muted)"} />
-        <span style={{ fontSize: 10, fontWeight: 500, color: active === "profile" ? "var(--color-accent)" : "var(--color-fg-muted)" }}>
-          マイページ
+        <span style={{
+          fontSize: 10, fontWeight: 700,
+          color: active === "search" ? "var(--color-accent)" : "var(--color-fg-muted)",
+        }}>
+          みつける
         </span>
       </div>
+
+      {sideTab("profile", "user", "マイページ")}
     </div>
   );
 }

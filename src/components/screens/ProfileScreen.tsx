@@ -9,9 +9,11 @@ import Icon from "@/components/ui/Icon";
 interface ProfileScreenProps {
   likes: Record<number, boolean>;
   onTapPost: (post: Post) => void;
+  onCompose: () => void;
 }
 
-export default function ProfileScreen({ likes, onTapPost }: ProfileScreenProps) {
+// きろく（旧likesタブ＋投稿）を統合したマイページ
+export default function ProfileScreen({ likes, onTapPost, onCompose }: ProfileScreenProps) {
   const [tab, setTab] = useState<"posts" | "likes">("posts");
   const myPosts = FEED_DATA.filter((p) => p.user === "shizuru");
   const likedPosts = FEED_DATA.filter((p) => likes[p.id]);
@@ -36,7 +38,7 @@ export default function ProfileScreen({ likes, onTapPost }: ProfileScreenProps) 
           background: "var(--color-surface)", borderRadius: 20, padding: "16px 0",
           border: "1px solid var(--color-border)", marginBottom: 4,
         }}>
-          {([{ n: myPosts.length, label: "投稿" }, { n: 7, label: "いいね" }, { n: 12, label: "フォロワー" }] as const).map((s, i) => (
+          {([{ n: myPosts.length, label: "きろく" }, { n: 7, label: "いいね" }, { n: 12, label: "フォロワー" }] as const).map((s, i) => (
             <div key={s.label} style={{
               flex: 1, textAlign: "center",
               borderRight: i < 2 ? "1px solid var(--color-border)" : "none",
@@ -82,15 +84,31 @@ export default function ProfileScreen({ likes, onTapPost }: ProfileScreenProps) 
               transition: "all 200ms ease-out",
             }}
           >
-            {id === "posts" ? "投稿" : "いいね"}
+            {id === "posts" ? "きろく" : "いいね"}
           </div>
         ))}
       </div>
 
       <div style={{ padding: "16px 20px 0" }}>
+        {/* きろく追加（小さい投稿動線） */}
+        {tab === "posts" && (
+          <button
+            onClick={onCompose}
+            style={{
+              width: "100%", padding: "12px 0", borderRadius: 14, marginBottom: 14,
+              border: "1.5px dashed var(--color-fg-subtle)", background: "transparent",
+              fontSize: 13, fontWeight: 600, color: "var(--color-fg-muted)",
+              cursor: "pointer", fontFamily: "inherit",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+            }}
+          >
+            <Icon name="plus" size={14} color="var(--color-fg-muted)" />
+            「はい、どうぞ」した記録を追加
+          </button>
+        )}
         {items.length === 0 ? (
           <div style={{ textAlign: "center", padding: "32px 0", color: "var(--color-fg-subtle)", fontSize: 13 }}>
-            {tab === "likes" ? "まだいいねした投稿がありません" : "投稿がありません"}
+            {tab === "likes" ? "まだいいねした投稿がありません" : "まだ記録がありません"}
           </div>
         ) : items.map((p) => (
           <div

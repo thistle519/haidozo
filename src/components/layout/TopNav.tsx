@@ -2,7 +2,7 @@
 
 import Icon from "@/components/ui/Icon";
 
-type Screen = "feed" | "search" | "compose" | "detail" | "likes" | "profile" | "notif";
+type Screen = "feed" | "search" | "compose" | "detail" | "profile" | "notif";
 
 interface TopNavProps {
   screen: Screen;
