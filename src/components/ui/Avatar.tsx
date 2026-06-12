@@ -1,9 +1,30 @@
 interface AvatarProps {
   initial?: string;
   size?: number;
+  /** 画像URLがあれば円形画像を表示。無ければイニシャル丸（後方互換） */
+  src?: string | null;
 }
 
-export default function Avatar({ initial = "?", size = 32 }: AvatarProps) {
+export default function Avatar({ initial = "?", size = 32, src }: AvatarProps) {
+  if (src) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={src}
+        alt=""
+        style={{
+          width: size,
+          height: size,
+          borderRadius: "100px",
+          objectFit: "cover",
+          border: "1.5px solid var(--color-border)",
+          flexShrink: 0,
+          display: "block",
+        }}
+      />
+    );
+  }
+
   return (
     <div
       style={{

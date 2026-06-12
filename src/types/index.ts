@@ -39,13 +39,13 @@ export interface Plan {
   savedAt: string;
 }
 
+// 通知（いいねイベント）。表示用に整形済み
 export interface Notification {
-  id: number;
-  type: "like" | "follow";
-  user: string;
-  initial: string;
-  text: string;
-  sub?: string;
-  time: string;
+  id: string;
+  type: "like";
+  user: string;        // いいねした人の表示名
+  initial: string;     // 表示名の先頭1文字
+  sub?: string;        // 対象投稿の item 名
+  time: string;        // 相対時刻（「3分前」「2時間前」「6月10日」等）
   unread: boolean;
 }

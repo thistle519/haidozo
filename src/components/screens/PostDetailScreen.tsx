@@ -54,7 +54,7 @@ export default function PostDetailScreen({ post, posts, liked, onLike }: PostDet
             }}
           >
             <Icon name={liked ? "heart-fill" : "heart"} size={15} color={liked ? "var(--color-accent)" : "var(--color-fg-muted)"} />
-            {post.likes + (liked ? 1 : 0)}
+            {post.likes}
           </button>
         </div>
 
@@ -95,11 +95,14 @@ export default function PostDetailScreen({ post, posts, liked, onLike }: PostDet
         )}
 
         {post.url && (
-          <div style={{
-            display: "flex", alignItems: "center", gap: 12,
-            background: "var(--color-surface)", border: "1px solid var(--color-border)",
-            borderRadius: 16, padding: "14px 16px", marginBottom: 20, cursor: "pointer",
-          }}>
+          <div
+            onClick={() => window.open(post.url, "_blank", "noopener,noreferrer")}
+            style={{
+              display: "flex", alignItems: "center", gap: 12,
+              background: "var(--color-surface)", border: "1px solid var(--color-border)",
+              borderRadius: 16, padding: "14px 16px", marginBottom: 20, cursor: "pointer",
+            }}
+          >
             <div style={{
               width: 36, height: 36, borderRadius: 10, background: "var(--color-accent-light)",
               display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,

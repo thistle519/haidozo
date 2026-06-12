@@ -74,7 +74,7 @@ function FeatureCard({ post, liked, onLike, onTap }: { post: Post; liked: boolea
             }}
           >
             <Icon name={liked ? "heart-fill" : "heart"} size={16} color={liked ? "var(--color-accent)" : "var(--color-fg-muted)"} />
-            {post.likes + (liked ? 1 : 0)}
+            {post.likes}
           </button>
         </div>
       </div>

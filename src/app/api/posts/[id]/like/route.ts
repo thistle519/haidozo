@@ -34,10 +34,10 @@ export async function POST(
       return unauthorized();
     }
 
-    // 投稿の存在確認
+    // 投稿の存在確認（通知生成のため投稿者 user_id も取得）
     const { data: post, error: postError } = await supabase
       .from("posts")
-      .select("id")
+      .select("id, user_id")
       .eq("id", postId)
       .single();
 
@@ -65,7 +65,7 @@ export async function POST(
     let liked: boolean;
 
     if (existing) {
-      // いいね済み → 解除
+      // いいね済み → 解除（delete はレースしても冪等）
       const { error: deleteError } = await supabase
         .from("post_likes")
         .delete()
@@ -77,6 +77,17 @@ export async function POST(
         return serverError();
       }
       liked = false;
+
+      // いいね解除に伴い、自分が出したいいね通知を削除（失敗してもレスポンスは成功）
+      const { error: notifDeleteError } = await supabase
+        .from("notifications")
+        .delete()
+        .eq("post_id", postId)
+        .eq("actor_id", user.id)
+        .eq("type", "like");
+      if (notifDeleteError) {
+        console.error(`[POST /api/posts/${postId}/like] Notification delete error:`, notifDeleteError);
+      }
     } else {
       // 未いいね → 追加
       const { error: insertError } = await supabase
@@ -84,10 +95,32 @@ export async function POST(
         .insert({ post_id: postId, user_id: user.id });
 
       if (insertError) {
-        console.error(`[POST /api/posts/${postId}/like] Insert error:`, insertError);
-        return serverError();
+        // 連打レースで二重 insert → PK(post_id,user_id) の一意制約違反(23505)。
+        // 既にいいね済みとみなし liked=true で正常応答する。
+        if (insertError.code === "23505") {
+          liked = true;
+        } else {
+          console.error(`[POST /api/posts/${postId}/like] Insert error:`, insertError);
+          return serverError();
+        }
+      } else {
+        liked = true;
+
+        // いいね成立時、投稿者宛に通知を生成（自分の投稿には作らない）。失敗してもレスポンスは成功。
+        if (post.user_id && post.user_id !== user.id) {
+          const { error: notifInsertError } = await supabase
+            .from("notifications")
+            .insert({
+              recipient_id: post.user_id,
+              actor_id: user.id,
+              type: "like",
+              post_id: postId,
+            });
+          if (notifInsertError) {
+            console.error(`[POST /api/posts/${postId}/like] Notification insert error:`, notifInsertError);
+          }
+        }
       }
-      liked = true;
     }
 
     // 最新のいいね数を取得

@@ -162,13 +162,13 @@ export default function SignupPage() {
       <form onSubmit={handleSubmit} noValidate style={{ display: "flex", flexDirection: "column", gap: 18 }}>
         <AuthInput
           id="name"
-          label="お名前"
+          label="ニックネーム"
           type="text"
           value={name}
           onChange={setName}
-          placeholder="山田 太郎"
+          placeholder="あざみ"
           error={fieldErrors.name}
-          autoComplete="name"
+          autoComplete="nickname"
           disabled={loading}
         />
         <AuthInput

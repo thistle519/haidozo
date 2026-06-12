@@ -7,6 +7,7 @@ import {
   toggleLike as apiToggleLike,
   getCurrentUser,
   signOut,
+  fetchNotifications,
   type CurrentUser,
 } from "@/lib/api";
 
@@ -23,32 +24,15 @@ import NotificationScreen from "@/components/screens/NotificationScreen";
 
 type Screen = "feed" | "search" | "compose" | "detail" | "profile" | "notif";
 
-// デモ用：考え中のプラン
-const INITIAL_PLANS: Plan[] = [
-  {
-    id: 1,
-    label: "お母さん",
-    relation: "家族",
-    scene: "誕生日",
-    persona: ["お出かけ好き", "vlogger"],
-    loves: ["vlog撮影", "お出かけ"],
-    selectedIds: ["25"],
-    vibes: ["出かける口実をあげたかった"],
-    memo: "最近vlogを始めて楽しそう。ネタになるものもいいかも",
-    wish: "",
-    savedAt: "6月10日",
-  },
-];
-
 export default function ClientShell() {
   const [screen, setScreen] = useState<Screen>("search");
   const [prevScreen, setPrev] = useState<Screen>("search");
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [likes, setLikes] = useState<Record<string, boolean>>({});
-  const [plans, setPlans] = useState<Plan[]>(INITIAL_PLANS);
+  const [plans, setPlans] = useState<Plan[]>([]);
   const [toast, setToast] = useState<string | null>(null);
-  const [notifSeen, setNotifSeen] = useState(false);
+  const [unreadNotif, setUnreadNotif] = useState(0);
   const [me, setMe] = useState<CurrentUser | null>(null);
 
   // ログイン中ユーザーの取得（プロフィール表示用）
@@ -56,6 +40,13 @@ export default function ClientShell() {
     getCurrentUser()
       .then(setMe)
       .catch(() => setMe(null));
+  }, []);
+
+  // 未読通知数の取得（バッジ表示用）
+  useEffect(() => {
+    fetchNotifications()
+      .then((list) => setUnreadNotif(list.filter((n) => n.unread).length))
+      .catch(() => setUnreadNotif(0));
   }, []);
 
   const onLogout = useCallback(() => {
@@ -119,22 +110,34 @@ export default function ClientShell() {
       return { ...sp, likes: sp.likes + (prevLiked ? -1 : 1) };
     });
 
-    apiToggleLike(id).catch((err) => {
-      // ロールバック
-      setLikes((l) => ({ ...l, [id]: prevLiked }));
-      setPosts((ps) =>
-        ps.map((p) =>
-          p.id === id
-            ? { ...p, likes: p.likes + (prevLiked ? 1 : -1) }
-            : p
-        )
-      );
-      setSelectedPost((sp) => {
-        if (!sp || sp.id !== id) return sp;
-        return { ...sp, likes: sp.likes + (prevLiked ? 1 : -1) };
+    apiToggleLike(id)
+      .then(({ liked, likes: serverLikes }) => {
+        // サーバ値で収束（連打時の楽観更新ズレを補正）
+        setLikes((l) => ({ ...l, [id]: liked }));
+        setPosts((ps) =>
+          ps.map((p) => (p.id === id ? { ...p, likes: serverLikes } : p))
+        );
+        setSelectedPost((sp) => {
+          if (!sp || sp.id !== id) return sp;
+          return { ...sp, likes: serverLikes };
+        });
+      })
+      .catch((err) => {
+        // ロールバック
+        setLikes((l) => ({ ...l, [id]: prevLiked }));
+        setPosts((ps) =>
+          ps.map((p) =>
+            p.id === id
+              ? { ...p, likes: p.likes + (prevLiked ? 1 : -1) }
+              : p
+          )
+        );
+        setSelectedPost((sp) => {
+          if (!sp || sp.id !== id) return sp;
+          return { ...sp, likes: sp.likes + (prevLiked ? 1 : -1) };
+        });
+        setToast(err instanceof Error ? err.message : "いいねに失敗しました");
       });
-      setToast(err instanceof Error ? err.message : "いいねに失敗しました");
-    });
   }, [likes]);
 
   const onTapPost = useCallback((post: Post) => {
@@ -143,9 +146,13 @@ export default function ClientShell() {
   }, [navigate]);
 
   const onBell = useCallback(() => {
-    setNotifSeen(true);
     navigate("notif");
   }, [navigate]);
+
+  // 通知画面で既読化したらバッジを消す
+  const onNotifRead = useCallback(() => {
+    setUnreadNotif(0);
+  }, []);
 
   const onPost = useCallback((newPost: Post) => {
     setPosts((ps) => [newPost, ...ps]);
@@ -237,9 +244,9 @@ export default function ClientShell() {
           />
         ) : null;
       case "profile":
-        return <ProfileScreen posts={posts} likes={likes} me={me} onTapPost={onTapPost} onCompose={() => navigate("compose")} onLogout={onLogout} />;
+        return <ProfileScreen posts={posts} likes={likes} me={me} onTapPost={onTapPost} onCompose={() => navigate("compose")} onLogout={onLogout} onUpdateMe={setMe} />;
       case "notif":
-        return <NotificationScreen />;
+        return <NotificationScreen onRead={onNotifRead} />;
       default:
         return null;
     }
@@ -256,7 +263,7 @@ export default function ClientShell() {
       display: "flex",
       flexDirection: "column",
     }}>
-      <TopNav screen={screen} onBack={goBack} onBell={onBell} hasNotif={!notifSeen} />
+      <TopNav screen={screen} onBack={goBack} onBell={onBell} hasNotif={unreadNotif > 0} />
 
       <div
         key={screen}

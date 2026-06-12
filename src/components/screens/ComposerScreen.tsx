@@ -3,12 +3,9 @@
 import { useState } from "react";
 import type { Post, Relation, PriceRange, Scene } from "@/types";
 import { createPost } from "@/lib/api";
+import { RELATIONS, PRICES, SCENES } from "@/lib/validation";
 import TagChip from "@/components/ui/TagChip";
 import Icon from "@/components/ui/Icon";
-
-const RELATIONS: Relation[] = ["恋人", "友達", "家族", "上司", "同僚", "先生・恩師"];
-const PRICES: PriceRange[] = ["〜3,000円", "〜5,000円", "〜10,000円", "それ以上"];
-const SCENES: Scene[] = ["誕生日", "記念日", "お礼", "送別", "なんでもない日"];
 
 interface ComposerScreenProps {
   onPost: (post: Post) => void;
@@ -131,7 +128,20 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
         {/* Step 2 */}
         <div style={{ marginBottom: 28 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-            <StepBadge n={2} done={!!price} />
+            <StepBadge n={2} done={!!scene} />
+            <div style={{ fontSize: 15, fontWeight: 500, color: "var(--color-fg)" }}>どんなシチュエーション？</div>
+          </div>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {SCENES.map((s) => (
+              <TagChip key={s} label={s} selected={scene === s} onClick={() => setScene(scene === s ? null : s)} />
+            ))}
+          </div>
+        </div>
+
+        {/* Step 3 */}
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+            <StepBadge n={3} done={!!price} />
             <div style={{ fontSize: 15, fontWeight: 500, color: "var(--color-fg)" }}>価格帯は？</div>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -141,10 +151,10 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
           </div>
         </div>
 
-        {/* Step 3 */}
+        {/* Step 4 */}
         <div style={{ marginBottom: 28 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-            <StepBadge n={3} done={!!itemName} />
+            <StepBadge n={4} done={!!itemName} />
             <div style={{ fontSize: 15, fontWeight: 500, color: "var(--color-fg)" }}>何を贈りましたか？</div>
           </div>
           <input
@@ -167,10 +177,10 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
           </div>
         </div>
 
-        {/* Step 4 */}
+        {/* Step 5 */}
         <div style={{ marginBottom: 28 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-            <StepBadge n={4} done={!!about} />
+            <StepBadge n={5} done={!!about} />
             <div style={{ fontSize: 15, fontWeight: 500, color: "var(--color-fg)" }}>贈った相手のこと</div>
           </div>
           <textarea
@@ -184,10 +194,10 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
           />
         </div>
 
-        {/* Step 5 */}
+        {/* Step 6 */}
         <div style={{ marginBottom: 28 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-            <StepBadge n={5} done={!!reason} />
+            <StepBadge n={6} done={!!reason} />
             <div style={{ fontSize: 15, fontWeight: 500, color: "var(--color-fg)" }}>なぜこれを選んだの？</div>
           </div>
           <textarea
@@ -226,14 +236,6 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
             background: "var(--color-surface)", border: "1.5px solid var(--color-border)",
             borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", gap: 16,
           }}>
-            <div>
-              <div style={{ fontSize: 13, fontWeight: 500, color: "var(--color-fg)", marginBottom: 10 }}>シーン</div>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {SCENES.map((s) => (
-                  <TagChip key={s} label={s} selected={scene === s} onClick={() => setScene(scene === s ? null : s)} variant="sage" />
-                ))}
-              </div>
-            </div>
             <div>
               <div style={{ fontSize: 13, fontWeight: 500, color: "var(--color-fg)", marginBottom: 8 }}>贈った時のこと</div>
               <textarea

@@ -31,7 +31,7 @@ export const searchQuerySchema = z.object({
 export type SearchQueryInput = z.infer<typeof searchQuerySchema>;
 
 export const signupSchema = z.object({
-  name: z.string().trim().min(1, "名前を入力してください").max(50),
+  name: z.string().trim().min(1, "ニックネームを入力してください").max(50),
   email: z.string().trim().email("メールアドレスの形式が正しくありません"),
   password: z.string().min(8, "パスワードは8文字以上にしてください").max(72),
 });

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { Post } from "@/types";
-import type { CurrentUser } from "@/lib/api";
+import { type CurrentUser, updateProfile, uploadAvatarImage } from "@/lib/api";
 import PostTags from "@/components/ui/PostTags";
 import Icon from "@/components/ui/Icon";
 
@@ -13,27 +13,97 @@ interface ProfileScreenProps {
   onTapPost: (post: Post) => void;
   onCompose: () => void;
   onLogout: () => void;
+  onUpdateMe: (me: CurrentUser) => void;
 }
 
 // きろく（旧likesタブ＋投稿）を統合したマイページ
-export default function ProfileScreen({ posts, likes, me, onTapPost, onCompose, onLogout }: ProfileScreenProps) {
+export default function ProfileScreen({ posts, likes, me, onTapPost, onCompose, onLogout, onUpdateMe }: ProfileScreenProps) {
   const [tab, setTab] = useState<"posts" | "likes">("posts");
   const [confirmingLogout, setConfirmingLogout] = useState(false);
+
+  // プロフィール編集 state
+  const [editing, setEditing] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editAvatarUrl, setEditAvatarUrl] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [editError, setEditError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const myPosts = me ? posts.filter((p) => p.userId === me.id) : [];
   const likedPosts = posts.filter((p) => likes[p.id]);
   const items = tab === "posts" ? myPosts : likedPosts;
 
+  const openEdit = () => {
+    if (!me) return;
+    setEditName(me.name);
+    setEditAvatarUrl(me.avatarUrl ?? null);
+    setEditError(null);
+    setEditing(true);
+  };
+
+  const closeEdit = () => {
+    setEditing(false);
+    setEditError(null);
+  };
+
+  const onPickFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // 同じファイル再選択を許可
+    if (!file || !me) return;
+    setEditError(null);
+    setUploading(true);
+    try {
+      const url = await uploadAvatarImage(file, me.id);
+      setEditAvatarUrl(url);
+    } catch (err) {
+      setEditError(err instanceof Error ? err.message : "画像のアップロードに失敗しました");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const onSave = async () => {
+    if (!me || saving || uploading) return;
+    setEditError(null);
+    setSaving(true);
+    try {
+      const updated = await updateProfile({ name: editName, avatarUrl: editAvatarUrl });
+      onUpdateMe({ ...me, ...updated, avatarUrl: editAvatarUrl });
+      setEditing(false);
+    } catch (err) {
+      setEditError(err instanceof Error ? err.message : "プロフィールの更新に失敗しました");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const previewInitial = editName.trim().charAt(0) || me?.initial || "?";
+
   return (
     <div style={{ paddingBottom: 100 }}>
       <div style={{ textAlign: "center", padding: "24px 20px 0" }}>
-        <div style={{
-          width: 76, height: 76, borderRadius: 100, background: "var(--color-accent-light)",
-          border: "2.5px solid var(--color-accent)", margin: "0 auto 12px",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 30, fontWeight: 800, color: "var(--color-accent)",
-        }}>
-          {me?.initial ?? "?"}
-        </div>
+        {me?.avatarUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={me.avatarUrl}
+            alt=""
+            style={{
+              width: 76, height: 76, borderRadius: 100, objectFit: "cover",
+              border: "2.5px solid var(--color-accent)", margin: "0 auto 12px",
+              display: "block",
+            }}
+          />
+        ) : (
+          <div style={{
+            width: 76, height: 76, borderRadius: 100, background: "var(--color-accent-light)",
+            border: "2.5px solid var(--color-accent)", margin: "0 auto 12px",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 30, fontWeight: 800, color: "var(--color-accent)",
+          }}>
+            {me?.initial ?? "?"}
+          </div>
+        )}
         <div style={{ fontSize: 17, fontWeight: 700, color: "var(--color-fg)", marginBottom: 3 }}>{me?.name ?? ""}</div>
         <div style={{ fontSize: 13, color: "var(--color-fg-muted)", marginBottom: 20 }}>贈り物の記録</div>
 
@@ -54,13 +124,17 @@ export default function ProfileScreen({ posts, likes, me, onTapPost, onCompose, 
         </div>
 
         <div style={{ display: "flex", gap: 8, margin: "14px 20px 0" }}>
-          <button style={{
-            flex: 1, padding: 10, borderRadius: 100,
-            border: "1.5px solid var(--color-border)", background: "var(--color-surface)",
-            fontSize: 13, fontWeight: 600, color: "var(--color-fg)", cursor: "pointer",
-            display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-            fontFamily: "inherit",
-          }}>
+          <button
+            onClick={openEdit}
+            disabled={!me}
+            style={{
+              flex: 1, padding: 10, borderRadius: 100,
+              border: "1.5px solid var(--color-border)", background: "var(--color-surface)",
+              fontSize: 13, fontWeight: 600, color: "var(--color-fg)",
+              cursor: me ? "pointer" : "default", opacity: me ? 1 : 0.5,
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+              fontFamily: "inherit",
+            }}>
             <Icon name="edit" size={14} color="var(--color-fg)" />
             プロフィールを編集
           </button>
@@ -75,6 +149,115 @@ export default function ProfileScreen({ posts, likes, me, onTapPost, onCompose, 
             <Icon name="logout" size={16} color="var(--color-fg-muted)" />
           </button>
         </div>
+
+        {editing && (
+          <div style={{
+            margin: "14px 20px 0", padding: "18px 16px",
+            background: "var(--color-surface)", border: "1px solid var(--color-border)",
+            borderRadius: 16, textAlign: "center",
+          }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "var(--color-fg)", marginBottom: 14 }}>プロフィールを編集</div>
+
+            {/* アバタープレビュー＋画像選択 */}
+            {editAvatarUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={editAvatarUrl}
+                alt=""
+                style={{
+                  width: 72, height: 72, borderRadius: 100, objectFit: "cover",
+                  border: "2px solid var(--color-accent)", margin: "0 auto 10px", display: "block",
+                }}
+              />
+            ) : (
+              <div style={{
+                width: 72, height: 72, borderRadius: 100, background: "var(--color-accent-light)",
+                border: "2px solid var(--color-accent)", margin: "0 auto 10px",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 28, fontWeight: 800, color: "var(--color-accent)",
+              }}>
+                {previewInitial}
+              </div>
+            )}
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={onPickFile}
+              style={{ display: "none" }}
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading || saving}
+              style={{
+                padding: "7px 18px", borderRadius: 100, marginBottom: 16,
+                border: "1.5px solid var(--color-border)", background: "transparent",
+                fontSize: 12, fontWeight: 600, color: "var(--color-fg-muted)",
+                cursor: uploading || saving ? "default" : "pointer", fontFamily: "inherit",
+                opacity: uploading || saving ? 0.6 : 1,
+              }}>
+              {uploading ? "アップロード中…" : "アイコンを変更"}
+            </button>
+
+            {/* ニックネーム入力 */}
+            <div style={{ textAlign: "left", marginBottom: 14 }}>
+              <label
+                htmlFor="profile-nickname"
+                style={{ display: "block", fontSize: 13, fontWeight: 600, color: "var(--color-fg-muted)", marginBottom: 6 }}
+              >
+                ニックネーム
+              </label>
+              <input
+                id="profile-nickname"
+                type="text"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                maxLength={50}
+                placeholder="ニックネーム"
+                disabled={saving}
+                style={{
+                  width: "100%", padding: "12px 14px", fontSize: 15,
+                  fontFamily: "var(--font-sans)", background: saving ? "var(--color-surface-alt)" : "#fff",
+                  border: "2px solid var(--color-border)", borderRadius: 16,
+                  color: "var(--color-fg)", outline: "none", WebkitAppearance: "none",
+                }}
+              />
+            </div>
+
+            {editError && (
+              <div style={{ fontSize: 12, color: "#E8502A", fontWeight: 500, marginBottom: 12, textAlign: "left" }}>
+                {editError}
+              </div>
+            )}
+
+            <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+              <button
+                onClick={onSave}
+                disabled={saving || uploading}
+                style={{
+                  padding: "8px 24px", borderRadius: 100, border: "none",
+                  background: "var(--color-accent)", color: "#fff",
+                  fontSize: 13, fontWeight: 700,
+                  cursor: saving || uploading ? "default" : "pointer", fontFamily: "inherit",
+                  opacity: saving || uploading ? 0.6 : 1,
+                }}>
+                {saving ? "保存中…" : "保存"}
+              </button>
+              <button
+                onClick={closeEdit}
+                disabled={saving}
+                style={{
+                  padding: "8px 24px", borderRadius: 100,
+                  border: "1.5px solid var(--color-border)", background: "transparent",
+                  fontSize: 13, fontWeight: 600, color: "var(--color-fg-muted)",
+                  cursor: saving ? "default" : "pointer", fontFamily: "inherit",
+                }}>
+                キャンセル
+              </button>
+            </div>
+          </div>
+        )}
 
         {confirmingLogout && (
           <div style={{
@@ -164,7 +347,7 @@ export default function ProfileScreen({ posts, likes, me, onTapPost, onCompose, 
               fontSize: 12, color: "var(--color-fg-muted)", lineHeight: 1.6,
               overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box",
               WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
-            } as React.CSSProperties}>{p.note}</div>
+            } as React.CSSProperties}>{p.reason ?? p.note}</div>
           </div>
         ))}
       </div>
