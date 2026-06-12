@@ -13,13 +13,13 @@ import { useOgpImage } from "@/lib/useOgpImage";
 
 interface FeedScreenProps {
   posts: Post[];
-  likes: Record<number, boolean>;
-  onLike: (id: number) => void;
+  likes: Record<string, boolean>;
+  onLike: (id: string) => void;
   onTapPost: (post: Post) => void;
 }
 
 // ── 注目の1本（フィーチャー）──
-function FeatureCard({ post, liked, onLike, onTap }: { post: Post; liked: boolean; onLike: (id: number) => void; onTap: (post: Post) => void }) {
+function FeatureCard({ post, liked, onLike, onTap }: { post: Post; liked: boolean; onLike: (id: string) => void; onTap: (post: Post) => void }) {
   const image = useOgpImage(post.url);
   return (
     <div

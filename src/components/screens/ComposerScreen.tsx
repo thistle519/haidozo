@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import type { Relation, PriceRange, Scene } from "@/types";
+import type { Post, Relation, PriceRange, Scene } from "@/types";
+import { createPost } from "@/lib/api";
 import TagChip from "@/components/ui/TagChip";
 import Icon from "@/components/ui/Icon";
 
@@ -10,7 +11,7 @@ const PRICES: PriceRange[] = ["〜3,000円", "〜5,000円", "〜10,000円", "そ
 const SCENES: Scene[] = ["誕生日", "記念日", "お礼", "送別", "なんでもない日"];
 
 interface ComposerScreenProps {
-  onPost: () => void;
+  onPost: (post: Post) => void;
 }
 
 function StepBadge({ n, done }: { n: number; done: boolean }) {
@@ -46,13 +47,35 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
   const [url, setUrl] = useState("");
   const [reaction, setReaction] = useState("");
   const [posted, setPosted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const canPost = !!(relation && price && itemName.trim() && reason.trim());
 
-  const handlePost = () => {
-    if (!canPost) return;
-    setPosted(true);
-    setTimeout(() => onPost(), 1400);
+  const handlePost = async () => {
+    if (!canPost || submitting) return;
+    if (!relation || !price) return;
+
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      const newPost = await createPost({
+        item: itemName.trim(),
+        relation,
+        scene: scene ?? "なんでもない日",
+        price,
+        about: about.trim(),
+        reason: reason.trim(),
+        reaction: reaction.trim() || undefined,
+        url: url.trim() || undefined,
+      });
+      setPosted(true);
+      setTimeout(() => onPost(newPost), 1400);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "投稿に失敗しました");
+      setSubmitting(false);
+    }
   };
 
   if (posted) {
@@ -80,6 +103,17 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <div style={{ flex: 1, overflowY: "auto", padding: "20px 20px 100px" }}>
+
+        {/* エラー表示 */}
+        {error && (
+          <div style={{
+            marginBottom: 20, padding: "12px 16px", borderRadius: 14,
+            background: "rgba(232,80,42,0.08)", border: "1.5px solid var(--color-accent)",
+            fontSize: 13, color: "var(--color-accent)", lineHeight: 1.6,
+          }}>
+            {error}
+          </div>
+        )}
 
         {/* Step 1 */}
         <div style={{ marginBottom: 28 }}>
@@ -222,19 +256,19 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
         background: "linear-gradient(to top, var(--color-bg) 80%, transparent)",
       }}>
         <button
-          onClick={handlePost}
-          disabled={!canPost}
+          onClick={() => { void handlePost(); }}
+          disabled={!canPost || submitting}
           style={{
             width: "100%", padding: 16, borderRadius: 100, border: "none",
-            background: canPost ? "var(--color-accent)" : "var(--color-surface-alt)",
-            color: canPost ? "#fff" : "var(--color-fg-subtle)",
+            background: canPost && !submitting ? "var(--color-accent)" : "var(--color-surface-alt)",
+            color: canPost && !submitting ? "#fff" : "var(--color-fg-subtle)",
             fontSize: 16, fontWeight: 700, fontFamily: "inherit",
-            cursor: canPost ? "pointer" : "not-allowed",
-            boxShadow: canPost ? "0 4px 20px rgba(232,80,42,0.35)" : "none",
+            cursor: canPost && !submitting ? "pointer" : "not-allowed",
+            boxShadow: canPost && !submitting ? "0 4px 20px rgba(232,80,42,0.35)" : "none",
             transition: "all 220ms ease-out", letterSpacing: "0.02em",
           }}
         >
-          {canPost ? "はい、どうぞ！" : "必須項目を入力してください"}
+          {submitting ? "送信中…" : canPost ? "はい、どうぞ！" : "必須項目を入力してください"}
         </button>
       </div>
     </div>

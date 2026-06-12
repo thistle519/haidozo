@@ -3,7 +3,7 @@ export type PriceRange = "〜3,000円" | "〜5,000円" | "〜10,000円" | "そ�
 export type Scene = "誕生日" | "記念日" | "お礼" | "送別" | "手土産" | "なんでもない日" | "応援" | "結婚祝い";
 
 export interface Post {
-  id: number;
+  id: string;
   user: string;
   initial: string;
   item: string;
@@ -31,7 +31,7 @@ export interface Plan {
   scene: Scene | null;
   persona: string[];      // その人はどんな人
   loves: string[];        // その人の好きなもの（自由回答チップ）
-  selectedIds: number[];  // 「この感じ、いいかも」したエピソード
+  selectedIds: string[];  // 「この感じ、いいかも」したエピソード
   vibes: string[];        // たまった想いのかけら
   memo: string;           // 問いへの答えメモ
   wish: string;           // 想いの一文（こんなふうに喜んでほしい）

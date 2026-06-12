@@ -1,17 +1,17 @@
 "use client";
 
 import type { Post } from "@/types";
-import { FEED_DATA } from "@/lib/mockData";
 import PostTags from "@/components/ui/PostTags";
 import Icon from "@/components/ui/Icon";
 
 interface LikesScreenProps {
-  likes: Record<number, boolean>;
+  posts: Post[];
+  likes: Record<string, boolean>;
   onTapPost: (post: Post) => void;
 }
 
-export default function LikesScreen({ likes, onTapPost }: LikesScreenProps) {
-  const likedPosts = FEED_DATA.filter((p) => likes[p.id]);
+export default function LikesScreen({ posts, likes, onTapPost }: LikesScreenProps) {
+  const likedPosts = posts.filter((p) => likes[p.id]);
 
   if (likedPosts.length === 0) {
     return (

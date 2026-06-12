@@ -2,21 +2,21 @@
 
 import { useState } from "react";
 import type { Post } from "@/types";
-import { FEED_DATA } from "@/lib/mockData";
 import PostTags from "@/components/ui/PostTags";
 import Icon from "@/components/ui/Icon";
 
 interface ProfileScreenProps {
-  likes: Record<number, boolean>;
+  posts: Post[];
+  likes: Record<string, boolean>;
   onTapPost: (post: Post) => void;
   onCompose: () => void;
 }
 
 // きろく（旧likesタブ＋投稿）を統合したマイページ
-export default function ProfileScreen({ likes, onTapPost, onCompose }: ProfileScreenProps) {
+export default function ProfileScreen({ posts, likes, onTapPost, onCompose }: ProfileScreenProps) {
   const [tab, setTab] = useState<"posts" | "likes">("posts");
-  const myPosts = FEED_DATA.filter((p) => p.user === "shizuru");
-  const likedPosts = FEED_DATA.filter((p) => likes[p.id]);
+  const myPosts = posts.filter((p) => p.user === "shizuru");
+  const likedPosts = posts.filter((p) => likes[p.id]);
   const items = tab === "posts" ? myPosts : likedPosts;
 
   return (

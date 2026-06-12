@@ -3,7 +3,6 @@
 import { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import type { Relation, Scene, Post } from "@/types";
-import { FEED_DATA } from "@/lib/mockData";
 import { useOgpImage } from "@/lib/useOgpImage";
 import TagChip from "@/components/ui/TagChip";
 import Icon from "@/components/ui/Icon";
@@ -218,17 +217,18 @@ function PostCarousel({ post }: { post: Post }) {
 
 // ── メインコンポーネント ────────────────────────────────────
 interface GuidedScreenProps {
+  posts: Post[];
   onClose: () => void;
 }
 
 type Phase = "context" | "grid" | "detail";
 
-export default function GuidedScreen({ onClose }: GuidedScreenProps) {
+export default function GuidedScreen({ posts: allPosts, onClose }: GuidedScreenProps) {
   const [phase, setPhase] = useState<Phase>("context");
   const [relation, setRelation] = useState<Relation | null>(null);
   const [scene, setScene] = useState<Scene | null>(null);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const filtered = FEED_DATA.filter((p) =>
+  const filtered = allPosts.filter((p) =>
     !relation ? true : p.relation === relation || (scene ? p.scene === scene : false)
   ).sort((a, b) => {
     const sa = (relation && a.relation === relation ? 3 : 0) + (scene && a.scene === scene ? 2 : 0);
@@ -327,7 +327,7 @@ export default function GuidedScreen({ onClose }: GuidedScreenProps) {
 
   // ── Phase: detail ──────────────────────────────────────
   if (phase === "detail" && selectedPost) {
-    const related = getRelated(selectedPost, FEED_DATA);
+    const related = getRelated(selectedPost, allPosts);
 
     return (
       <div style={{ padding: "8px 16px 100px" }}>

@@ -9,19 +9,32 @@ export function useOgpImage(url?: string) {
 
   useEffect(() => {
     if (!url) return;
+    let alive = true;
+
+    // キャッシュ済みなら fetch せず非同期に反映（effect 内同期 setState を避ける）
     if (url in cache) {
-      setImage(cache[url]);
-      return;
+      const cached = cache[url];
+      queueMicrotask(() => {
+        if (alive) setImage(cached);
+      });
+      return () => {
+        alive = false;
+      };
     }
+
     fetch(`/api/ogp?url=${encodeURIComponent(url)}`)
       .then((r) => r.json())
-      .then(({ image }) => {
+      .then(({ image }: { image: string | null }) => {
         cache[url] = image;
-        setImage(image);
+        if (alive) setImage(image);
       })
       .catch(() => {
         cache[url] = null;
       });
+
+    return () => {
+      alive = false;
+    };
   }, [url]);
 
   return image;

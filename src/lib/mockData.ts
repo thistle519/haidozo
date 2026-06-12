@@ -2,7 +2,7 @@ import type { Post, Notification } from "@/types";
 
 export const FEED_DATA: Post[] = [
   {
-    id: 14,
+    id: "14",
     user: "Katsuya", initial: "K",
     item: "お猪口",
     relation: "友達", scene: "手土産", price: "〜3,000円",
@@ -14,7 +14,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["一緒に楽しめるものがよかった", "一体感が生まれそう", "この出会いを形にしたかった"],
   },
   {
-    id: 15,
+    id: "15",
     user: "WAEI", initial: "W",
     item: "メイソンピアソン ヘアブラシ",
     relation: "恋人", scene: "記念日", price: "それ以上",
@@ -27,7 +27,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["ずっと使い続けてほしい", "毎日の時間に自分がいてほしい", "ちゃんと見てたことが伝わる"],
   },
   {
-    id: 9,
+    id: "9",
     user: "shizuru", initial: "S",
     item: "ブルーボトルコーヒー インスタントコーヒーセット（ブライト・エスプレッソ）",
     relation: "先生・恩師", scene: "誕生日", price: "〜3,000円",
@@ -40,7 +40,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["旅先でふと思い出してほしい", "さりげなく気遣いが伝わる", "その人の日常に自然と馴染む"],
   },
   {
-    id: 10,
+    id: "10",
     user: "shizuru", initial: "S",
     item: "メゾン マルジェラ「レプリカ」フレグランス ディスカバリーコレクション",
     relation: "友達", scene: "誕生日", price: "〜5,000円",
@@ -53,7 +53,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["辛い時にそっとそばにいてあげられる", "ちゃんと聞いてたよが伝わる", "気分の切り替えに使ってほしい"],
   },
   {
-    id: 11,
+    id: "11",
     user: "shizuru", initial: "S",
     item: "「立町カヌレ」カヌレギフトセット（15個入り）",
     relation: "友達", scene: "なんでもない日", price: "〜5,000円",
@@ -66,7 +66,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["その子自身のためのものにしたかった", "嬉しさをお返ししたかった", "贈った後の顔が浮かんだ"],
   },
   {
-    id: 12,
+    id: "12",
     user: "shizuru", initial: "S",
     item: "TEAPOND ポーチ入り ティータイムセット",
     relation: "友達", scene: "送別", price: "〜3,000円",
@@ -79,7 +79,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["新居でふと思い出してほしい", "この場所の記憶を持って行ってほしい", "落ち着いた時間に使ってほしい"],
   },
   {
-    id: 13,
+    id: "13",
     user: "shizuru", initial: "S",
     item: "TAKIBI BAKERY クリスマスシュトーレン ＋ 旅する紅茶 ＋ 小花束",
     relation: "先生・恩師", scene: "送別", price: "〜5,000円",
@@ -92,7 +92,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["プロだからこそ逆張りしたかった", "ふたりで楽しんでほしかった", "ありがとうをそっと添えたい"],
   },
   {
-    id: 16,
+    id: "16",
     user: "JURI", initial: "J",
     item: "ADDICTION リップスティック",
     relation: "友達", scene: "誕生日", price: "〜5,000円",
@@ -105,7 +105,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["名前まで含めてその人にぴったりを選びたかった", "何年後も使い続けてほしい", "センスが伝わるものがよかった"],
   },
   {
-    id: 17,
+    id: "17",
     user: "mina", initial: "M",
     item: "AURALEE スムースソフトウールニット",
     relation: "恋人", scene: "誕生日", price: "それ以上",
@@ -118,7 +118,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["自分の世界を広げてほしかった", "最初の一着になってほしかった", "入口を一緒に開けてあげたかった"],
   },
   {
-    id: 18,
+    id: "18",
     user: "shizuru", initial: "S",
     item: "ムビチケオンラインギフト 4枚綴り",
     relation: "友達", scene: "送別", price: "〜10,000円",
@@ -131,7 +131,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["気軽に見に行ける時間をプレゼントしたかった", "距離があっても届けられた", "誰かと一緒に使ってほしかった"],
   },
   {
-    id: 19,
+    id: "19",
     user: "shizuru", initial: "S",
     item: "図書カード（ピーターラビット）+ しおり",
     relation: "友達", scene: "誕生日", price: "〜3,000円",
@@ -144,7 +144,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["本を選ぶ時間からプレゼントしたかった", "その人のペースで楽しんでほしかった", "自分で選ぶ喜びを邪魔したくなかった"],
   },
   {
-    id: 20,
+    id: "20",
     user: "shizuru", initial: "S",
     item: "COMME des GARÇONS PARFUM Monocle Yoyogi",
     relation: "恋人", scene: "誕生日", price: "〜10,000円",
@@ -157,7 +157,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["私と一緒にいるから手に取れるものがよかった", "気取った気分になってほしかった", "開拓していない世界に連れて行きたかった"],
   },
   {
-    id: 21,
+    id: "21",
     user: "shizuru", initial: "S",
     item: "あなたのための短歌集（木下龍也）+ パロサント",
     relation: "友達", scene: "誕生日", price: "〜3,000円",
@@ -170,7 +170,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["重くない贈り物にしたかった", "ちょっとした時間に開いてほしかった", "ひとりの時間がもっと豊かになってほしかった"],
   },
   {
-    id: 22,
+    id: "22",
     user: "shizuru", initial: "S",
     item: "スターバックスeギフト 4枚綴り",
     relation: "友達", scene: "応援", price: "〜3,000円",
@@ -183,7 +183,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["そばにいられなくても届けたかった", "誰かと飲んで気が紛れてほしかった", "気軽なものがちょうどよかった"],
   },
   {
-    id: 23,
+    id: "23",
     user: "shizuru", initial: "S",
     item: "FOR2ギフト（GREEN）| ソウ・エクスペリエンス体験ギフト",
     relation: "友達", scene: "結婚祝い", price: "それ以上",
@@ -196,7 +196,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["ふたりの思い出になってほしかった", "モノより体験を残したかった", "一緒に使ってほしかった"],
   },
   {
-    id: 24,
+    id: "24",
     user: "shizuru", initial: "S",
     item: "汲古 紅白のお皿",
     relation: "友達", scene: "結婚祝い", price: "〜10,000円",
@@ -209,7 +209,7 @@ export const FEED_DATA: Post[] = [
     vibes: ["好きなものに踏み込みたかった", "おめでとうの気持ちを形にしたかった", "ふたりで使ってほしかった"],
   },
   {
-    id: 25,
+    id: "25",
     user: "shizuru", initial: "S",
     item: "アフタヌーンティーペアチケット | ソウ・エクスペリエンス体験ギフト",
     relation: "家族", scene: "誕生日", price: "それ以上",

@@ -4,17 +4,17 @@ import type { Post } from "@/types";
 import Avatar from "@/components/ui/Avatar";
 import PostTags from "@/components/ui/PostTags";
 import Icon from "@/components/ui/Icon";
-import { FEED_DATA } from "@/lib/mockData";
 import { useOgpImage } from "@/lib/useOgpImage";
 
 interface PostDetailScreenProps {
   post: Post;
+  posts: Post[];
   liked: boolean;
-  onLike: (id: number) => void;
+  onLike: (id: string) => void;
 }
 
-export default function PostDetailScreen({ post, liked, onLike }: PostDetailScreenProps) {
-  const related = FEED_DATA.filter(
+export default function PostDetailScreen({ post, posts, liked, onLike }: PostDetailScreenProps) {
+  const related = posts.filter(
     (p) => p.id !== post.id && (p.relation === post.relation || p.scene === post.scene)
   ).slice(0, 3);
   const ogpImage = useOgpImage(post.url);

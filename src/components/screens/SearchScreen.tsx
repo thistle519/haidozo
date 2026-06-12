@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import type { Post, Plan, Relation, PriceRange, Scene } from "@/types";
-import { FEED_DATA } from "@/lib/mockData";
 import { expandQuery, postFullText } from "@/lib/searchUtils";
 import { useOgpImage } from "@/lib/useOgpImage";
 import PostTags from "@/components/ui/PostTags";
@@ -104,7 +103,7 @@ function scorePost(post: Post, relation: Relation | null, scene: Scene | null, p
 // ────────────────────────────────────
 interface CardProps {
   post: Post;
-  likes: Record<number, boolean>;
+  likes: Record<string, boolean>;
   onTapPost: (p: Post) => void;
 }
 
@@ -214,14 +213,15 @@ function SecondaryCard({ post, likes, onTapPost }: CardProps) {
 type Phase = "home" | "start" | "meguru" | "result";
 
 interface SearchScreenProps {
-  likes: Record<number, boolean>;
+  posts: Post[];
+  likes: Record<string, boolean>;
   onTapPost: (post: Post) => void;
   plans: Plan[];
   onSavePlan: (plan: Plan) => void;
   onCompose: () => void;
 }
 
-export default function SearchScreen({ likes, onTapPost, plans, onSavePlan, onCompose }: SearchScreenProps) {
+export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans, onSavePlan, onCompose }: SearchScreenProps) {
   const [phase, setPhase] = useState<Phase>("home");
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
@@ -233,7 +233,7 @@ export default function SearchScreen({ likes, onTapPost, plans, onSavePlan, onCo
   const [loves, setLoves] = useState<string[]>([]);
   const [loveInput, setLoveInput] = useState("");
   const [memo, setMemo] = useState("");
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [selectedVibes, setSelectedVibes] = useState<string[]>([]);
   const [vibeInput, setVibeInput] = useState("");
   const [wish, setWish] = useState("");
@@ -312,7 +312,7 @@ export default function SearchScreen({ likes, onTapPost, plans, onSavePlan, onCo
   // ── 入力に反応するヒント（他人の投稿が相槌を打つ）──
   const relatedPosts = useMemo(() => {
     const queries = [...loves, memo].map((s) => s.trim()).filter(Boolean);
-    return [...FEED_DATA]
+    return [...allPosts]
       .map((p) => {
         let s = 0;
         if (relation && p.relation === relation) s += 2;
@@ -335,7 +335,7 @@ export default function SearchScreen({ likes, onTapPost, plans, onSavePlan, onCo
 
   // Step3 かけら候補：共鳴したエピソード＋ヒント上位のvibes
   const vibeCandidates = useMemo(() => {
-    const fromSelected = FEED_DATA.filter((p) => selectedIds.includes(p.id)).flatMap((p) => p.vibes ?? []);
+    const fromSelected = allPosts.filter((p) => selectedIds.includes(p.id)).flatMap((p) => p.vibes ?? []);
     const fromRelated = relatedPosts.slice(0, 5).flatMap(({ post }) => post.vibes ?? []);
     return [...new Set([...fromSelected, ...fromRelated])].slice(0, 12);
   }, [selectedIds, relatedPosts]);
@@ -347,7 +347,7 @@ export default function SearchScreen({ likes, onTapPost, plans, onSavePlan, onCo
   );
 
   const ranked = useMemo(() => {
-    return [...FEED_DATA]
+    return [...allPosts]
       .map((p) => ({ post: p, score: scorePost(p, relation, scene, null, query) }))
       .filter(({ score }) => score > 0)
       .sort((a, b) => b.score - a.score);
@@ -488,7 +488,7 @@ export default function SearchScreen({ likes, onTapPost, plans, onSavePlan, onCo
 
   // ── home：いま、誰のことを考えていますか？ ──────────
   if (phase === "home") {
-    const teasers = FEED_DATA.filter((p) => p.vibes && p.vibes.length > 0).slice(0, 4);
+    const teasers = allPosts.filter((p) => p.vibes && p.vibes.length > 0).slice(0, 4);
     return (
       <div style={{ padding: "24px 20px 110px" }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: "var(--color-accent)", letterSpacing: "0.08em", marginBottom: 8 }}>おもいめぐり</div>
