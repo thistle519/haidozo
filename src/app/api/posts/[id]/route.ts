@@ -39,7 +39,7 @@ export async function GET(
 
     const { data, error } = await supabase
       .from("posts")
-      .select("*, profiles(name, avatar_url), post_likes(user_id)")
+      .select("*, profiles!posts_user_id_fkey(name, avatar_url), post_likes(user_id)")
       .eq("id", id)
       .single();
 

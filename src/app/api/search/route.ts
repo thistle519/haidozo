@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from("posts")
-      .select("*, profiles(name, avatar_url), post_likes(user_id)")
+      .select("*, profiles!posts_user_id_fkey(name, avatar_url), post_likes(user_id)")
       .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
 
