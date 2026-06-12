@@ -2,7 +2,13 @@
 
 import { useState, useCallback, useEffect } from "react";
 import type { Post, Plan } from "@/types";
-import { fetchFeed, toggleLike as apiToggleLike } from "@/lib/api";
+import {
+  fetchFeed,
+  toggleLike as apiToggleLike,
+  getCurrentUser,
+  signOut,
+  type CurrentUser,
+} from "@/lib/api";
 
 import TopNav from "@/components/layout/TopNav";
 import BottomNav from "@/components/layout/BottomNav";
@@ -43,6 +49,18 @@ export default function ClientShell() {
   const [plans, setPlans] = useState<Plan[]>(INITIAL_PLANS);
   const [toast, setToast] = useState<string | null>(null);
   const [notifSeen, setNotifSeen] = useState(false);
+  const [me, setMe] = useState<CurrentUser | null>(null);
+
+  // ログイン中ユーザーの取得（プロフィール表示用）
+  useEffect(() => {
+    getCurrentUser()
+      .then(setMe)
+      .catch(() => setMe(null));
+  }, []);
+
+  const onLogout = useCallback(() => {
+    void signOut();
+  }, []);
 
   // フィード取得状態
   const [loading, setLoading] = useState(true);
@@ -219,7 +237,7 @@ export default function ClientShell() {
           />
         ) : null;
       case "profile":
-        return <ProfileScreen posts={posts} likes={likes} onTapPost={onTapPost} onCompose={() => navigate("compose")} />;
+        return <ProfileScreen posts={posts} likes={likes} me={me} onTapPost={onTapPost} onCompose={() => navigate("compose")} onLogout={onLogout} />;
       case "notif":
         return <NotificationScreen />;
       default:

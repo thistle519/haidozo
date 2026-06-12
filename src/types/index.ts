@@ -4,6 +4,7 @@ export type Scene = "誕生日" | "記念日" | "お礼" | "送別" | "手土産
 
 export interface Post {
   id: string;
+  userId?: string;   // DB上の投稿者ID（mockデータには無いため任意）
   user: string;
   initial: string;
   item: string;

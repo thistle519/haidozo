@@ -2,20 +2,24 @@
 
 import { useState } from "react";
 import type { Post } from "@/types";
+import type { CurrentUser } from "@/lib/api";
 import PostTags from "@/components/ui/PostTags";
 import Icon from "@/components/ui/Icon";
 
 interface ProfileScreenProps {
   posts: Post[];
   likes: Record<string, boolean>;
+  me: CurrentUser | null;
   onTapPost: (post: Post) => void;
   onCompose: () => void;
+  onLogout: () => void;
 }
 
 // きろく（旧likesタブ＋投稿）を統合したマイページ
-export default function ProfileScreen({ posts, likes, onTapPost, onCompose }: ProfileScreenProps) {
+export default function ProfileScreen({ posts, likes, me, onTapPost, onCompose, onLogout }: ProfileScreenProps) {
   const [tab, setTab] = useState<"posts" | "likes">("posts");
-  const myPosts = posts.filter((p) => p.user === "shizuru");
+  const [confirmingLogout, setConfirmingLogout] = useState(false);
+  const myPosts = me ? posts.filter((p) => p.userId === me.id) : [];
   const likedPosts = posts.filter((p) => likes[p.id]);
   const items = tab === "posts" ? myPosts : likedPosts;
 
@@ -28,9 +32,9 @@ export default function ProfileScreen({ posts, likes, onTapPost, onCompose }: Pr
           display: "flex", alignItems: "center", justifyContent: "center",
           fontSize: 30, fontWeight: 800, color: "var(--color-accent)",
         }}>
-          S
+          {me?.initial ?? "?"}
         </div>
-        <div style={{ fontSize: 17, fontWeight: 700, color: "var(--color-fg)", marginBottom: 3 }}>shizuru</div>
+        <div style={{ fontSize: 17, fontWeight: 700, color: "var(--color-fg)", marginBottom: 3 }}>{me?.name ?? ""}</div>
         <div style={{ fontSize: 13, color: "var(--color-fg-muted)", marginBottom: 20 }}>贈り物の記録</div>
 
         <div style={{
@@ -38,10 +42,10 @@ export default function ProfileScreen({ posts, likes, onTapPost, onCompose }: Pr
           background: "var(--color-surface)", borderRadius: 20, padding: "16px 0",
           border: "1px solid var(--color-border)", marginBottom: 4,
         }}>
-          {([{ n: myPosts.length, label: "きろく" }, { n: 7, label: "いいね" }, { n: 12, label: "フォロワー" }] as const).map((s, i) => (
+          {([{ n: myPosts.length, label: "きろく" }, { n: likedPosts.length, label: "いいね" }] as const).map((s, i) => (
             <div key={s.label} style={{
               flex: 1, textAlign: "center",
-              borderRight: i < 2 ? "1px solid var(--color-border)" : "none",
+              borderRight: i < 1 ? "1px solid var(--color-border)" : "none",
             }}>
               <div style={{ fontSize: 22, fontWeight: 800, color: "var(--color-fg)" }}>{s.n}</div>
               <div style={{ fontSize: 12, color: "var(--color-fg-muted)" }}>{s.label}</div>
@@ -60,14 +64,48 @@ export default function ProfileScreen({ posts, likes, onTapPost, onCompose }: Pr
             <Icon name="edit" size={14} color="var(--color-fg)" />
             プロフィールを編集
           </button>
-          <button style={{
-            width: 40, height: 40, borderRadius: 100, flexShrink: 0,
-            border: "1.5px solid var(--color-border)", background: "var(--color-surface)",
-            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
-          }}>
-            <Icon name="settings" size={16} color="var(--color-fg-muted)" />
+          <button
+            onClick={() => setConfirmingLogout(true)}
+            aria-label="ログアウト"
+            style={{
+              width: 40, height: 40, borderRadius: 100, flexShrink: 0,
+              border: "1.5px solid var(--color-border)", background: "var(--color-surface)",
+              display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+            }}>
+            <Icon name="logout" size={16} color="var(--color-fg-muted)" />
           </button>
         </div>
+
+        {confirmingLogout && (
+          <div style={{
+            margin: "14px 20px 0", padding: "14px 16px",
+            background: "var(--color-surface)", border: "1px solid var(--color-border)",
+            borderRadius: 16, textAlign: "center",
+          }}>
+            <div style={{ fontSize: 13, color: "var(--color-fg)", marginBottom: 10 }}>ログアウトしますか？</div>
+            <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+              <button
+                onClick={onLogout}
+                style={{
+                  padding: "8px 24px", borderRadius: 100, border: "none",
+                  background: "var(--color-accent)", color: "#fff",
+                  fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit",
+                }}>
+                ログアウト
+              </button>
+              <button
+                onClick={() => setConfirmingLogout(false)}
+                style={{
+                  padding: "8px 24px", borderRadius: 100,
+                  border: "1.5px solid var(--color-border)", background: "transparent",
+                  fontSize: 13, fontWeight: 600, color: "var(--color-fg-muted)",
+                  cursor: "pointer", fontFamily: "inherit",
+                }}>
+                やめておく
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Tabs */}

@@ -22,6 +22,7 @@ function formatDate(iso: string): string {
 function toPost(api: ApiPost): Post {
   return {
     id: api.id,
+    userId: api.userId,
     user: api.userName,
     initial: api.userInitial,
     item: api.item,
@@ -124,6 +125,39 @@ export async function deletePost(id: string): Promise<void> {
   if (!res.ok) {
     throw new Error(await parseError(res));
   }
+}
+
+// ── 認証ユーザー ──────────────────────────────────────────────────────────────
+
+export interface CurrentUser {
+  id: string;
+  name: string;
+  initial: string;
+}
+
+/** ログイン中ユーザーのプロフィールを取得（未ログインなら null） */
+export async function getCurrentUser(): Promise<CurrentUser | null> {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("name")
+    .eq("id", user.id)
+    .single();
+
+  const name = profile?.name || "わたし";
+  return { id: user.id, name, initial: name.charAt(0) || "?" };
+}
+
+/** ログアウトしてログイン画面へ */
+export async function signOut(): Promise<void> {
+  const supabase = createClient();
+  await supabase.auth.signOut();
+  window.location.href = "/auth/login";
 }
 
 // ── uploadPostImage ───────────────────────────────────────────────────────────
