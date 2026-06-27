@@ -1,29 +1,82 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #FAF7F2;
-  --color-surface: #FFF9F4;
-  --color-surface-alt: #F5EFE6;
-  --color-accent: #E8502A;
-  --color-accent-light: #FFE8DF;
-  --color-accent-dark: #C43E1E;
-  --color-sage: #F5C210;
-  --color-sage-light: #FEF3C0;
-  --color-fg: #2B3467;
-  --color-fg-muted: #6B77A4;
-  --color-fg-subtle: #A8B0CC;
-  --color-border: #E4E6F0;
+  --color-cream: #FFF7ED;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #FFF1E4;
+  --color-ink: #2A2521;
+  --color-ink-soft: #6E645C;
+  --color-ink-faint: #A89E94;
+  --color-hairline: #EFE6D9;
+  --color-orange: #FF5A1F;
+  --color-orange-press: #E8431A;
+  --color-orange-tint: #FFE7D6;
+  --color-orange-wash: #FFF1E8;
+  --color-sun: #FFC23D;
+  --color-sun-tint: #FFF0CC;
+  --color-sky: #3E8EF7;
+  --color-sky-tint: #DCEBFF;
+  --color-mint: #2FC79E;
+  --color-mint-tint: #D2F4EA;
+  --color-error: #E5484D;
+  --color-error-tint: #FBE0E1;
 
-  --shadow-1: 0 1px 4px rgba(43,52,103,0.05);
-  --shadow-2: 0 2px 12px rgba(43,52,103,0.08);
-  --shadow-3: 0 8px 32px rgba(43,52,103,0.12);
+  --color-bg: #FFF7ED;
+  --color-accent: #FF5A1F;
+  --color-accent-light: #FFE7D6;
+  --color-accent-dark: #E8431A;
+  --color-sage: #FFC23D;
+  --color-sage-light: #FFF0CC;
+  --color-fg: #2A2521;
+  --color-fg-muted: #6E645C;
+  --color-fg-subtle: #A89E94;
+  --color-border: #EFE6D9;
 
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-full: 100px;
+  --shadow-soft: 0 6px 20px rgba(42, 37, 33, 0.08);
+  --shadow-pop: 0 4px 0 rgba(42, 37, 33, 0.18);
+  --shadow-cta: 0 8px 22px rgba(255, 90, 31, 0.32);
+  --shadow-1: 0 6px 20px rgba(42, 37, 33, 0.08);
+  --shadow-2: 0 6px 20px rgba(42, 37, 33, 0.08);
+  --shadow-3: 0 12px 30px rgba(42, 37, 33, 0.18);
 
-  --font-sans: 'Nunito', 'M PLUS Rounded 1c', 'Hiragino Kaku Gothic ProN', sans-serif;
+  --radius-sm: 14px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
+  --radius-full: 999px;
+
+  --font-display: 'Arial Rounded MT Bold', 'Trebuchet MS', system-ui, sans-serif;
+  --font-sans: 'M PLUS Rounded 1c', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, sans-serif;
+}
+
+:root {
+  --hz-cream: #FFF7ED;
+  --hz-surface: #FFFFFF;
+  --hz-surface-alt: #FFF1E4;
+  --hz-ink: #2A2521;
+  --hz-ink-soft: #6E645C;
+  --hz-ink-faint: #A89E94;
+  --hz-hairline: #EFE6D9;
+  --hz-orange: #FF5A1F;
+  --hz-orange-press: #E8431A;
+  --hz-orange-tint: #FFE7D6;
+  --hz-orange-wash: #FFF1E8;
+  --hz-sun: #FFC23D;
+  --hz-sun-tint: #FFF0CC;
+  --hz-sky: #3E8EF7;
+  --hz-sky-tint: #DCEBFF;
+  --hz-mint: #2FC79E;
+  --hz-mint-tint: #D2F4EA;
+  --hz-error: #E5484D;
+  --hz-error-tint: #FBE0E1;
+  --hz-r-sm: 14px;
+  --hz-r-md: 18px;
+  --hz-r-lg: 26px;
+  --hz-r-full: 999px;
+  --hz-shadow-soft: 0 6px 20px rgba(42, 37, 33, 0.08);
+  --hz-shadow-pop: 0 4px 0 rgba(42, 37, 33, 0.18);
+  --hz-shadow-cta: 0 8px 22px rgba(255, 90, 31, 0.32);
+  --hz-font-display: 'Arial Rounded MT Bold', 'Trebuchet MS', system-ui, sans-serif;
+  --hz-font: 'M PLUS Rounded 1c', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, sans-serif;
 }
 
 html, body {

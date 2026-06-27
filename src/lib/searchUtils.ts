@@ -45,6 +45,14 @@ const KEYWORD_MAP: Record<string, string[]> = {
   "香り好き":       ["香り", "フレグランス", "香水", "アロマ", "マルジェラ", "レプリカ"],
   "花が好き":       ["花", "お花", "フラワー"],
   "ミニマリスト":   ["シンプル", "上品", "すっきり", "実用"],
+  "服":             ["服", "ファッション", "ドメブラ", "ニット", "ブランド", "おしゃれ"],
+  "ファッション":   ["服", "ファッション", "ドメブラ", "ニット", "ブランド", "おしゃれ"],
+  "映画":           ["映画", "ムビチケ", "映画館", "体験", "一緒"],
+  "音楽":           ["音楽", "香水", "サカナクション", "感性", "気分"],
+  "美容":           ["美容", "メイク", "リップ", "ヘア", "ブラシ", "身だしなみ"],
+  "髪":             ["髪", "ヘア", "ブラシ", "身だしなみ", "長く使う"],
+  "デート":         ["一緒", "ふたり", "体験", "お出かけ", "映画", "旅行"],
+  "恋人":           ["恋人", "ふたり", "一緒", "記念日", "誕生日", "ちゃんと見てた"],
   // ── 気持ち・状況 ──
   "サプライズ":     ["驚", "サプライズ", "急", "当日"],
   "思い出":         ["思い出", "記憶", "覚えて", "ずっと", "昔"],
@@ -78,7 +86,16 @@ export function expandQuery(query: string): string[] {
 
 // 投稿の全テキストを結合
 export function postFullText(post: Post): string {
-  return [post.item, post.about, post.reason, post.reaction, ...(post.persona ?? [])].join(" ");
+  return [
+    post.item,
+    post.relation,
+    post.scene,
+    post.about,
+    post.reason,
+    post.reaction,
+    ...(post.persona ?? []),
+    ...(post.vibes ?? []),
+  ].join(" ");
 }
 
 export interface SearchFilters {

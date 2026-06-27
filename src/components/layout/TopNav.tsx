@@ -29,7 +29,7 @@ export default function TopNav({ screen, onBack, onBell, hasNotif }: TopNavProps
       alignItems: "center",
       justifyContent: "space-between",
       padding: "0 20px",
-      background: "rgba(250,247,242,0.92)",
+      background: "rgba(255,247,237,0.92)",
       backdropFilter: "blur(10px)",
       borderBottom: "1px solid var(--color-border)",
       flexShrink: 0,
@@ -40,7 +40,13 @@ export default function TopNav({ screen, onBack, onBell, hasNotif }: TopNavProps
           <Icon name="arrow-left" size={22} color="var(--color-fg)" />
         </div>
       ) : (
-        <div style={{ fontSize: 18, fontWeight: 800, color: "var(--color-accent)", letterSpacing: "-0.5px" }}>
+        <div style={{
+          fontFamily: "var(--font-display)",
+          fontSize: 24,
+          fontWeight: 800,
+          lineHeight: 1,
+          color: "var(--color-fg)",
+        }}>
           haidozo
         </div>
       )}

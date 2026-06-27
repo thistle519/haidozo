@@ -9,7 +9,7 @@ interface BottomNavProps {
   onNav: (screen: Screen) => void;
 }
 
-// 3タブ構成：フィード ｜ みつける（中央・メイン動線）｜ マイページ（きろく統合）
+// 3タブ構成：フィード ｜ なにあげよ？（中央・メイン動線）｜ マイページ（きろく統合）
 export default function BottomNav({ active, onNav }: BottomNavProps) {
   const sideTab = (id: Screen, icon: "home" | "user", label: string) => (
     <div
@@ -35,7 +35,7 @@ export default function BottomNav({ active, onNav }: BottomNavProps) {
       width: "100%",
       maxWidth: 480,
       height: 72,
-      background: "rgba(255,249,244,0.95)",
+      background: "rgba(255,247,237,0.95)",
       backdropFilter: "blur(12px)",
       borderTop: "1px solid var(--color-border)",
       display: "flex",
@@ -46,7 +46,7 @@ export default function BottomNav({ active, onNav }: BottomNavProps) {
     }}>
       {sideTab("feed", "home", "フィード")}
 
-      {/* みつける（中央・メイン動線） */}
+      {/* なにあげよ？（中央・メイン動線） */}
       <div
         onClick={() => onNav("search")}
         style={{
@@ -57,7 +57,7 @@ export default function BottomNav({ active, onNav }: BottomNavProps) {
         <div style={{
           width: 54, height: 54, borderRadius: 100,
           background: "var(--color-accent)",
-          boxShadow: "0 4px 16px rgba(232,80,42,0.4)",
+          boxShadow: "var(--hz-shadow-cta)",
           border: "3px solid var(--color-bg)",
           display: "flex", alignItems: "center", justifyContent: "center",
         }}>
@@ -67,7 +67,7 @@ export default function BottomNav({ active, onNav }: BottomNavProps) {
           fontSize: 10, fontWeight: 700,
           color: active === "search" ? "var(--color-accent)" : "var(--color-fg-muted)",
         }}>
-          みつける
+          なにあげよ？
         </span>
       </div>
 
