@@ -24,7 +24,23 @@ export interface Post {
   episode?: string;
 }
 
-// おもいめぐり：考え中のプラン（贈る相手単位の思考の途中経過）
+export interface MitateBranch {
+  axis: string;
+  category: string;
+  oneLine: string;
+}
+
+export interface Mitate {
+  id: string;
+  fragment: string;
+  axis: string;
+  category: string;
+  reason: string;
+  relatedPostIds: string[];
+  branches?: MitateBranch[];
+}
+
+// なにあげよ？：考え中のプラン（贈る相手単位の思考の途中経過）
 export interface Plan {
   id: number;
   label: string;          // 呼び名（例：お母さん）空なら関係性を表示
@@ -35,7 +51,7 @@ export interface Plan {
   selectedIds: string[];  // 「この感じ、いいかも」したエピソード
   vibes: string[];        // たまった想いのかけら
   memo: string;           // 問いへの答えメモ
-  wish: string;           // 想いの一文（こんなふうに喜んでほしい）
+  wish: string;           // これ、いいかも（こんなふうに喜んでほしい）
   savedAt: string;
 }
 

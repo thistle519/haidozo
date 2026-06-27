@@ -158,7 +158,7 @@ export default function ClientShell() {
     setPosts((ps) => [newPost, ...ps]);
     setTimeout(() => {
       navigate("search");
-      setToast("記録しました！誰かの思いめぐりのヒントになります");
+      setToast("記録しました！誰かの「これどうかな？」のヒントになります");
     }, 400);
   }, [navigate]);
 
