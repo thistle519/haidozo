@@ -82,13 +82,13 @@ function SecondaryCard({ post, likes, onTapPost }: CardProps) {
   return (
     <div
       onClick={() => onTapPost(post)}
+      className="card-interactive"
       style={{
         background: "var(--color-surface)",
-        border: "1px solid var(--color-border)",
         borderRadius: 16,
         overflow: "hidden",
         marginBottom: 10,
-        boxShadow: "var(--shadow-1)",
+        boxShadow: "0 4px 16px rgba(42, 37, 33, 0.07)",
         cursor: "pointer",
         display: "flex",
         alignItems: "stretch",
@@ -130,6 +130,7 @@ function TeaserCard({ post, onTapPost, featured = false }: Pick<CardProps, "post
     <button
       type="button"
       onClick={() => onTapPost(post)}
+      className="card-interactive"
       style={{
         gridColumn: featured ? "span 2" : "span 1",
         minHeight: featured ? 228 : 184,
@@ -137,7 +138,7 @@ function TeaserCard({ post, onTapPost, featured = false }: Pick<CardProps, "post
         borderRadius: 18,
         overflow: "hidden",
         background: "var(--color-surface)",
-        boxShadow: "var(--hz-shadow-soft)",
+        boxShadow: "0 4px 16px rgba(42, 37, 33, 0.07)",
         cursor: "pointer",
         padding: 0,
         textAlign: "left",
@@ -558,6 +559,7 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
         {/* 唯一の入口 */}
         <div
           onClick={startNew}
+          className="card-interactive"
           style={{
             display: "flex", alignItems: "center", gap: 14,
             padding: "16px 18px", borderRadius: 18, marginBottom: 26,
@@ -729,13 +731,14 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
         <button
           onClick={() => { if (relation) { setStep(1); setPhase("meguru"); } }}
           disabled={!relation}
+          className={relation ? "btn-interactive" : ""}
           style={{
             width: "100%", padding: 16, borderRadius: 100, border: "none",
             background: relation ? "var(--color-accent)" : "var(--color-surface-alt)",
             color: relation ? "#fff" : "var(--color-fg-subtle)",
             fontSize: 16, fontWeight: 700, fontFamily: "inherit",
             cursor: relation ? "pointer" : "not-allowed",
-            boxShadow: relation ? "var(--hz-shadow-cta)" : "none",
+            boxShadow: relation ? "0 6px 20px rgba(255, 90, 31, 0.35), inset 0 1px 1px rgba(255,255,255,0.2)" : "none",
             transition: "all 220ms ease-out",
           }}
         >
@@ -1007,11 +1010,12 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
           {step < 3 ? (
             <button
               onClick={() => setStep((step + 1) as 1 | 2 | 3)}
+              className="btn-interactive"
               style={{
                 width: "100%", padding: 16, borderRadius: 100, border: "none",
                 background: "var(--color-accent)", color: "#fff",
                 fontSize: 16, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
-                boxShadow: "var(--hz-shadow-cta)",
+                boxShadow: "0 6px 20px rgba(255, 90, 31, 0.35), inset 0 1px 1px rgba(255,255,255,0.2)",
               }}
             >
               次の問いへ →
@@ -1020,13 +1024,14 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
             <button
               onClick={handleGoResult}
               disabled={!canFinish}
+              className={canFinish ? "btn-interactive" : ""}
               style={{
                 width: "100%", padding: 16, borderRadius: 100, border: "none",
                 background: canFinish ? "var(--color-accent)" : "var(--color-surface-alt)",
                 color: canFinish ? "#fff" : "var(--color-fg-subtle)",
                 fontSize: 16, fontWeight: 700, fontFamily: "inherit",
                 cursor: canFinish ? "pointer" : "not-allowed",
-                boxShadow: canFinish ? "var(--hz-shadow-cta)" : "none",
+                boxShadow: canFinish ? "0 6px 20px rgba(255, 90, 31, 0.35), inset 0 1px 1px rgba(255,255,255,0.2)" : "none",
                 transition: "all 220ms ease-out",
               }}
             >
@@ -1113,6 +1118,7 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
           <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
             <button
               onClick={showNextMitate}
+              className="btn-interactive"
               style={{
                 width: "100%",
                 padding: 15,
@@ -1124,13 +1130,14 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
                 fontWeight: 800,
                 fontFamily: "inherit",
                 cursor: "pointer",
-                boxShadow: "var(--hz-shadow-cta)",
+                boxShadow: "0 6px 20px rgba(255, 90, 31, 0.35), inset 0 1px 1px rgba(255,255,255,0.2)",
               }}
             >
               別の提案を見る
             </button>
             <button
               onClick={handleSave}
+              className="btn-interactive"
               style={{
                 width: "100%",
                 padding: 14,

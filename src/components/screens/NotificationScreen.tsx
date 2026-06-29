@@ -55,7 +55,6 @@ export default function NotificationScreen({ onRead }: NotificationScreenProps) 
           animation: "spin 0.8s linear infinite",
         }} />
         <div style={{ fontSize: 14, color: "var(--color-fg-muted)" }}>読み込んでいます…</div>
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
@@ -92,11 +91,14 @@ export default function NotificationScreen({ onRead }: NotificationScreenProps) 
           key={n.id}
           style={{
             display: "flex", alignItems: "flex-start", gap: 12,
-            padding: n.unread ? "14px 12px" : "14px 0",
+            padding: n.unread ? "14px 14px" : "14px 0",
             borderBottom: n.unread ? "none" : "1px solid var(--color-border)",
             background: n.unread ? "var(--color-accent-light)" : "transparent",
-            borderRadius: n.unread ? 14 : 0,
-            marginBottom: n.unread ? 4 : 0,
+            borderRadius: n.unread ? 16 : 0,
+            marginBottom: n.unread ? 6 : 0,
+            borderLeft: n.unread ? "3px solid var(--color-accent)" : "none",
+            boxShadow: n.unread ? "0 2px 8px rgba(255, 90, 31, 0.08)" : "none",
+            transition: "background 200ms ease",
           }}
         >
           <Avatar initial={n.initial} size={38} />

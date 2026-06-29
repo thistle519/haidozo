@@ -11,18 +11,20 @@ interface TagChipProps {
 export default function TagChip({ label, selected = false, onClick, variant = "accent", small = false }: TagChipProps) {
   const accent = variant === "accent";
   return (
-    <div
+    <button
+      type="button"
       onClick={onClick}
+      disabled={!onClick}
+      className={onClick ? "btn-interactive" : ""}
       style={{
         display: "inline-flex",
         alignItems: "center",
         padding: small ? "3px 10px" : "7px 16px",
         borderRadius: "100px",
         fontSize: small ? 11 : 14,
-        fontWeight: 500,
+        fontWeight: selected ? 700 : 500,
         cursor: onClick ? "pointer" : "default",
         userSelect: "none",
-        transition: "all 200ms ease-out",
         border: selected
           ? `1.5px solid ${accent ? "var(--color-accent)" : "var(--color-sage)"}`
           : "1.5px solid var(--color-border)",
@@ -32,9 +34,11 @@ export default function TagChip({ label, selected = false, onClick, variant = "a
         color: selected
           ? (accent ? "var(--color-accent-dark)" : "#8B6F00")
           : "var(--color-fg)",
+        fontFamily: "inherit",
+        letterSpacing: selected ? "0.01em" : "0",
       }}
     >
       {label}
-    </div>
+    </button>
   );
 }

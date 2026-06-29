@@ -92,14 +92,17 @@ export default function ProfileScreen({ posts, likes, me, onTapPost, onCompose, 
               width: 76, height: 76, borderRadius: 100, objectFit: "cover",
               border: "2.5px solid var(--color-accent)", margin: "0 auto 12px",
               display: "block",
+              boxShadow: "0 4px 16px rgba(255, 90, 31, 0.15)",
             }}
           />
         ) : (
           <div style={{
-            width: 76, height: 76, borderRadius: 100, background: "var(--color-accent-light)",
+            width: 76, height: 76, borderRadius: 100,
+            background: "linear-gradient(145deg, var(--hz-orange-wash), var(--hz-orange-tint))",
             border: "2.5px solid var(--color-accent)", margin: "0 auto 12px",
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 30, fontWeight: 800, color: "var(--color-accent)",
+            boxShadow: "0 4px 16px rgba(255, 90, 31, 0.15), inset 0 1px 2px rgba(255,255,255,0.5)",
           }}>
             {me?.initial ?? "?"}
           </div>
@@ -110,7 +113,8 @@ export default function ProfileScreen({ posts, likes, me, onTapPost, onCompose, 
         <div style={{
           display: "flex", justifyContent: "center",
           background: "var(--color-surface)", borderRadius: 20, padding: "16px 0",
-          border: "1px solid var(--color-border)", marginBottom: 4,
+          boxShadow: "0 2px 12px rgba(42, 37, 33, 0.05)",
+          marginBottom: 4,
         }}>
           {([{ n: myPosts.length, label: "きろく" }, { n: likedPosts.length, label: "いいね" }] as const).map((s, i) => (
             <div key={s.label} style={{
@@ -294,19 +298,23 @@ export default function ProfileScreen({ posts, likes, me, onTapPost, onCompose, 
       {/* Tabs */}
       <div style={{ display: "flex", margin: "20px 0 0", padding: "0 20px", borderBottom: "1px solid var(--color-border)" }}>
         {(["posts", "likes"] as const).map((id) => (
-          <div
+          <button
             key={id}
+            type="button"
             onClick={() => setTab(id)}
             style={{
               flex: 1, textAlign: "center", paddingBottom: 10, cursor: "pointer",
-              fontSize: 14, fontWeight: tab === id ? 600 : 500,
+              fontSize: 14, fontWeight: tab === id ? 700 : 500,
               color: tab === id ? "var(--color-accent)" : "var(--color-fg-muted)",
-              borderBottom: `2px solid ${tab === id ? "var(--color-accent)" : "transparent"}`,
-              transition: "all 200ms ease-out",
+              borderBottom: `2.5px solid ${tab === id ? "var(--color-accent)" : "transparent"}`,
+              transition: "all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+              background: "none", border: "none", borderBottomWidth: "2.5px", borderBottomStyle: "solid",
+              borderBottomColor: tab === id ? "var(--color-accent)" : "transparent",
+              fontFamily: "inherit",
             }}
           >
             {id === "posts" ? "きろく" : "いいね"}
-          </div>
+          </button>
         ))}
       </div>
 
@@ -335,10 +343,11 @@ export default function ProfileScreen({ posts, likes, me, onTapPost, onCompose, 
           <div
             key={p.id}
             onClick={() => onTapPost(p)}
+            className="card-interactive"
             style={{
-              background: "var(--color-surface)", border: "1px solid var(--color-border)",
+              background: "var(--color-surface)",
               borderRadius: 16, padding: "14px 16px", marginBottom: 12,
-              boxShadow: "var(--shadow-1)", cursor: "pointer",
+              boxShadow: "0 4px 16px rgba(42, 37, 33, 0.07)", cursor: "pointer",
             }}
           >
             <div style={{ marginBottom: 8 }}><PostTags post={p} small /></div>

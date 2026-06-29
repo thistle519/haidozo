@@ -21,7 +21,7 @@ export default function TopNav({ screen, onBack, onBell, hasNotif }: TopNavProps
   const isBack = ["compose", "detail", "notif"].includes(screen);
 
   return (
-    <div style={{
+    <nav style={{
       position: "sticky",
       top: 0,
       height: 52,
@@ -29,16 +29,25 @@ export default function TopNav({ screen, onBack, onBell, hasNotif }: TopNavProps
       alignItems: "center",
       justifyContent: "space-between",
       padding: "0 20px",
-      background: "rgba(255,247,237,0.92)",
-      backdropFilter: "blur(10px)",
-      borderBottom: "1px solid var(--color-border)",
+      background: "rgba(255,247,237,0.88)",
+      backdropFilter: "blur(16px) saturate(1.4)",
+      WebkitBackdropFilter: "blur(16px) saturate(1.4)",
+      borderBottom: "1px solid rgba(239,230,217,0.6)",
+      boxShadow: "inset 0 -1px 0 rgba(255,255,255,0.5)",
       flexShrink: 0,
       zIndex: 9,
     }}>
       {isBack ? (
-        <div onClick={onBack} style={{ cursor: "pointer", padding: 4, marginLeft: -4 }}>
+        <button
+          onClick={onBack}
+          className="tap-target"
+          style={{
+            cursor: "pointer", padding: 6, marginLeft: -6, borderRadius: 10,
+            background: "none", border: "none", display: "flex",
+          }}
+        >
           <Icon name="arrow-left" size={22} color="var(--color-fg)" />
-        </div>
+        </button>
       ) : (
         <div style={{
           fontFamily: "var(--font-display)",
@@ -46,13 +55,14 @@ export default function TopNav({ screen, onBack, onBell, hasNotif }: TopNavProps
           fontWeight: 800,
           lineHeight: 1,
           color: "var(--color-fg)",
+          letterSpacing: "-0.02em",
         }}>
           haidozo
         </div>
       )}
 
       {isBack ? (
-        <div style={{ fontSize: 16, fontWeight: 700, color: "var(--color-fg)" }}>
+        <div style={{ fontSize: 15, fontWeight: 700, color: "var(--color-fg)", letterSpacing: "-0.01em" }}>
           {titles[screen] ?? ""}
         </div>
       ) : (
@@ -60,9 +70,17 @@ export default function TopNav({ screen, onBack, onBell, hasNotif }: TopNavProps
       )}
 
       {isBack ? (
-        <div style={{ width: 30 }} />
+        <div style={{ width: 34 }} />
       ) : (
-        <div onClick={onBell} style={{ cursor: "pointer", padding: 4, position: "relative" }}>
+        <button
+          onClick={onBell}
+          className="tap-target"
+          style={{
+            cursor: "pointer", padding: 6, position: "relative",
+            background: "none", border: "none", display: "flex",
+            borderRadius: 10,
+          }}
+        >
           <Icon name="bell" size={22} color="var(--color-fg-muted)" />
           {hasNotif && (
             <div style={{
@@ -70,10 +88,11 @@ export default function TopNav({ screen, onBack, onBell, hasNotif }: TopNavProps
               width: 8, height: 8, borderRadius: 100,
               background: "var(--color-accent)",
               border: "1.5px solid var(--color-bg)",
+              boxShadow: "0 0 0 2px rgba(255, 90, 31, 0.2)",
             }} />
           )}
-        </div>
+        </button>
       )}
-    </div>
+    </nav>
   );
 }

@@ -30,23 +30,25 @@ export default function Toast({ message, onDone }: ToastProps) {
         zIndex: 100,
         background: "var(--color-fg)",
         color: "#fff",
-        borderRadius: 16,
+        borderRadius: 18,
         padding: "14px 18px",
         display: "flex",
         alignItems: "center",
         gap: 12,
-        boxShadow: "var(--shadow-3)",
+        boxShadow: "0 12px 40px rgba(42, 37, 33, 0.25), 0 4px 12px rgba(42, 37, 33, 0.1)",
+        backdropFilter: "blur(8px)",
       }}
     >
       <div style={{
-        width: 24, height: 24, borderRadius: 100,
-        background: "var(--color-sage-light)",
+        width: 26, height: 26, borderRadius: 100,
+        background: "linear-gradient(135deg, var(--hz-sun-tint), var(--hz-sun))",
         display: "flex", alignItems: "center", justifyContent: "center",
         flexShrink: 0,
+        boxShadow: "0 2px 6px rgba(255, 194, 61, 0.3)",
       }}>
         <Icon name="check" size={14} color="#8B6F00" />
       </div>
-      <span style={{ fontSize: 14, fontWeight: 500 }}>{message}</span>
+      <span style={{ fontSize: 14, fontWeight: 500, lineHeight: 1.4 }}>{message}</span>
     </div>
   );
 }

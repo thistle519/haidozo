@@ -6,11 +6,6 @@ import PostTags from "@/components/ui/PostTags";
 import Icon from "@/components/ui/Icon";
 import { useOgpImage } from "@/lib/useOgpImage";
 
-// ────────────────────────────────────
-// マガジンビュー：注目の1本 ＋ テーマ別レール ＋ 新着リスト
-// フィードは「読み物」。考えるためのヒントを雑誌のようにめくる
-// ────────────────────────────────────
-
 interface FeedScreenProps {
   posts: Post[];
   likes: Record<string, boolean>;
@@ -18,36 +13,39 @@ interface FeedScreenProps {
   onTapPost: (post: Post) => void;
 }
 
-// ── 注目の1本（フィーチャー）──
 function FeatureCard({ post, liked, onLike, onTap }: { post: Post; liked: boolean; onLike: (id: string) => void; onTap: (post: Post) => void }) {
   const image = useOgpImage(post.url);
   return (
-    <div
+    <article
       onClick={() => onTap(post)}
+      className="card-interactive"
       style={{
         background: "var(--color-surface)",
-        border: "1px solid var(--color-border)",
         borderRadius: 22,
         overflow: "hidden",
-        boxShadow: "var(--shadow-2)",
+        boxShadow: "0 8px 30px rgba(42, 37, 33, 0.1), 0 1px 3px rgba(42, 37, 33, 0.06)",
         cursor: "pointer",
         marginBottom: 28,
       }}
     >
       <div style={{
         height: 210,
-        background: "var(--color-surface-alt)",
+        background: "linear-gradient(135deg, var(--hz-orange-wash), var(--hz-sun-tint))",
         display: "flex", alignItems: "center", justifyContent: "center",
         overflow: "hidden",
+        position: "relative",
       }}>
         {image
           ? <img src={image} alt={post.item} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          : <Icon name="gift" size={48} color="var(--color-fg-subtle)" strokeWidth={1.3} />
+          : <Icon name="gift" size={48} color="var(--color-accent)" strokeWidth={1.2} />
         }
       </div>
       <div style={{ padding: "16px 18px 18px" }}>
         <div style={{ marginBottom: 10 }}><PostTags post={post} small /></div>
-        <div style={{ fontSize: 17, fontWeight: 800, color: "var(--color-fg)", lineHeight: 1.45, marginBottom: 10 }}>
+        <div style={{
+          fontSize: 17, fontWeight: 800, color: "var(--color-fg)", lineHeight: 1.45, marginBottom: 10,
+          letterSpacing: "-0.01em",
+        }}>
           {post.item}
         </div>
         <div style={{
@@ -55,22 +53,24 @@ function FeatureCard({ post, liked, onLike, onTap }: { post: Post; liked: boolea
           overflow: "hidden", display: "-webkit-box",
           WebkitLineClamp: 3, WebkitBoxOrient: "vertical",
         } as React.CSSProperties}>
-          “{post.reason}”
+          &ldquo;{post.reason}&rdquo;
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <Avatar initial={post.initial} />
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 13, fontWeight: 500, color: "var(--color-fg)" }}>{post.user}</div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "var(--color-fg)" }}>{post.user}</div>
             <div style={{ fontSize: 11, color: "var(--color-fg-subtle)" }}>{post.date}</div>
           </div>
           <button
             onClick={(e) => { e.stopPropagation(); onLike(post.id); }}
+            className="tap-target"
             style={{
               display: "flex", alignItems: "center", gap: 4,
-              background: "none", border: "none", cursor: "pointer",
-              fontSize: 13, fontWeight: 500,
+              background: liked ? "var(--hz-orange-wash)" : "none",
+              border: "none", cursor: "pointer",
+              fontSize: 13, fontWeight: 600,
               color: liked ? "var(--color-accent)" : "var(--color-fg-muted)",
-              transition: "color 200ms ease-out", padding: 4,
+              padding: "5px 10px", borderRadius: 100,
             }}
           >
             <Icon name={liked ? "heart-fill" : "heart"} size={16} color={liked ? "var(--color-accent)" : "var(--color-fg-muted)"} />
@@ -78,31 +78,32 @@ function FeatureCard({ post, liked, onLike, onTap }: { post: Post; liked: boolea
           </button>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 
-// ── テーマ別レールのカード ──
 function RailCard({ post, onTap }: { post: Post; onTap: (post: Post) => void }) {
   const image = useOgpImage(post.url);
   return (
-    <div
+    <article
       onClick={() => onTap(post)}
+      className="card-interactive"
       style={{
         flexShrink: 0, width: 150,
         background: "var(--color-surface)",
-        border: "1px solid var(--color-border)",
         borderRadius: 16, overflow: "hidden",
-        boxShadow: "var(--shadow-1)", cursor: "pointer",
+        boxShadow: "0 4px 16px rgba(42, 37, 33, 0.07)",
+        cursor: "pointer",
       }}
     >
       <div style={{
-        height: 96, background: "var(--color-surface-alt)",
+        height: 96,
+        background: "linear-gradient(135deg, var(--hz-orange-wash), var(--hz-sun-tint))",
         display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden",
       }}>
         {image
           ? <img src={image} alt={post.item} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          : <Icon name="gift" size={26} color="var(--color-fg-subtle)" />
+          : <Icon name="gift" size={26} color="var(--color-accent)" strokeWidth={1.3} />
         }
       </div>
       <div style={{ padding: "10px 12px 12px" }}>
@@ -118,34 +119,36 @@ function RailCard({ post, onTap }: { post: Post; onTap: (post: Post) => void }) 
           {post.item}
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 
-// ── 新着リストの行 ──
 function RowCard({ post, liked, onTap }: { post: Post; liked: boolean; onTap: (post: Post) => void }) {
   const image = useOgpImage(post.url);
   return (
-    <div
+    <article
       onClick={() => onTap(post)}
       style={{
         display: "flex", gap: 12, alignItems: "center",
-        padding: "13px 0", borderBottom: "1px solid var(--color-border)",
+        padding: "14px 0", borderBottom: "1px solid var(--color-border)",
         cursor: "pointer",
+        transition: "background 150ms ease",
       }}
     >
       <div style={{
-        width: 58, height: 58, borderRadius: 12, flexShrink: 0,
-        background: "var(--color-surface-alt)", overflow: "hidden",
+        width: 58, height: 58, borderRadius: 14, flexShrink: 0,
+        background: "linear-gradient(135deg, var(--hz-orange-wash), var(--hz-sun-tint))",
+        overflow: "hidden",
         display: "flex", alignItems: "center", justifyContent: "center",
+        boxShadow: "0 2px 8px rgba(42, 37, 33, 0.06)",
       }}>
         {image
           ? <img src={image} alt={post.item} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          : <Icon name="gift" size={20} color="var(--color-fg-subtle)" />
+          : <Icon name="gift" size={20} color="var(--color-accent)" />
         }
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 10, fontWeight: 600, color: "var(--color-fg-subtle)", marginBottom: 3 }}>
+        <div style={{ fontSize: 10, fontWeight: 600, color: "var(--color-fg-subtle)", marginBottom: 3, letterSpacing: "0.02em" }}>
           {post.relation} · {post.scene} · {post.price}
         </div>
         <div style={{
@@ -164,32 +167,31 @@ function RowCard({ post, liked, onTap }: { post: Post; liked: boolean; onTap: (p
         </div>
       </div>
       {liked && <Icon name="heart-fill" size={14} color="var(--color-accent)" />}
-    </div>
+    </article>
   );
 }
 
 export default function FeedScreen({ posts, likes, onLike, onTapPost }: FeedScreenProps) {
-  // フィーチャー：画像が出る（=urlあり）最初の投稿
   const feature = posts.find((p) => p.url) ?? posts[0];
-  // テーマレール：誕生日の記録
   const railTheme = "誕生日";
   const rail = posts.filter((p) => p.id !== feature.id && p.scene === railTheme).slice(0, 8);
-  // 新着：残り
   const rest = posts.filter((p) => p.id !== feature.id && !rail.some((r) => r.id === p.id));
 
   return (
     <div style={{ padding: "20px 20px 110px" }}>
-      {/* 注目の1本 */}
-      <div style={{ fontSize: 11, fontWeight: 700, color: "var(--color-accent)", letterSpacing: "0.08em", marginBottom: 10 }}>
+      <div style={{
+        fontSize: 11, fontWeight: 800, color: "var(--color-accent)",
+        letterSpacing: "0.08em", marginBottom: 10,
+        textTransform: "uppercase" as const,
+      }}>
         今日の「はい、どうぞ」
       </div>
       <FeatureCard post={feature} liked={!!likes[feature.id]} onLike={onLike} onTap={onTapPost} />
 
-      {/* テーマ別レール */}
       {rail.length > 0 && (
         <>
           <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 12 }}>
-            <div style={{ fontSize: 15, fontWeight: 800, color: "var(--color-fg)" }}>{railTheme}の「なぜ選んだか」</div>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "var(--color-fg)", letterSpacing: "-0.01em" }}>{railTheme}の「なぜ選んだか」</div>
             <div style={{ fontSize: 11, color: "var(--color-fg-subtle)" }}>{rail.length}件</div>
           </div>
           <div style={{
@@ -201,8 +203,7 @@ export default function FeedScreen({ posts, likes, onLike, onTapPost }: FeedScre
         </>
       )}
 
-      {/* 新着の記録 */}
-      <div style={{ fontSize: 15, fontWeight: 800, color: "var(--color-fg)", marginBottom: 4 }}>新着の記録</div>
+      <div style={{ fontSize: 15, fontWeight: 800, color: "var(--color-fg)", marginBottom: 4, letterSpacing: "-0.01em" }}>新着の記録</div>
       {rest.map((p) => (
         <RowCard key={p.id} post={p} liked={!!likes[p.id]} onTap={onTapPost} />
       ))}

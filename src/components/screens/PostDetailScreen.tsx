@@ -20,21 +20,27 @@ export default function PostDetailScreen({ post, posts, liked, onLike }: PostDet
   const ogpImage = useOgpImage(post.url);
 
   return (
-    <div style={{ paddingBottom: 100 }}>
+    <article style={{ paddingBottom: 100 }}>
       <div style={{
         height: 260,
-        background: "var(--color-accent-light)",
+        background: "linear-gradient(145deg, var(--hz-orange-wash), var(--hz-sun-tint))",
         display: "flex", alignItems: "center", justifyContent: "center",
         overflow: "hidden",
+        position: "relative",
       }}>
         {ogpImage
           ? <img src={ogpImage} alt={post.item} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           : <Icon name="gift" size={56} color="var(--color-accent)" strokeWidth={1.2} />
         }
+        {ogpImage && (
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "linear-gradient(to bottom, transparent 50%, rgba(255,247,237,0.15) 100%)",
+          }} />
+        )}
       </div>
 
       <div style={{ padding: "20px 20px 0" }}>
-        {/* user row */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
           <Avatar initial={post.initial} size={36} />
           <div style={{ flex: 1 }}>
@@ -43,14 +49,16 @@ export default function PostDetailScreen({ post, posts, liked, onLike }: PostDet
           </div>
           <button
             onClick={() => onLike(post.id)}
+            className="btn-interactive"
             style={{
               display: "flex", alignItems: "center", gap: 5,
               padding: "8px 14px", borderRadius: 100, border: "1.5px solid",
               borderColor: liked ? "var(--color-accent)" : "var(--color-border)",
               background: liked ? "var(--color-accent-light)" : "var(--color-surface)",
-              cursor: "pointer", fontSize: 13, fontWeight: 500,
+              cursor: "pointer", fontSize: 13, fontWeight: 600,
               color: liked ? "var(--color-accent)" : "var(--color-fg-muted)",
-              transition: "all 200ms ease-out",
+              fontFamily: "inherit",
+              boxShadow: liked ? "0 2px 8px rgba(255, 90, 31, 0.15)" : "none",
             }}
           >
             <Icon name={liked ? "heart-fill" : "heart"} size={15} color={liked ? "var(--color-accent)" : "var(--color-fg-muted)"} />
@@ -62,84 +70,101 @@ export default function PostDetailScreen({ post, posts, liked, onLike }: PostDet
           <PostTags post={post} />
         </div>
 
-        <div style={{ fontSize: 19, fontWeight: 700, color: "var(--color-fg)", lineHeight: 1.4, marginBottom: 12 }}>
+        <h1 style={{
+          fontSize: 19, fontWeight: 800, color: "var(--color-fg)", lineHeight: 1.4, marginBottom: 14,
+          letterSpacing: "-0.01em",
+        }}>
           {post.item}
-        </div>
+        </h1>
 
         {post.about && (
-          <div style={{
-            background: "var(--color-surface-alt)", border: "1px solid var(--color-border)",
-            borderRadius: 16, padding: "14px 16px", marginBottom: 12,
+          <section style={{
+            background: "var(--color-surface-alt)",
+            borderRadius: 18, padding: "16px 18px", marginBottom: 12,
           }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: "var(--color-fg-muted)", letterSpacing: "0.05em", marginBottom: 8 }}>贈った相手のこと</div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "var(--color-fg-muted)", letterSpacing: "0.05em", marginBottom: 8 }}>贈った相手のこと</div>
             <div style={{ fontSize: 14, color: "var(--color-fg)", lineHeight: 1.8 }}>{post.about}</div>
-          </div>
+          </section>
         )}
 
-        <div style={{
-          background: "var(--color-surface)", border: "1px solid var(--color-border)",
-          borderRadius: 16, padding: "14px 16px", marginBottom: 12,
+        <section style={{
+          background: "var(--color-surface)",
+          border: "1.5px solid var(--color-border)",
+          borderLeft: "3px solid var(--color-accent)",
+          borderRadius: "0 18px 18px 0",
+          padding: "16px 18px", marginBottom: 12,
+          boxShadow: "0 2px 12px rgba(42, 37, 33, 0.04)",
         }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: "var(--color-fg-muted)", letterSpacing: "0.05em", marginBottom: 8 }}>なぜこれを選んだか</div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "var(--color-accent)", letterSpacing: "0.05em", marginBottom: 8 }}>なぜこれを選んだか</div>
           <div style={{ fontSize: 14, color: "var(--color-fg)", lineHeight: 1.8 }}>{post.reason ?? post.note}</div>
-        </div>
+        </section>
 
         {post.reaction && (
-          <div style={{
-            background: "var(--color-sage-light)", border: "1px solid rgba(245,194,16,0.3)",
-            borderRadius: 16, padding: "14px 16px", marginBottom: 12,
+          <section style={{
+            background: "linear-gradient(135deg, var(--hz-sun-tint), #FFF8E8)",
+            borderRadius: 18, padding: "16px 18px", marginBottom: 12,
+            boxShadow: "inset 0 1px 2px rgba(255, 255, 255, 0.6)",
           }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: "#8B6F00", letterSpacing: "0.05em", marginBottom: 8 }}>贈った時のこと</div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#8B6F00", letterSpacing: "0.05em", marginBottom: 8 }}>贈った時のこと</div>
             <div style={{ fontSize: 14, color: "var(--color-fg)", lineHeight: 1.8 }}>{post.reaction}</div>
-          </div>
+          </section>
         )}
 
         {post.url && (
-          <div
-            onClick={() => window.open(post.url, "_blank", "noopener,noreferrer")}
+          <a
+            href={post.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="card-interactive"
             style={{
               display: "flex", alignItems: "center", gap: 12,
-              background: "var(--color-surface)", border: "1px solid var(--color-border)",
-              borderRadius: 16, padding: "14px 16px", marginBottom: 20, cursor: "pointer",
+              background: "var(--color-surface)",
+              borderRadius: 16, padding: "14px 16px", marginBottom: 20,
+              textDecoration: "none",
+              boxShadow: "0 2px 12px rgba(42, 37, 33, 0.05)",
             }}
           >
             <div style={{
-              width: 36, height: 36, borderRadius: 10, background: "var(--color-accent-light)",
+              width: 36, height: 36, borderRadius: 10,
+              background: "linear-gradient(135deg, var(--hz-orange-wash), var(--hz-orange-tint))",
               display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
             }}>
               <Icon name="external-link" size={16} color="var(--color-accent)" />
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 11, color: "var(--color-fg-muted)", marginBottom: 2 }}>購入リンク</div>
-              <div style={{ fontSize: 13, fontWeight: 500, color: "var(--color-fg)" }}>商品ページを見る</div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: "var(--color-fg)" }}>商品ページを見る</div>
             </div>
-          </div>
+            <Icon name="arrow-right" size={16} color="var(--color-fg-subtle)" />
+          </a>
         )}
 
         {related.length > 0 && (
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "var(--color-fg-muted)", marginBottom: 12, letterSpacing: "0.04em" }}>似たプレゼント</div>
+          <section>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--color-fg-muted)", marginBottom: 12, letterSpacing: "0.04em" }}>似たプレゼント</div>
             {related.map((p) => (
-              <div key={p.id} style={{
-                background: "var(--color-surface)", border: "1px solid var(--color-border)",
-                borderRadius: 14, padding: "12px 14px", marginBottom: 10,
-                boxShadow: "var(--shadow-1)", display: "flex", alignItems: "flex-start", gap: 10,
+              <div key={p.id} className="card-interactive" style={{
+                background: "var(--color-surface)",
+                borderRadius: 16, padding: "12px 14px", marginBottom: 10,
+                boxShadow: "0 2px 12px rgba(42, 37, 33, 0.05)",
+                display: "flex", alignItems: "flex-start", gap: 10,
               }}>
                 <div style={{
-                  width: 36, height: 36, borderRadius: 10, background: "var(--color-surface-alt)",
+                  width: 36, height: 36, borderRadius: 10,
+                  background: "linear-gradient(135deg, var(--hz-orange-wash), var(--hz-sun-tint))",
                   display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
                 }}>
-                  <Icon name="gift" size={16} color="var(--color-fg-subtle)" />
+                  <Icon name="gift" size={16} color="var(--color-accent)" />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 13, fontWeight: 500, color: "var(--color-fg)", marginBottom: 4, lineHeight: 1.3 }}>{p.item}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "var(--color-fg)", marginBottom: 4, lineHeight: 1.3 }}>{p.item}</div>
                   <PostTags post={p} small />
                 </div>
               </div>
             ))}
-          </div>
+          </section>
         )}
       </div>
-    </div>
+    </article>
   );
 }

@@ -177,16 +177,44 @@ export default function ClientShell() {
   const renderLoading = () => (
     <div style={{
       flex: 1, display: "flex", flexDirection: "column",
-      alignItems: "center", justifyContent: "center", gap: 16, padding: 32,
+      padding: "20px 20px 110px", gap: 16,
     }}>
+      {/* Skeleton: section header */}
+      <div className="skeleton" style={{ width: 120, height: 14, marginBottom: 4 }} />
+      {/* Skeleton: feature card */}
       <div style={{
-        width: 48, height: 48, borderRadius: "50%",
-        border: "3px solid var(--color-border)",
-        borderTopColor: "var(--color-accent)",
-        animation: "spin 0.8s linear infinite",
-      }} />
-      <div style={{ fontSize: 14, color: "var(--color-fg-muted)" }}>読み込んでいます…</div>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        borderRadius: 22, overflow: "hidden",
+        background: "var(--color-surface)",
+        boxShadow: "0 4px 16px rgba(42, 37, 33, 0.05)",
+      }}>
+        <div className="skeleton" style={{ height: 200, borderRadius: 0 }} />
+        <div style={{ padding: "16px 18px 18px" }}>
+          <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
+            <div className="skeleton" style={{ width: 48, height: 20, borderRadius: 100 }} />
+            <div className="skeleton" style={{ width: 56, height: 20, borderRadius: 100 }} />
+          </div>
+          <div className="skeleton" style={{ width: "80%", height: 18, marginBottom: 10 }} />
+          <div className="skeleton" style={{ width: "100%", height: 14, marginBottom: 6 }} />
+          <div className="skeleton" style={{ width: "60%", height: 14, marginBottom: 14 }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div className="skeleton" style={{ width: 32, height: 32, borderRadius: 100 }} />
+            <div className="skeleton" style={{ width: 80, height: 14 }} />
+          </div>
+        </div>
+      </div>
+      {/* Skeleton: section header */}
+      <div className="skeleton" style={{ width: 160, height: 16, marginTop: 8 }} />
+      {/* Skeleton: row cards */}
+      {[1, 2, 3].map((i) => (
+        <div key={i} style={{ display: "flex", gap: 12, alignItems: "center", padding: "8px 0" }}>
+          <div className="skeleton" style={{ width: 56, height: 56, borderRadius: 14 }} />
+          <div style={{ flex: 1 }}>
+            <div className="skeleton" style={{ width: "40%", height: 10, marginBottom: 6 }} />
+            <div className="skeleton" style={{ width: "70%", height: 14, marginBottom: 6 }} />
+            <div className="skeleton" style={{ width: "90%", height: 12 }} />
+          </div>
+        </div>
+      ))}
     </div>
   );
 
@@ -253,16 +281,19 @@ export default function ClientShell() {
   };
 
   return (
-    <div style={{
-      width: "100%",
-      minHeight: "100dvh",
-      maxWidth: 480,
-      margin: "0 auto",
-      background: "var(--color-bg)",
-      position: "relative",
-      display: "flex",
-      flexDirection: "column",
-    }}>
+    <div
+      className="noise-grain"
+      style={{
+        width: "100%",
+        minHeight: "100dvh",
+        maxWidth: 480,
+        margin: "0 auto",
+        background: "var(--color-bg)",
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <TopNav screen={screen} onBack={goBack} onBell={onBell} hasNotif={unreadNotif > 0} />
 
       <div

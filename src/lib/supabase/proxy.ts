@@ -41,7 +41,10 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isPublic = PUBLIC_PREFIXES.some((p) => pathname.startsWith(p));
 
-  if (!user && !isPublic) {
+  // DEV: ?bypass=1 で認証スキップ（開発確認用・本番では無効）
+  const bypassDev = process.env.NODE_ENV === "development" && request.nextUrl.searchParams.has("bypass");
+
+  if (!user && !isPublic && !bypassDev) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     url.searchParams.set("next", pathname);

@@ -14,12 +14,14 @@ interface ComposerScreenProps {
 function StepBadge({ n, done }: { n: number; done: boolean }) {
   return (
     <div style={{
-      width: 22, height: 22, borderRadius: 100, flexShrink: 0,
-      background: done ? "var(--color-accent)" : "var(--color-surface-alt)",
+      width: 24, height: 24, borderRadius: 100, flexShrink: 0,
+      background: done ? "var(--color-accent)" : "var(--color-surface)",
       border: done ? "none" : "1.5px solid var(--color-border)",
       display: "flex", alignItems: "center", justifyContent: "center",
       fontSize: 11, fontWeight: 700,
       color: done ? "#fff" : "var(--color-fg-muted)",
+      boxShadow: done ? "0 2px 8px rgba(255, 90, 31, 0.25)" : "none",
+      transition: "all 250ms ease",
     }}>
       {done ? <Icon name="check" size={12} color="#fff" /> : n}
     </div>
@@ -89,7 +91,7 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
         }}>
           <Icon name="check" size={36} color="#8B6F00" />
         </div>
-        <div style={{ fontSize: 22, fontWeight: 800, color: "var(--color-fg)", textAlign: "center" }}>投稿できました！</div>
+        <div style={{ fontSize: 22, fontWeight: 800, color: "var(--color-fg)", textAlign: "center", letterSpacing: "-0.02em" }}>投稿できました</div>
         <div style={{ fontSize: 14, color: "var(--color-fg-muted)", textAlign: "center", lineHeight: 1.8 }}>
           あなたの「はい、どうぞ」が<br />みんなの参考になります
         </div>
@@ -260,17 +262,18 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
         <button
           onClick={() => { void handlePost(); }}
           disabled={!canPost || submitting}
+          className={canPost && !submitting ? "btn-interactive" : ""}
           style={{
             width: "100%", padding: 16, borderRadius: 100, border: "none",
             background: canPost && !submitting ? "var(--color-accent)" : "var(--color-surface-alt)",
             color: canPost && !submitting ? "#fff" : "var(--color-fg-subtle)",
             fontSize: 16, fontWeight: 700, fontFamily: "inherit",
             cursor: canPost && !submitting ? "pointer" : "not-allowed",
-            boxShadow: canPost && !submitting ? "0 4px 20px rgba(232,80,42,0.35)" : "none",
+            boxShadow: canPost && !submitting ? "0 6px 20px rgba(255, 90, 31, 0.35), inset 0 1px 1px rgba(255,255,255,0.2)" : "none",
             transition: "all 220ms ease-out", letterSpacing: "0.02em",
           }}
         >
-          {submitting ? "送信中…" : canPost ? "はい、どうぞ！" : "必須項目を入力してください"}
+          {submitting ? "送信中…" : canPost ? "はい、どうぞ" : "必須項目を入力してください"}
         </button>
       </div>
     </div>
