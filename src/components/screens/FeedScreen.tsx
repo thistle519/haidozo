@@ -23,7 +23,7 @@ function FeatureCard({ post, liked, onLike, onTap }: { post: Post; liked: boolea
         background: "var(--color-surface)",
         borderRadius: 22,
         overflow: "hidden",
-        boxShadow: "0 8px 30px rgba(42, 37, 33, 0.1), 0 1px 3px rgba(42, 37, 33, 0.06)",
+        boxShadow: "var(--hz-shadow-soft)",
         cursor: "pointer",
         marginBottom: 28,
       }}
@@ -66,11 +66,11 @@ function FeatureCard({ post, liked, onLike, onTap }: { post: Post; liked: boolea
             className="tap-target"
             style={{
               display: "flex", alignItems: "center", gap: 4,
-              background: liked ? "var(--hz-orange-wash)" : "none",
-              border: "none", cursor: "pointer",
+              background: "var(--hz-orange-wash)",
+              border: "1px solid transparent", cursor: "pointer",
               fontSize: 13, fontWeight: 600,
               color: liked ? "var(--color-accent)" : "var(--color-fg-muted)",
-              padding: "5px 10px", borderRadius: 100,
+              padding: "6px 12px", borderRadius: 100,
             }}
           >
             <Icon name={liked ? "heart-fill" : "heart"} size={16} color={liked ? "var(--color-accent)" : "var(--color-fg-muted)"} />
@@ -92,7 +92,7 @@ function RailCard({ post, onTap }: { post: Post; onTap: (post: Post) => void }) 
         flexShrink: 0, width: 150,
         background: "var(--color-surface)",
         borderRadius: 16, overflow: "hidden",
-        boxShadow: "0 4px 16px rgba(42, 37, 33, 0.07)",
+        boxShadow: "var(--hz-shadow-soft)",
         cursor: "pointer",
       }}
     >
@@ -140,7 +140,7 @@ function RowCard({ post, liked, onTap }: { post: Post; liked: boolean; onTap: (p
         background: "linear-gradient(135deg, var(--hz-orange-wash), var(--hz-sun-tint))",
         overflow: "hidden",
         display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: "0 2px 8px rgba(42, 37, 33, 0.06)",
+        boxShadow: "var(--hz-shadow-soft)",
       }}>
         {image
           ? <img src={image} alt={post.item} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -181,7 +181,7 @@ export default function FeedScreen({ posts, likes, onLike, onTapPost }: FeedScre
     <div style={{ padding: "20px 20px 110px" }}>
       <div style={{
         fontSize: 11, fontWeight: 800, color: "var(--color-accent)",
-        letterSpacing: "0.08em", marginBottom: 10,
+        letterSpacing: "0.06em", marginBottom: 10,
         textTransform: "uppercase" as const,
       }}>
         今日の「はい、どうぞ」
