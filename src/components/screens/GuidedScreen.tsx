@@ -7,8 +7,8 @@ import { useOgpImage } from "@/lib/useOgpImage";
 import TagChip from "@/components/ui/TagChip";
 import Icon from "@/components/ui/Icon";
 
-const RELATIONS: Relation[] = ["恋人", "友達", "家族", "上司", "同僚", "先生・恩師"];
-const SCENES: Scene[] = ["誕生日", "記念日", "お礼", "送別", "手土産", "なんでもない日", "応援", "結婚祝い"];
+const RELATIONS: Relation[] = ["恋人", "友達", "家族", "上司", "同僚", "先生・恩師", "その他"];
+const SCENES: Scene[] = ["誕生日", "記念日", "お礼", "送別", "手土産", "なんでもない日", "応援", "結婚祝い", "労い"];
 
 const RELATION_COLOR: Record<string, { from: string; to: string; dot: string }> = {
   "恋人":       { from: "#F9D4C8", to: "#F0A898", dot: "#C43E1E" },

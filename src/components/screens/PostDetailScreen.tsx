@@ -30,15 +30,28 @@ export default function PostDetailScreen({ post, posts, liked, onLike }: PostDet
       }}>
         {ogpImage
           ? <img src={ogpImage} alt={post.item} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          : <Icon name="gift" size={56} color="var(--color-accent)" strokeWidth={1.2} />
+          : post.imageUrl
+            ? <img src={post.imageUrl} alt={post.item} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            : <Icon name="gift" size={56} color="var(--color-accent)" strokeWidth={1.2} />
         }
-        {ogpImage && (
+        {(ogpImage || post.imageUrl) && (
           <div style={{
             position: "absolute", inset: 0,
             background: "linear-gradient(to bottom, transparent 50%, rgba(255,247,237,0.15) 100%)",
           }} />
         )}
       </div>
+
+      {ogpImage && post.imageUrl && (
+        <div style={{ padding: "12px 20px 0" }}>
+          <div style={{
+            borderRadius: 16, overflow: "hidden",
+            boxShadow: "0 2px 12px rgba(42, 37, 33, 0.08)",
+          }}>
+            <img src={post.imageUrl} alt={`${post.item} の写真`} style={{ width: "100%", height: 180, objectFit: "cover", display: "block" }} />
+          </div>
+        </div>
+      )}
 
       <div style={{ padding: "20px 20px 0" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>

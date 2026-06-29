@@ -4,6 +4,7 @@ import { expandQuery, postFullText } from "@/lib/searchUtils";
 type MitateTemplate = Omit<Mitate, "fragment"> & {
   fallbackFragment: string;
   keywords: string[];
+  suggestions: string[];
 };
 
 const MITATE_TEMPLATES: MitateTemplate[] = [
@@ -21,6 +22,7 @@ const MITATE_TEMPLATES: MitateTemplate[] = [
       { axis: "一日をほどく合図", category: "眠る前のもの", oneLine: "寝る前の数分に、ほっとする余白をつくる" },
     ],
     keywords: ["香り", "香水", "フレグランス", "切り替え", "仕事", "忙しい", "ハードワーク", "おしゃれ"],
+    suggestions: ["Aesop ヒュイル オードパルファム", "Jo Malone ウッドセージ＆シーソルト", "SHIRO サボン ルームフレグランス"],
   },
   {
     id: "first-good-clothes",
@@ -36,6 +38,7 @@ const MITATE_TEMPLATES: MitateTemplate[] = [
       { axis: "手入れまで贈る", category: "ケア用品", oneLine: "大事に使う前提で、長く付き合えるものにする" },
     ],
     keywords: ["恋人", "誕生日", "服", "ファッション", "ドメブラ", "ブランド", "ニット", "社会人", "こだわり", "おしゃれ"],
+    suggestions: ["YAECA コンフォートシャツ", "Hender Scheme エスキメーションレザーベルト", "THE NORTH FACE PURPLE LABEL ニットキャップ"],
   },
   {
     id: "share-a-date",
@@ -51,6 +54,7 @@ const MITATE_TEMPLATES: MitateTemplate[] = [
       { axis: "特別な日を作る", category: "体験ギフト", oneLine: "記念日に残る時間として考える" },
     ],
     keywords: ["恋人", "記念日", "誕生日", "一緒", "ふたり", "二人", "映画", "音楽", "ライブ", "旅行", "お出かけ", "デート", "体験"],
+    suggestions: ["SOW EXPERIENCE 体験ギフト for 2", "TOHOシネマズ ギフトカード", "Afternoon Tea ペアティーセット"],
   },
   {
     id: "hair-care",
@@ -66,6 +70,7 @@ const MITATE_TEMPLATES: MitateTemplate[] = [
       { axis: "香りまで整える", category: "フレグランス", oneLine: "近づいたときに少しうれしいものにする" },
     ],
     keywords: ["恋人", "記念日", "誕生日", "髪", "ヘア", "美容", "メイク", "ブラシ", "リップ", "長く使う", "丁寧", "身だしなみ"],
+    suggestions: ["MASON PEARSON ポケットブリッスル", "NARS リップスティック", "MARKS&WEB ハーバルバスソルト"],
   },
   {
     id: "private-culture",
@@ -81,6 +86,7 @@ const MITATE_TEMPLATES: MitateTemplate[] = [
       { axis: "気分を作る", category: "香りのもの", oneLine: "作品の余韻みたいに使える" },
     ],
     keywords: ["恋人", "映画", "本", "読書", "音楽", "ライブ", "サカナクション", "カルチャー", "作品", "推し", "感性"],
+    suggestions: ["紀伊國屋書店 ギフトカード", "Spotify Premium ギフト 3ヶ月", "BALMUDA The Speaker"],
   },
   {
     id: "morning-coffee",
@@ -96,6 +102,7 @@ const MITATE_TEMPLATES: MitateTemplate[] = [
       { axis: "会う理由をひとつ増やす", category: "一緒に過ごす口実になるもの", oneLine: "一緒に飲む時間まで贈る" },
     ],
     keywords: ["コーヒー", "カフェ", "朝", "出張", "旅", "仕事", "応援", "落ち込んでいる"],
+    suggestions: ["KINTO トラベルタンブラー", "丸山珈琲 シングルオリジンセット", "Kalita ウェーブドリッパー"],
   },
   {
     id: "night-bath",
@@ -111,6 +118,7 @@ const MITATE_TEMPLATES: MitateTemplate[] = [
       { axis: "家の中に好きな場所を作る", category: "部屋で使うもの", oneLine: "部屋で落ち着けるきっかけにする" },
     ],
     keywords: ["入浴", "お風呂", "夜", "休む", "疲れ", "忙しい", "リラックス", "ゆっくり"],
+    suggestions: ["CLAYD ウィークブック", "BARTH 中性重炭酸入浴剤", "OSAJI バスオイル"],
   },
   {
     id: "home-reset",
@@ -126,6 +134,7 @@ const MITATE_TEMPLATES: MitateTemplate[] = [
       { axis: "夜にスイッチを切る", category: "入浴剤", oneLine: "疲れた日にすぐ使えるものにする" },
     ],
     keywords: ["部屋", "家", "おうち", "インドア", "丁寧", "料理", "食器", "暮らし", "一人"],
+    suggestions: ["HAY キャンドルホルダー", "P.F.Candle Co. アンバー＆モス", "1616 / arita japan ラウンドプレート"],
   },
   {
     id: "before-sleep",
@@ -141,6 +150,7 @@ const MITATE_TEMPLATES: MitateTemplate[] = [
       { axis: "自分に戻るスイッチ", category: "香りのもの", oneLine: "香りで気持ちをほどく" },
     ],
     keywords: ["眠る", "寝る", "夜", "本", "読書", "ひとり", "一人", "短歌", "紅茶", "落ち着く"],
+    suggestions: ["KLIPPAN コットンブランケット", "TWG ティーバッグセット", "無印良品 おやすみブレンド エッセンシャルオイル"],
   },
   {
     id: "shared-excuse",
@@ -156,6 +166,7 @@ const MITATE_TEMPLATES: MitateTemplate[] = [
       { axis: "一日をほどく合図", category: "眠る前のもの", oneLine: "一人の時間も大事にできる方向へずらす" },
     ],
     keywords: ["一緒", "ふたり", "二人", "体験", "映画", "旅行", "お出かけ", "会う", "友達", "家族"],
+    suggestions: ["アソビュー 体験ギフト", "Starbucks ペアマグセット", "SOW EXPERIENCE レストランギフト"],
   },
 ];
 
@@ -195,6 +206,7 @@ export function buildMockMitates(fragment: string, query: string): Mitate[] {
       reason: template.reason,
       relatedPostIds: template.relatedPostIds,
       branches: template.branches,
+      suggestions: template.suggestions,
     }));
 }
 

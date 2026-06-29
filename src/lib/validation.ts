@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 // src/types/index.ts のユニオン型・DB CHECK 制約と必ず一致させること
-export const RELATIONS = ["恋人", "友達", "家族", "上司", "同僚", "先生・恩師"] as const;
-export const SCENES = ["誕生日", "記念日", "お礼", "送別", "手土産", "なんでもない日", "応援", "結婚祝い"] as const;
-export const PRICES = ["〜3,000円", "〜5,000円", "〜10,000円", "それ以上"] as const;
+export const RELATIONS = ["恋人", "友達", "家族", "上司", "同僚", "先生・恩師", "その他"] as const;
+export const SCENES = ["誕生日", "記念日", "お礼", "送別", "手土産", "なんでもない日", "応援", "結婚祝い", "労い"] as const;
+export const PRICES = ["〜3,000円", "〜5,000円", "〜10,000円", "〜5万円", "〜10万円", "それ以上"] as const;
 
 export const postCreateSchema = z.object({
   item: z.string().trim().min(1, "贈ったものを入力してください").max(100),

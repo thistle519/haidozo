@@ -21,8 +21,8 @@ import Icon from "@/components/ui/Icon";
 //   喜んでほしい = みんなの想いのかけらから共鳴＋自由追加
 // ────────────────────────────────────
 
-const RELATIONS: Relation[] = ["恋人", "友達", "家族", "先生・恩師", "同僚", "上司"];
-const SCENES: Scene[] = ["誕生日", "記念日", "お礼", "送別", "手土産", "なんでもない日", "応援", "結婚祝い"];
+const RELATIONS: Relation[] = ["恋人", "友達", "家族", "先生・恩師", "同僚", "上司", "その他"];
+const SCENES: Scene[] = ["誕生日", "記念日", "お礼", "送別", "手土産", "なんでもない日", "応援", "結婚祝い", "労い"];
 
 // Step2 思い出すきっかけ
 const MEMORY_PROMPTS = [
@@ -1114,6 +1114,25 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
               {activeMitate.reason}
             </div>
           </div>
+
+          {activeMitate.suggestions && activeMitate.suggestions.length > 0 && (
+            <div style={{
+              background: "var(--color-surface-alt)", borderRadius: 14,
+              padding: "12px 14px", marginBottom: 16,
+            }}>
+              <div style={{ fontSize: 10, fontWeight: 800, color: "var(--color-fg-muted)", letterSpacing: "0.06em", marginBottom: 8 }}>
+                たとえばこんな商品
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {activeMitate.suggestions.map((s) => (
+                  <div key={s} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <Icon name="gift" size={12} color="var(--color-accent)" />
+                    <div style={{ fontSize: 13, color: "var(--color-fg)", fontWeight: 600 }}>{s}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
             <button

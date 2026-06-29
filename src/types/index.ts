@@ -1,6 +1,6 @@
-export type Relation = "恋人" | "友達" | "家族" | "上司" | "同僚" | "先生・恩師";
-export type PriceRange = "〜3,000円" | "〜5,000円" | "〜10,000円" | "それ以上";
-export type Scene = "誕生日" | "記念日" | "お礼" | "送別" | "手土産" | "なんでもない日" | "応援" | "結婚祝い";
+export type Relation = "恋人" | "友達" | "家族" | "上司" | "同僚" | "先生・恩師" | "その他";
+export type PriceRange = "〜3,000円" | "〜5,000円" | "〜10,000円" | "〜5万円" | "〜10万円" | "それ以上";
+export type Scene = "誕生日" | "記念日" | "お礼" | "送別" | "手土産" | "なんでもない日" | "応援" | "結婚祝い" | "労い";
 
 export interface Post {
   id: string;
@@ -19,6 +19,7 @@ export interface Post {
   likes: number;
   date: string;
   url?: string;
+  imageUrl?: string;
   // 旧フィールド（移行用）
   note?: string;
   episode?: string;
@@ -38,6 +39,7 @@ export interface Mitate {
   reason: string;
   relatedPostIds: string[];
   branches?: MitateBranch[];
+  suggestions?: string[];
 }
 
 // なにあげよ？：考え中のプラン（贈る相手単位の思考の途中経過）

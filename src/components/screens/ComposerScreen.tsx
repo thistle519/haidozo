@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import type { Post, Relation, PriceRange, Scene } from "@/types";
-import { createPost } from "@/lib/api";
+import { createPost, uploadPostImage, getCurrentUser } from "@/lib/api";
 import { RELATIONS, PRICES, SCENES } from "@/lib/validation";
 import TagChip from "@/components/ui/TagChip";
 import Icon from "@/components/ui/Icon";
@@ -41,15 +41,27 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
   const [itemName, setItemName] = useState("");
   const [about, setAbout] = useState("");
   const [reason, setReason] = useState("");
-  const [expanded, setExpanded] = useState(false);
   const [scene, setScene] = useState<Scene | null>(null);
   const [url, setUrl] = useState("");
   const [reaction, setReaction] = useState("");
+  const [relationCustom, setRelationCustom] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [posted, setPosted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const canPost = !!(relation && price && itemName.trim() && reason.trim());
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImageFile(file);
+    const reader = new FileReader();
+    reader.onload = () => setImagePreview(reader.result as string);
+    reader.readAsDataURL(file);
+  };
 
   const handlePost = async () => {
     if (!canPost || submitting) return;
@@ -59,6 +71,14 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
     setError(null);
 
     try {
+      let imageUrl: string | undefined;
+      if (imageFile) {
+        const user = await getCurrentUser();
+        if (user) {
+          imageUrl = await uploadPostImage(imageFile, user.id);
+        }
+      }
+
       const newPost = await createPost({
         item: itemName.trim(),
         relation,
@@ -67,6 +87,7 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
         about: about.trim(),
         reason: reason.trim(),
         reaction: reaction.trim() || undefined,
+        imageUrl,
         url: url.trim() || undefined,
       });
       setPosted(true);
@@ -122,9 +143,20 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {RELATIONS.map((r) => (
-              <TagChip key={r} label={r} selected={relation === r} onClick={() => setRelation(r)} />
+              <TagChip key={r} label={r} selected={relation === r} onClick={() => { setRelation(r); if (r !== "その他") setRelationCustom(""); }} />
             ))}
           </div>
+          {relation === "その他" && (
+            <input
+              type="text"
+              value={relationCustom}
+              onChange={(e) => setRelationCustom(e.target.value)}
+              placeholder="例: 推し、ご近所さん、先輩"
+              style={{ ...inputStyle, marginTop: 10, fontSize: 13 }}
+              onFocus={(e) => (e.target.style.borderColor = "var(--color-accent)")}
+              onBlur={(e) => (e.target.style.borderColor = "var(--color-border)")}
+            />
+          )}
         </div>
 
         {/* Step 2 */}
@@ -176,6 +208,40 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
               onFocus={(e) => { e.target.style.borderColor = "var(--color-accent)"; (e.target as HTMLInputElement).style.color = "var(--color-fg)"; }}
               onBlur={(e) => { e.target.style.borderColor = "var(--color-border)"; if (!url) (e.target as HTMLInputElement).style.color = "var(--color-fg-muted)"; }}
             />
+            <div style={{ fontSize: 11, color: "var(--color-fg-subtle)", marginTop: 4, paddingLeft: 4 }}>
+              URLを入力すると商品画像が自動で取得されます
+            </div>
+          </div>
+          <div style={{ marginTop: 10 }}>
+            <input ref={fileInputRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={handleImageSelect} style={{ display: "none" }} />
+            {imagePreview ? (
+              <div style={{ position: "relative", borderRadius: 16, overflow: "hidden" }}>
+                <img src={imagePreview} alt="プレビュー" style={{ width: "100%", height: 160, objectFit: "cover", borderRadius: 16 }} />
+                <button
+                  onClick={() => { setImageFile(null); setImagePreview(null); if (fileInputRef.current) fileInputRef.current.value = ""; }}
+                  style={{
+                    position: "absolute", top: 8, right: 8, width: 28, height: 28, borderRadius: 100,
+                    background: "rgba(0,0,0,0.5)", border: "none", cursor: "pointer",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}
+                >
+                  <Icon name="x" size={14} color="#fff" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                style={{
+                  width: "100%", padding: "14px 16px", borderRadius: 16,
+                  border: "1.5px dashed var(--color-border)", background: "var(--color-surface)",
+                  cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                  fontSize: 13, color: "var(--color-fg-muted)", fontFamily: "inherit",
+                }}
+              >
+                <Icon name="image" size={16} color="var(--color-fg-muted)" />
+                写真を追加（任意）
+              </button>
+            )}
           </div>
         </div>
 
@@ -219,38 +285,22 @@ export default function ComposerScreen({ onPost }: ComposerScreenProps) {
           </div>
         </div>
 
-        {/* Expand */}
-        <div
-          onClick={() => setExpanded((e) => !e)}
-          style={{
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            padding: "14px 16px", borderRadius: 16,
-            border: "1.5px solid var(--color-border)", background: "var(--color-surface)",
-            cursor: "pointer", marginBottom: expanded ? 12 : 0,
-          }}
-        >
-          <div style={{ fontSize: 14, fontWeight: 500, color: "var(--color-fg-muted)" }}>もっと詳しく書く</div>
-          <Icon name={expanded ? "chevron-up" : "chevron-down"} size={18} color="var(--color-fg-muted)" />
-        </div>
-
-        {expanded && (
-          <div className="animate-fade-in" style={{
-            background: "var(--color-surface)", border: "1.5px solid var(--color-border)",
-            borderRadius: 16, padding: 16, display: "flex", flexDirection: "column", gap: 16,
-          }}>
-            <div>
-              <div style={{ fontSize: 13, fontWeight: 500, color: "var(--color-fg)", marginBottom: 8 }}>贈った時のこと</div>
-              <textarea
-                value={reaction} onChange={(e) => setReaction(e.target.value)}
-                placeholder="渡した時の反応、その場の雰囲気、など"
-                rows={3}
-                style={{ ...inputStyle, resize: "none", lineHeight: 1.7 }}
-                onFocus={(e) => (e.target.style.borderColor = "var(--color-accent)")}
-                onBlur={(e) => (e.target.style.borderColor = "var(--color-border)")}
-              />
-            </div>
+        {/* Step 7 */}
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+            <StepBadge n={7} done={!!reaction} />
+            <div style={{ fontSize: 15, fontWeight: 500, color: "var(--color-fg)" }}>贈った時のこと</div>
+            <div style={{ fontSize: 11, color: "var(--color-fg-subtle)" }}>（任意）</div>
           </div>
-        )}
+          <textarea
+            value={reaction} onChange={(e) => setReaction(e.target.value)}
+            placeholder="渡した時の反応、その場の雰囲気、など"
+            rows={3}
+            style={{ ...inputStyle, resize: "none", lineHeight: 1.7 }}
+            onFocus={(e) => (e.target.style.borderColor = "var(--color-accent)")}
+            onBlur={(e) => (e.target.style.borderColor = "var(--color-border)")}
+          />
+        </div>
       </div>
 
       {/* Post button */}

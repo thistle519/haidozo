@@ -298,7 +298,6 @@ export default function ClientShell() {
 
       <div
         key={screen}
-        className="animate-fade-in"
         style={{ flex: 1, overflowX: "hidden", position: "relative" }}
       >
         {renderScreen()}

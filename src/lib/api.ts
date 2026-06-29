@@ -54,6 +54,7 @@ function toPost(api: ApiPost): Post {
     likes: api.likes,
     date: formatDate(api.createdAt),
     url: api.url ?? undefined,
+    imageUrl: api.imageUrl ?? undefined,
   };
 }
 
