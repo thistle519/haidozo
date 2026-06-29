@@ -73,52 +73,103 @@ function inferVibeChoices(
 // ────────────────────────────────────
 interface CardProps {
   post: Post;
-  likes: Record<string, boolean>;
   onTapPost: (p: Post) => void;
 }
 
-function SecondaryCard({ post, likes, onTapPost }: CardProps) {
+function RelatedGiftCard({
+  post,
+  selected = false,
+  variant,
+  onTapPost,
+  onToggle,
+}: {
+  post: Post;
+  selected?: boolean;
+  variant: "echo" | "related";
+  onTapPost: (p: Post) => void;
+  onToggle?: () => void;
+}) {
   const image = useOgpImage(post.url);
+  const isEcho = variant === "echo";
+  const ctaLabel = isEcho ? (selected ? "✓ いいかも" : "いいかも") : "記録を見る";
+
   return (
     <div
-      onClick={() => onTapPost(post)}
       className="card-interactive"
       style={{
-        background: "var(--color-surface)",
-        borderRadius: 16,
+        background: isEcho ? "var(--color-surface)" : "var(--hz-cream)",
+        border: isEcho ? "1.5px solid var(--hz-orange)" : "1px solid var(--color-border)",
+        borderRadius: isEcho ? "var(--hz-r-md)" : "var(--hz-r-sm)",
         overflow: "hidden",
-        marginBottom: 10,
-        boxShadow: "0 4px 16px rgba(42, 37, 33, 0.07)",
-        cursor: "pointer",
+        boxShadow: isEcho ? "var(--hz-shadow-pop)" : "none",
         display: "flex",
         alignItems: "stretch",
+        minHeight: 116,
       }}
     >
-      {image ? (
-        <div style={{ width: 80, flexShrink: 0, background: "var(--color-surface-alt)", overflow: "hidden" }}>
+      <div style={{
+        width: 80,
+        flexShrink: 0,
+        background: "linear-gradient(135deg, var(--hz-orange-wash), var(--hz-sun-tint))",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        overflow: "hidden",
+      }}>
+        {image ? (
           <img src={image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-        </div>
-      ) : (
-        <div style={{
-          width: 80, flexShrink: 0,
-          background: "var(--color-surface-alt)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-        }}>
-          <Icon name="gift" size={20} color="var(--color-fg-subtle)" />
-        </div>
-      )}
+        ) : (
+          <span aria-hidden="true" style={{ fontSize: 24, opacity: 0.26 }}>✦</span>
+        )}
+      </div>
       <div style={{ flex: 1, padding: "12px 14px", minWidth: 0 }}>
-        <div style={{ marginBottom: 5 }}><PostTags post={post} small /></div>
-        <div style={{ fontSize: 13, fontWeight: 600, color: "var(--color-fg)", marginBottom: 4, lineHeight: 1.35 }}>{post.item}</div>
+        <div style={{ marginBottom: 6 }}><PostTags post={post} small /></div>
+        <button
+          type="button"
+          onClick={() => onTapPost(post)}
+          style={{
+            display: "block",
+            width: "100%",
+            border: "none",
+            background: "transparent",
+            padding: 0,
+            textAlign: "left",
+            fontFamily: "inherit",
+            fontSize: 13,
+            fontWeight: 800,
+            color: "var(--color-fg)",
+            marginBottom: 4,
+            lineHeight: 1.35,
+            cursor: "pointer",
+          }}
+        >
+          {post.item}
+        </button>
         <div style={{
-          fontSize: 11, color: "var(--color-fg-muted)", lineHeight: 1.6,
+          fontSize: 12, color: "var(--color-fg-muted)", lineHeight: 1.7,
           overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box",
           WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
-        } as React.CSSProperties}>{post.reason}</div>
-      </div>
-      <div style={{ flexShrink: 0, padding: "12px 12px 12px 0", display: "flex", alignItems: "center", gap: 3, color: "var(--color-fg-subtle)", fontSize: 11 }}>
-        <Icon name="heart" size={11} color="var(--color-fg-subtle)" />
-        {post.likes + (likes[post.id] ? 1 : 0)}
+          marginBottom: 9,
+        } as React.CSSProperties}>
+          {post.reason}
+        </div>
+        <button
+          type="button"
+          onClick={onToggle ?? (() => onTapPost(post))}
+          style={{
+            padding: "6px 14px",
+            borderRadius: "var(--hz-r-full)",
+            border: "none",
+            background: selected || !isEcho ? "var(--hz-orange)" : "var(--hz-orange-wash)",
+            color: selected || !isEcho ? "var(--hz-cream)" : "var(--hz-orange-press)",
+            fontSize: 12,
+            fontWeight: 800,
+            fontFamily: "inherit",
+            cursor: "pointer",
+          }}
+        >
+          {ctaLabel}
+        </button>
       </div>
     </div>
   );
@@ -138,7 +189,7 @@ function TeaserCard({ post, onTapPost, featured = false }: Pick<CardProps, "post
         borderRadius: 18,
         overflow: "hidden",
         background: "var(--color-surface)",
-        boxShadow: "0 4px 16px rgba(42, 37, 33, 0.07)",
+        boxShadow: "var(--hz-shadow-soft)",
         cursor: "pointer",
         padding: 0,
         textAlign: "left",
@@ -180,7 +231,7 @@ function TeaserCard({ post, onTapPost, featured = false }: Pick<CardProps, "post
               fontWeight: 800,
               padding: "3px 8px",
               borderRadius: 999,
-              background: "rgba(255, 247, 237, 0.92)",
+              background: "color-mix(in srgb, var(--hz-cream) 92%, transparent)",
               color: "var(--color-fg)",
             }}>
               {t}
@@ -232,7 +283,7 @@ interface SearchScreenProps {
   onCompose: () => void;
 }
 
-export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans, onSavePlan, onCompose }: SearchScreenProps) {
+export default function SearchScreen({ posts: allPosts, onTapPost, plans, onSavePlan, onCompose }: SearchScreenProps) {
   const [phase, setPhase] = useState<Phase>("home");
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
@@ -451,45 +502,16 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
   );
 
   // 相槌ヒントカード（入力に反応して浮かぶ他人の投稿）
-  const hintCard = (p: Post) => {
-    const isSelected = selectedIds.includes(p.id);
-    return (
-      <div key={p.id} style={{
-        background: "var(--color-surface)",
-        border: `1.5px solid ${isSelected ? "var(--color-accent)" : "var(--color-border)"}`,
-        borderRadius: 18, padding: 14,
-        boxShadow: isSelected ? "var(--hz-shadow-pop)" : "var(--shadow-1)",
-        transition: "all 200ms ease",
-      }}>
-        <div style={{ display: "flex", gap: 6, marginBottom: 8, flexWrap: "wrap" }}>
-          {[p.relation, p.scene].map((t) => (
-            <span key={t} style={{ fontSize: 10, fontWeight: 600, padding: "2px 8px", borderRadius: 100, background: isSelected ? "var(--hz-orange-wash)" : "var(--color-surface-alt)", color: isSelected ? "var(--color-accent)" : "var(--color-fg-muted)" }}>{t}</span>
-          ))}
-        </div>
-        <div style={{ fontSize: 13, color: "var(--color-fg)", lineHeight: 1.8, marginBottom: 8 }}>“{p.reason}”</div>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
-          <div
-            onClick={() => onTapPost(p)}
-            style={{ fontSize: 11, color: "var(--color-fg-muted)", fontWeight: 500, cursor: "pointer", textDecoration: "underline", textDecorationColor: "var(--color-border)", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-          >
-            {p.item}
-          </div>
-          <button
-            onClick={() => toggleEpisode(p)}
-            style={{
-              flexShrink: 0, padding: "7px 14px", borderRadius: 100, border: "none",
-              background: isSelected ? "var(--color-accent)" : "var(--color-surface-alt)",
-              color: isSelected ? "#fff" : "var(--color-fg-muted)",
-              fontSize: 12, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
-              transition: "all 200ms ease",
-            }}
-          >
-            {isSelected ? "✓ いいかも" : "この感じ、いいかも"}
-          </button>
-        </div>
-      </div>
-    );
-  };
+  const hintCard = (p: Post) => (
+    <RelatedGiftCard
+      key={p.id}
+      post={p}
+      selected={selectedIds.includes(p.id)}
+      variant="echo"
+      onTapPost={onTapPost}
+      onToggle={() => toggleEpisode(p)}
+    />
+  );
 
   // その人ノート（貯まっていくのが見えるボード）
   const noteBoard = () => {
@@ -506,7 +528,7 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
         {loves.length > 0 && (
           <div style={{ display: "flex", gap: 5, flexWrap: "wrap", marginBottom: needsLoveHelp || memo.trim() || selectedVibes.length > 0 ? 8 : 0 }}>
             {loves.map((v) => (
-              <span key={v} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 100, background: "#fff", border: "1px solid var(--color-border)", color: "var(--color-fg)", fontWeight: 600 }}>♡ {v}</span>
+              <span key={v} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 100, background: "var(--hz-surface)", border: "1px solid var(--color-border)", color: "var(--color-fg)", fontWeight: 600 }}>♡ {v}</span>
             ))}
           </div>
         )}
@@ -562,9 +584,9 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
           className="card-interactive"
           style={{
             display: "flex", alignItems: "center", gap: 14,
-            padding: "16px 18px", borderRadius: 18, marginBottom: 26,
+            padding: "16px 18px", borderRadius: 18, marginBottom: 28,
             border: "1.5px dashed var(--color-accent)",
-            background: "var(--color-accent-light)", cursor: "pointer",
+            background: "var(--hz-orange-wash)", cursor: "pointer",
           }}
         >
           <div style={{
@@ -572,7 +594,7 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
             background: "var(--color-accent)", boxShadow: "var(--hz-shadow-cta)",
             display: "flex", alignItems: "center", justifyContent: "center",
           }}>
-            <Icon name="plus" size={20} color="#fff" />
+            <Icon name="plus" size={20} color="var(--hz-cream)" />
           </div>
           <div>
             <div style={{ fontSize: 15, fontWeight: 800, color: "var(--color-fg)" }}>あたらしく「なにあげよ？」</div>
@@ -589,14 +611,14 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
             {plans.map((plan) => (
               <div key={plan.id} style={{
                 background: "var(--color-surface)", border: "1px solid var(--color-border)",
-                borderRadius: 18, padding: 16, marginBottom: 12, boxShadow: "var(--shadow-1)",
+                borderRadius: 18, padding: 16, marginBottom: 12, boxShadow: "var(--hz-shadow-soft)",
               }}>
                 <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 10 }}>
                   <div style={{
                     width: 44, height: 44, borderRadius: 100, flexShrink: 0,
                     background: "var(--color-accent-light)",
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 17, fontWeight: 800, color: "var(--color-accent)",
+                    fontSize: 17, fontWeight: 800, color: "var(--hz-orange-press)",
                   }}>
                     {(plan.label || plan.relation).slice(0, 1)}
                   </div>
@@ -605,8 +627,15 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
                       {plan.label || plan.relation}
                     </div>
                     <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                      {[plan.relation, ...(plan.scene ? [plan.scene] : []), ...(plan.loves ?? []).slice(0, 2)].map((t) => (
-                        <span key={t} style={{ fontSize: 10, fontWeight: 600, padding: "2px 8px", borderRadius: 100, background: "var(--color-surface-alt)", color: "var(--color-fg-muted)" }}>{t}</span>
+                      {[plan.relation, ...(plan.scene ? [plan.scene] : []), ...(plan.loves ?? []).slice(0, 2)].map((t, index) => (
+                        <span key={t} style={{
+                          fontSize: 10,
+                          fontWeight: 700,
+                          padding: "2px 8px",
+                          borderRadius: 100,
+                          background: index === 0 ? "var(--hz-orange-tint)" : index === 1 ? "var(--hz-sky-tint)" : "var(--hz-mint-tint)",
+                          color: index === 0 ? "var(--hz-orange-press)" : index === 1 ? "var(--hz-sky)" : "color-mix(in srgb, var(--hz-mint) 56%, var(--hz-ink))",
+                        }}>{t}</span>
                       ))}
                     </div>
                   </div>
@@ -625,7 +654,7 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
                     onClick={() => resumePlan(plan)}
                     style={{
                       flex: 1, padding: "10px 0", borderRadius: 100, border: "none",
-                      background: "var(--color-accent)", color: "#fff",
+                      background: "var(--color-accent)", color: "var(--hz-cream)",
                       fontSize: 13, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
                     }}
                   >
@@ -649,7 +678,7 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
         )}
 
         {/* フィードはヒント供給源として下部に */}
-        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", margin: "28px 0 12px" }}>
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", margin: "30px 0 16px" }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: "var(--color-fg)", letterSpacing: "0.01em" }}>
             これどうかな？ みんなの候補
           </div>
@@ -735,10 +764,10 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
           style={{
             width: "100%", padding: 16, borderRadius: 100, border: "none",
             background: relation ? "var(--color-accent)" : "var(--color-surface-alt)",
-            color: relation ? "#fff" : "var(--color-fg-subtle)",
+            color: relation ? "var(--hz-cream)" : "var(--color-fg-subtle)",
             fontSize: 16, fontWeight: 700, fontFamily: "inherit",
             cursor: relation ? "pointer" : "not-allowed",
-            boxShadow: relation ? "0 6px 20px rgba(255, 90, 31, 0.35), inset 0 1px 1px rgba(255,255,255,0.2)" : "none",
+            boxShadow: relation ? "var(--hz-shadow-cta)" : "none",
             transition: "all 220ms ease-out",
           }}
         >
@@ -810,7 +839,7 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
                   style={{
                     flexShrink: 0, padding: "0 18px", borderRadius: 12, border: "none",
                     background: loveInput.trim() ? "var(--color-accent)" : "var(--color-surface-alt)",
-                    color: loveInput.trim() ? "#fff" : "var(--color-fg-subtle)",
+                    color: loveInput.trim() ? "var(--hz-cream)" : "var(--color-fg-subtle)",
                     fontSize: 13, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
                     transition: "all 150ms ease",
                   }}
@@ -847,7 +876,7 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
                       borderRadius: 999,
                       border: "1px solid var(--color-border)",
                       background: loves.includes(v) ? "var(--color-accent)" : "var(--color-surface)",
-                      color: loves.includes(v) ? "#fff" : "var(--color-fg)",
+                      color: loves.includes(v) ? "var(--hz-cream)" : "var(--color-fg)",
                       cursor: "pointer",
                       fontFamily: "inherit",
                       fontWeight: 700,
@@ -921,7 +950,7 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
                           fontSize: 12, padding: "8px 13px", borderRadius: 100,
                           border: `1.5px solid ${selectedVibes.includes(v) ? "var(--color-accent)" : "var(--color-border)"}`,
                           background: selectedVibes.includes(v) ? "var(--color-accent)" : "var(--color-surface)",
-                          color: selectedVibes.includes(v) ? "#fff" : "var(--color-fg)",
+                          color: selectedVibes.includes(v) ? "var(--hz-cream)" : "var(--color-fg)",
                           cursor: "pointer", fontFamily: "inherit", fontWeight: 700,
                           transition: "all 150ms ease",
                         }}
@@ -950,7 +979,7 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
                   style={{
                     flexShrink: 0, padding: "0 18px", borderRadius: 12, border: "none",
                     background: vibeInput.trim() ? "var(--color-accent)" : "var(--color-surface-alt)",
-                    color: vibeInput.trim() ? "#fff" : "var(--color-fg-subtle)",
+                    color: vibeInput.trim() ? "var(--hz-cream)" : "var(--color-fg-subtle)",
                     fontSize: 13, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
                     transition: "all 150ms ease",
                   }}
@@ -968,7 +997,7 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
                       style={{
                         fontSize: 12, padding: "7px 14px", borderRadius: 100,
                         border: "1.5px solid var(--color-accent)",
-                        background: "var(--color-accent)", color: "#fff",
+                        background: "var(--color-accent)", color: "var(--hz-cream)",
                         cursor: "pointer", fontFamily: "inherit", fontWeight: 500,
                       }}
                     >
@@ -985,7 +1014,7 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
         {step === 1 && loves.length > 0 && echoPosts.length > 0 && (
           <>
             <div style={{ fontSize: 12, fontWeight: 700, color: "var(--color-fg-muted)", letterSpacing: "0.04em", marginBottom: 10 }}>
-              その「好き」に贈った人がいます
+              その「好き」にプレゼントした人がいます
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {echoPosts.slice(0, 2).map(hintCard)}
@@ -1013,9 +1042,9 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
               className="btn-interactive"
               style={{
                 width: "100%", padding: 16, borderRadius: 100, border: "none",
-                background: "var(--color-accent)", color: "#fff",
+                background: "var(--color-accent)", color: "var(--hz-cream)",
                 fontSize: 16, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
-                boxShadow: "0 6px 20px rgba(255, 90, 31, 0.35), inset 0 1px 1px rgba(255,255,255,0.2)",
+                boxShadow: "var(--hz-shadow-cta)",
               }}
             >
               次の問いへ →
@@ -1028,10 +1057,10 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
               style={{
                 width: "100%", padding: 16, borderRadius: 100, border: "none",
                 background: canFinish ? "var(--color-accent)" : "var(--color-surface-alt)",
-                color: canFinish ? "#fff" : "var(--color-fg-subtle)",
+                color: canFinish ? "var(--hz-cream)" : "var(--color-fg-subtle)",
                 fontSize: 16, fontWeight: 700, fontFamily: "inherit",
                 cursor: canFinish ? "pointer" : "not-allowed",
-                boxShadow: canFinish ? "0 6px 20px rgba(255, 90, 31, 0.35), inset 0 1px 1px rgba(255,255,255,0.2)" : "none",
+                boxShadow: canFinish ? "var(--hz-shadow-cta)" : "none",
                 transition: "all 220ms ease-out",
               }}
             >
@@ -1060,9 +1089,6 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
           </div>
           <div style={{ fontSize: 22, fontWeight: 800, color: "var(--color-fg)", lineHeight: 1.35, marginBottom: 8 }}>
             {targetName}には、<br />こんなのどうかな？
-          </div>
-          <div style={{ fontSize: 13, color: "var(--color-fg-muted)", lineHeight: 1.7 }}>
-            まだ決めなくて大丈夫。近いプレゼント記録も見ながら考えよう
           </div>
         </div>
 
@@ -1134,6 +1160,40 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
             </div>
           )}
 
+          <div style={{
+            borderTop: "1px solid var(--color-border)",
+            paddingTop: 16,
+            marginBottom: 16,
+          }}>
+            <div style={{ fontSize: 13, color: "var(--color-fg)", fontWeight: 800, marginBottom: 10 }}>
+              近い気持ちで贈られたプレゼント
+            </div>
+            {relatedMitatePosts.length > 0 ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {relatedMitatePosts.slice(0, 2).map((post) => (
+                  <RelatedGiftCard
+                    key={post.id}
+                    post={post}
+                    variant="related"
+                    onTapPost={onTapPost}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div style={{
+                background: "var(--hz-cream)",
+                border: "1px solid var(--color-border)",
+                borderRadius: "var(--hz-r-sm)",
+                padding: "16px 14px",
+                color: "var(--color-fg-muted)",
+                fontSize: 13,
+                lineHeight: 1.7,
+              }}>
+                近い記録はまだ少なめ。まずはこの方向だけ、持ち帰って考えてみよう。
+              </div>
+            )}
+          </div>
+
           <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
             <button
               onClick={showNextMitate}
@@ -1144,12 +1204,12 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
                 borderRadius: 999,
                 border: "none",
                 background: "var(--color-accent)",
-                color: "#fff",
+                color: "var(--hz-cream)",
                 fontSize: 15,
                 fontWeight: 800,
                 fontFamily: "inherit",
                 cursor: "pointer",
-                boxShadow: "0 6px 20px rgba(255, 90, 31, 0.35), inset 0 1px 1px rgba(255,255,255,0.2)",
+                boxShadow: "var(--hz-shadow-cta)",
               }}
             >
               別の提案を見る
@@ -1173,31 +1233,6 @@ export default function SearchScreen({ posts: allPosts, likes, onTapPost, plans,
               あとで考える
             </button>
           </div>
-        </div>
-
-        <div style={{ marginTop: 22 }}>
-          <div style={{ fontSize: 13, color: "var(--color-fg)", fontWeight: 800, marginBottom: 10 }}>
-            近い気持ちで贈られたプレゼント
-          </div>
-          {relatedMitatePosts.length > 0 ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {relatedMitatePosts.map((post) => (
-                <SecondaryCard key={post.id} post={post} likes={likes} onTapPost={onTapPost} />
-              ))}
-            </div>
-          ) : (
-            <div style={{
-              background: "var(--color-surface)",
-              border: "1px solid var(--color-border)",
-              borderRadius: 16,
-              padding: "18px 16px",
-              color: "var(--color-fg-muted)",
-              fontSize: 13,
-              lineHeight: 1.7,
-            }}>
-              近い記録はまだ少なめ。まずはこの方向だけ、持ち帰って考えてみよう。
-            </div>
-          )}
         </div>
 
         <div style={{ fontSize: 11, color: "var(--color-fg-subtle)", textAlign: "center", marginTop: 14, lineHeight: 1.7 }}>
