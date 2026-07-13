@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+// URL は http/https のみ許可（javascript:・data: 等のスキームを弾く）
+const httpUrl = z
+  .string()
+  .url()
+  .refine((v) => /^https?:\/\//i.test(v), {
+    message: "URLは http/https のみ指定できます",
+  });
+
 // src/types/index.ts のユニオン型・DB CHECK 制約と必ず一致させること
 export const RELATIONS = ["恋人", "友達", "家族", "上司", "同僚", "先生・恩師", "その他"] as const;
 export const SCENES = ["誕生日", "記念日", "お礼", "送別", "手土産", "なんでもない日", "応援", "結婚祝い", "労い"] as const;
@@ -15,8 +23,8 @@ export const postCreateSchema = z.object({
   reaction: z.string().trim().max(1000).optional(),
   persona: z.array(z.string().trim().min(1).max(30)).max(10).default([]),
   vibes: z.array(z.string().trim().min(1).max(30)).max(10).default([]),
-  imageUrl: z.string().url().optional(),
-  url: z.string().url().optional(),
+  imageUrl: httpUrl.optional(),
+  url: httpUrl.optional(),
 });
 export type PostCreateInput = z.infer<typeof postCreateSchema>;
 

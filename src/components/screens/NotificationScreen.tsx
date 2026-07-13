@@ -76,7 +76,9 @@ export default function NotificationScreen({ onRead }: NotificationScreenProps) 
         flex: 1, display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center", gap: 12, padding: 48, textAlign: "center",
       }}>
-        <Icon name="bell" size={40} color="var(--color-fg-subtle)" strokeWidth={1.3} />
+        <span className="animate-floaty" style={{ display: "flex" }}>
+          <Icon name="bell" size={40} color="var(--color-fg-subtle)" strokeWidth={1.3} />
+        </span>
         <div style={{ fontSize: 14, color: "var(--color-fg-muted)", lineHeight: 1.7 }}>
           まだ通知はありません
         </div>
@@ -86,10 +88,12 @@ export default function NotificationScreen({ onRead }: NotificationScreenProps) 
 
   return (
     <div style={{ padding: "16px 20px 100px" }}>
-      {items.map((n) => (
+      {items.map((n, i) => (
         <div
           key={n.id}
+          className="stagger-item"
           style={{
+            ["--stagger-i" as string]: i,
             display: "flex", alignItems: "flex-start", gap: 12,
             padding: n.unread ? "14px 14px" : "14px 0",
             borderBottom: n.unread ? "none" : "1px solid var(--color-border)",

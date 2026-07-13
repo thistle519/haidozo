@@ -175,14 +175,15 @@ function RelatedGiftCard({
   );
 }
 
-function TeaserCard({ post, onTapPost, featured = false }: Pick<CardProps, "post" | "onTapPost"> & { featured?: boolean }) {
+function TeaserCard({ post, onTapPost, featured = false, index = 0 }: Pick<CardProps, "post" | "onTapPost"> & { featured?: boolean; index?: number }) {
   const image = useOgpImage(post.url);
   return (
     <button
       type="button"
       onClick={() => onTapPost(post)}
-      className="card-interactive"
+      className="card-interactive stagger-item"
       style={{
+        ["--stagger-i" as string]: index,
         gridColumn: featured ? "span 2" : "span 1",
         minHeight: featured ? 228 : 184,
         border: "none",
@@ -568,28 +569,29 @@ export default function SearchScreen({ posts: allPosts, onTapPost, plans, onSave
     const teasers = allPosts.filter((p) => p.vibes && p.vibes.length > 0).slice(0, 7);
     return (
       <div style={{ padding: "24px 20px 110px" }}>
-        <div style={{ fontSize: 11, fontWeight: 800, color: "var(--color-accent)", letterSpacing: "0.04em", marginBottom: 8 }}>
-          なにあげよ？
+        <div className="animate-stamp-in" style={{ marginBottom: 10 }}>
+          <span className="hz-sticker hz-sticker--orange" style={{ fontSize: 11 }}>なにあげよ？</span>
         </div>
-        <div style={{ fontSize: 22, fontWeight: 800, color: "var(--color-fg)", lineHeight: 1.35, marginBottom: 6 }}>
+        <div className="animate-pop-in" style={{ fontSize: 22, fontWeight: 800, color: "var(--color-fg)", lineHeight: 1.35, marginBottom: 6 }}>
           まず、誰のこと<br />考える？
         </div>
-        <div style={{ fontSize: 13, color: "var(--color-fg-muted)", lineHeight: 1.7, marginBottom: 22 }}>
+        <div className="stagger-item" style={{ ["--stagger-i" as string]: 1, fontSize: 13, color: "var(--color-fg-muted)", lineHeight: 1.7, marginBottom: 22 }}>
           プレゼントを考える時間を、ちょっと楽しく
         </div>
 
         {/* 唯一の入口 */}
         <div
           onClick={startNew}
-          className="card-interactive"
+          className="card-interactive stagger-item"
           style={{
+            ["--stagger-i" as string]: 2,
             display: "flex", alignItems: "center", gap: 14,
             padding: "16px 18px", borderRadius: 18, marginBottom: 28,
             border: "1.5px dashed var(--color-accent)",
             background: "var(--hz-orange-wash)", cursor: "pointer",
           }}
         >
-          <div style={{
+          <div className="wiggle-child" style={{
             width: 44, height: 44, borderRadius: 100, flexShrink: 0,
             background: "var(--color-accent)", boxShadow: "var(--hz-shadow-cta)",
             display: "flex", alignItems: "center", justifyContent: "center",
@@ -608,8 +610,9 @@ export default function SearchScreen({ posts: allPosts, onTapPost, plans, onSave
             <div style={{ fontSize: 12, fontWeight: 700, color: "var(--color-fg-muted)", letterSpacing: "0.04em", marginBottom: 12 }}>
               あとで考える（{plans.length}）
             </div>
-            {plans.map((plan) => (
-              <div key={plan.id} style={{
+            {plans.map((plan, planIndex) => (
+              <div key={plan.id} className="stagger-item" style={{
+                ["--stagger-i" as string]: planIndex + 3,
                 background: "var(--color-surface)", border: "1px solid var(--color-border)",
                 borderRadius: 18, padding: 16, marginBottom: 12, boxShadow: "var(--hz-shadow-soft)",
               }}>
@@ -697,6 +700,7 @@ export default function SearchScreen({ posts: allPosts, onTapPost, plans, onSave
               post={p}
               onTapPost={onTapPost}
               featured={index === 0}
+              index={index}
             />
           ))}
         </div>

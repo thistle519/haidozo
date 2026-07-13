@@ -19,7 +19,7 @@ export default function Toast({ message, onDone }: ToastProps) {
 
   return (
     <div
-      className={exiting ? "animate-fade-out" : "animate-slide-up"}
+      className={exiting ? "animate-fade-out" : "animate-toast-pop"}
       style={{
         position: "fixed",
         bottom: 88,
@@ -39,7 +39,7 @@ export default function Toast({ message, onDone }: ToastProps) {
         backdropFilter: "blur(8px)",
       }}
     >
-      <div style={{
+      <div className="animate-stamp-in" style={{
         width: 26, height: 26, borderRadius: 100,
         background: "linear-gradient(135deg, var(--hz-sun-tint), var(--hz-sun))",
         display: "flex", alignItems: "center", justifyContent: "center",

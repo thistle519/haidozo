@@ -81,6 +81,43 @@ export default function LpPage() {
           .flow-cards { grid-template-columns: repeat(4, 1fr); }
           .mock-row { flex-direction: row; align-items: stretch; justify-content: center; }
         }
+
+        /* ── 楽しさレイヤー（v2.1）: globals.css のモーショントークンを利用 ── */
+        .lp-hero-pop { animation: popIn 620ms var(--hz-ease-spring, cubic-bezier(0.34,1.56,0.64,1)) backwards; }
+        .lp-d1 { animation-delay: 80ms; }
+        .lp-d2 { animation-delay: 180ms; }
+        .lp-d3 { animation-delay: 300ms; }
+
+        .lp-cta { transition: transform 220ms var(--hz-ease-spring, ease), box-shadow 220ms ease; }
+        .lp-cta:hover { transform: translateY(-3px) scale(1.03) rotate(-1deg); }
+        .lp-cta:active { transform: translateY(0) scale(0.98); }
+
+        .lp-step-card { transition: transform 260ms var(--hz-ease-spring, ease), box-shadow 260ms ease; }
+        .lp-step-card:hover { transform: translateY(-6px) rotate(-1deg); box-shadow: var(--hz-shadow-soft); }
+        .lp-step-card:nth-child(even):hover { transform: translateY(-6px) rotate(1deg); }
+
+        .lp-tilt-l { transform: rotate(-0.9deg); }
+        .lp-tilt-r { transform: rotate(0.9deg); }
+
+        .lp-accent {
+          position: absolute; pointer-events: none; user-select: none;
+          font-family: var(--font-display, inherit); font-weight: 800; line-height: 1;
+          animation: floaty 3.2s ease-in-out infinite;
+        }
+
+        /* スクロール連動の登場（対応ブラウザのみ、非対応は普通に表示） */
+        @supports (animation-timeline: view()) {
+          .lp-reveal {
+            animation: popIn linear both;
+            animation-timeline: view();
+            animation-range: entry 0% entry 32%;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .lp-hero-pop, .lp-accent, .lp-reveal { animation: none; }
+          .lp-cta:hover, .lp-step-card:hover { transform: none; }
+        }
       `}</style>
 
       <div className="lp">
@@ -100,10 +137,10 @@ export default function LpPage() {
             }}>
               haidozo
             </div>
-            <Link href="/" style={{
+            <Link href="/" className="lp-cta" style={{
               background: "var(--hz-orange)", color: "var(--hz-cream)", borderRadius: 100,
               padding: "9px 22px", fontSize: 13, fontWeight: 700, textDecoration: "none",
-              boxShadow: "var(--hz-shadow-cta)",
+              boxShadow: "var(--hz-shadow-cta)", display: "inline-block",
             }}>
               使ってみる
             </Link>
@@ -111,17 +148,24 @@ export default function LpPage() {
         </nav>
 
         {/* ── Hero ── */}
-        <section style={{ padding: "80px 0 72px", textAlign: "center" }}>
-          <div className="wrap">
-            <p className="eyebrow">贈る前の、いちばん楽しい時間</p>
-            <h1 style={{
+        <section style={{ padding: "80px 0 72px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+          {/* 小さなアクセント: ? と ! はデザイン原則どおり控えめに */}
+          <span aria-hidden className="lp-accent" style={{ top: "18%", left: "12%", fontSize: 28, color: "var(--hz-sun)", transform: "rotate(-12deg)", animationDelay: "0s" }}>?</span>
+          <span aria-hidden className="lp-accent" style={{ top: "30%", right: "13%", fontSize: 22, color: "var(--hz-sky)", transform: "rotate(10deg)", animationDelay: "0.8s" }}>!</span>
+          <span aria-hidden className="lp-accent" style={{ bottom: "22%", left: "20%", width: 10, height: 10, borderRadius: 100, background: "var(--hz-mint)", animationDelay: "1.4s" }} />
+          <span aria-hidden className="lp-accent" style={{ bottom: "30%", right: "22%", width: 8, height: 8, borderRadius: 100, background: "var(--hz-orange-tint)", animationDelay: "0.4s" }} />
+          <div className="wrap" style={{ position: "relative" }}>
+            <p className="lp-hero-pop" style={{ marginBottom: 24 }}>
+              <span className="hz-sticker" style={{ fontSize: 12 }}>贈る前の、いちばん楽しい時間</span>
+            </p>
+            <h1 className="lp-hero-pop lp-d1" style={{
               fontSize: "clamp(34px, 5.6vw, 60px)",
               fontWeight: 800, lineHeight: 1.18, letterSpacing: 0,
               color: "var(--hz-ink)", maxWidth: 820, margin: "0 auto 28px",
             }}>
               なにあげよ？<br />から、はじめる。
             </h1>
-            <p style={{
+            <p className="lp-hero-pop lp-d2" style={{
               fontSize: "clamp(15px, 1.8vw, 18px)",
               color: "var(--hz-ink-soft)", lineHeight: 1.85,
               maxWidth: 540, margin: "0 auto 44px",
@@ -129,7 +173,7 @@ export default function LpPage() {
               プレゼントは、探すより考える時間が楽しい。<br />
               「これどうかな？」を集めて、「これ、いいかも」に出会うアプリ。
             </p>
-            <Link href="/" style={{
+            <Link href="/" className="lp-cta lp-hero-pop lp-d3" style={{
               display: "inline-flex", alignItems: "center", gap: 8,
               background: "var(--hz-orange)", color: "var(--hz-cream)",
               borderRadius: 100, padding: "17px 40px",
@@ -169,7 +213,7 @@ export default function LpPage() {
 
             <div className="flow-cards">
               {STEPS.map((step) => (
-                <div key={step.n} style={{
+                <div key={step.n} className="lp-step-card lp-reveal" style={{
                   background: step.accent ? "color-mix(in srgb, var(--hz-orange) 4%, transparent)" : "var(--hz-surface)",
                   border: `1.5px solid ${step.accent ? "color-mix(in srgb, var(--hz-orange) 20%, transparent)" : "var(--hz-hairline)"}`,
                   borderRadius: 20, padding: "24px 22px",
@@ -202,7 +246,7 @@ export default function LpPage() {
 
             <div className="mock-row">
               {/* あとで考えるカード mockup */}
-              <div style={{
+              <div className="lp-reveal lp-tilt-l" style={{
                 width: "100%", maxWidth: 400,
                 background: "var(--hz-cream)", border: "1.5px solid var(--hz-hairline)",
                 borderRadius: 24, padding: 24, boxShadow: "var(--hz-shadow-soft)",
@@ -247,18 +291,18 @@ export default function LpPage() {
                     つづきを考える
                   </div>
                 </div>
-                <div style={{
+                <div className="hover-wiggle" style={{
                   border: "1.5px dashed var(--hz-orange)", borderRadius: 16,
                   padding: "13px", textAlign: "center",
                   fontSize: 13, fontWeight: 700, color: "var(--hz-orange)",
-                  background: "var(--hz-orange-wash)",
+                  background: "var(--hz-orange-wash)", cursor: "default",
                 }}>
                   ＋ あたらしく「なにあげよ？」
                 </div>
               </div>
 
               {/* これ、いいかも mockup */}
-              <div style={{
+              <div className="lp-reveal lp-tilt-r" style={{
                 width: "100%", maxWidth: 400,
                 background: "var(--hz-surface)", border: "2px solid color-mix(in srgb, var(--hz-orange) 20%, transparent)",
                 borderRadius: 24, padding: 24, boxShadow: "var(--hz-shadow-soft)",
@@ -291,12 +335,11 @@ export default function LpPage() {
             </div>
 
             <div style={{ textAlign: "center", marginTop: 48 }}>
-              <Link href="/" style={{
+              <Link href="/" className="lp-cta" style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
                 border: "2px solid var(--hz-orange)", color: "var(--hz-orange)",
                 borderRadius: 100, padding: "14px 36px",
                 fontSize: 15, fontWeight: 700, textDecoration: "none",
-                transition: "all 200ms",
               }}>
                 なにあげよ？を体験する →
               </Link>
@@ -315,7 +358,7 @@ export default function LpPage() {
             </p>
             <div className="grid-3">
               {EPISODES.map((ep, i) => (
-                <div key={i} className="card-interactive" style={{
+                <div key={i} className={`card-interactive lp-reveal ${i % 2 === 0 ? "lp-tilt-l" : "lp-tilt-r"}`} style={{
                   background: "var(--hz-surface)", border: "1px solid var(--hz-hairline)",
                   borderRadius: 22, padding: "28px 24px 22px",
                   boxShadow: "var(--hz-shadow-soft)",
@@ -359,7 +402,7 @@ export default function LpPage() {
             <p style={{ fontSize: "clamp(16px, 2vw, 20px)", color: "color-mix(in srgb, var(--hz-cream) 50%, transparent)", lineHeight: 1.8, marginBottom: 40 }}>
               いま、誰のことを考えていますか？
             </p>
-            <Link href="/" style={{
+            <Link href="/" className="lp-cta" style={{
               display: "inline-flex", alignItems: "center", gap: 8,
               background: "var(--hz-orange)", color: "var(--hz-cream)",
               borderRadius: 100, padding: "18px 48px",

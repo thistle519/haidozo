@@ -26,6 +26,21 @@ export const notFound = () =>
 export const serverError = () =>
   apiError(500, "server_error", "問題が発生しました。もう一度試してみてください");
 
+/**
+ * レート制限超過（429）。retryAfter（秒）があれば Retry-After ヘッダを付ける。
+ */
+export function rateLimited(retryAfter?: number) {
+  const res = apiError(
+    429,
+    "rate_limited",
+    "アクセスが集中しています。少し時間をおいて試してみてください",
+  );
+  if (retryAfter && retryAfter > 0) {
+    res.headers.set("Retry-After", String(retryAfter));
+  }
+  return res;
+}
+
 export function validationError(error: ZodError) {
   const first = error.issues[0];
   return apiError(400, "invalid_input", first?.message ?? "入力内容を確認してください");

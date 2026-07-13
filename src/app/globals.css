@@ -166,6 +166,126 @@ html, body {
   opacity: 0.8;
 }
 
+/* ── Playful motion layer (v2.1) ─────────────────────────────
+   「使っていて楽しい」ためのマイクロインタラクション。
+   色・レイアウトのトークンは変更しない追加レイヤー。 */
+
+:root {
+  --hz-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --hz-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --hz-dur-quick: 180ms;
+  --hz-dur-base: 280ms;
+  --hz-dur-slow: 420ms;
+}
+
+@keyframes popIn {
+  0%   { opacity: 0; transform: translateY(14px) scale(0.97); }
+  60%  { opacity: 1; transform: translateY(-2px) scale(1.005); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes stampIn {
+  0%   { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+  70%  { opacity: 1; transform: scale(1.08) rotate(1deg); }
+  100% { opacity: 1; transform: scale(1) rotate(-2deg); }
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(-5deg); }
+  75%      { transform: rotate(5deg); }
+}
+@keyframes bellRing {
+  0%, 100% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  25% { transform: rotate(-12deg); }
+  40% { transform: rotate(8deg); }
+  55% { transform: rotate(-5deg); }
+  70% { transform: rotate(2deg); }
+}
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes toastPop {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(18px) scale(0.94); }
+  60%  { opacity: 1; transform: translateX(-50%) translateY(-3px) scale(1.01); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+@keyframes heartPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.4) rotate(-6deg); }
+  70%  { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+@keyframes burstFly {
+  0%   { opacity: 1; transform: rotate(var(--a, 0deg)) translateY(-4px) scale(1); }
+  100% { opacity: 0; transform: rotate(var(--a, 0deg)) translateY(-20px) scale(0.3); }
+}
+@keyframes countPop {
+  0%   { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* 画面遷移：ふわっと弾んで入る（fillなし＝終了後transformを残さない） */
+.animate-screen-in { animation: popIn 360ms var(--hz-ease-spring); }
+
+/* 登場アニメーション */
+.animate-pop-in   { animation: popIn var(--hz-dur-slow) var(--hz-ease-spring) backwards; }
+.animate-stamp-in { animation: stampIn 400ms var(--hz-ease-spring) backwards; }
+.animate-floaty   { animation: floaty 2.8s ease-in-out infinite; }
+.animate-toast-pop { animation: toastPop 340ms var(--hz-ease-spring); }
+.animate-count-pop { display: inline-block; animation: countPop 240ms var(--hz-ease-out); }
+
+/* リスト用スタッガー: style={{ "--stagger-i": n }} と併用 */
+.stagger-item {
+  animation: popIn var(--hz-dur-slow) var(--hz-ease-spring) backwards;
+  animation-delay: calc(min(var(--stagger-i, 0), 8) * 55ms);
+}
+
+/* ホバーでちょっとうれしい */
+.hover-wiggle:hover { animation: wiggle 420ms var(--hz-ease-spring); }
+.card-interactive:hover .wiggle-child { animation: wiggle 460ms var(--hz-ease-spring); }
+
+/* 通知ベル */
+.bell-ring { animation: bellRing 1.4s var(--hz-ease-out) 500ms 2; transform-origin: top center; }
+
+/* いいねバースト */
+.heart-pop { animation: heartPop 460ms var(--hz-ease-spring); }
+.burst-dot {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 5px; height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 100px;
+  pointer-events: none;
+  animation: burstFly 520ms var(--hz-ease-out) forwards;
+}
+
+/* スタンプ風ラベル（デザイン原則2: ラベルで可愛さを作る） */
+.hz-sticker {
+  display: inline-block;
+  transform: rotate(-2deg);
+  background: var(--hz-sun-tint);
+  color: #8B6F00;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 10px;
+  letter-spacing: 0.04em;
+}
+.hz-sticker--orange {
+  background: var(--hz-orange-tint);
+  color: var(--hz-orange-press);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-screen-in, .animate-pop-in, .animate-stamp-in, .animate-floaty,
+  .animate-toast-pop, .animate-count-pop, .stagger-item,
+  .hover-wiggle:hover, .card-interactive:hover .wiggle-child,
+  .bell-ring, .heart-pop, .burst-dot {
+    animation: none;
+  }
+  .hz-sticker { transform: none; }
+}
+
 /* Noise grain overlay */
 .noise-grain::before {
   content: '';

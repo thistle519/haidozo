@@ -49,13 +49,14 @@ export default function TopNav({ screen, onBack, onBell, hasNotif }: TopNavProps
           <Icon name="arrow-left" size={22} color="var(--color-fg)" />
         </button>
       ) : (
-        <div style={{
+        <div className="hover-wiggle" style={{
           fontFamily: "var(--font-display)",
           fontSize: 24,
           fontWeight: 800,
           lineHeight: 1,
           color: "var(--color-fg)",
           letterSpacing: "-0.02em",
+          cursor: "default",
         }}>
           haidozo
         </div>
@@ -81,7 +82,9 @@ export default function TopNav({ screen, onBack, onBell, hasNotif }: TopNavProps
             borderRadius: 10,
           }}
         >
-          <Icon name="bell" size={22} color="var(--color-fg-muted)" />
+          <span className={hasNotif ? "bell-ring" : undefined} style={{ display: "flex" }}>
+            <Icon name="bell" size={22} color="var(--color-fg-muted)" />
+          </span>
           {hasNotif && (
             <div style={{
               position: "absolute", top: 4, right: 4,

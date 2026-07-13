@@ -1,6 +1,6 @@
 # haidozo リリース前チェックリスト
 
-更新日: 2026-06-12（アーキテクチャレビューセッション）
+更新日: 2026-07-11（リリース前整理）
 
 ## 1. Supabase セットアップ（手作業）
 
@@ -42,14 +42,19 @@
 - [x] PostgREST `.or()` 構文注入対策（サニタイズ + 10 語制限）
 - [x] service_role キー不使用・anon キー + RLS のみ
 - [x] パスワードハッシュは Supabase Auth 管理（bcrypt 自前実装なし）
+- [x] /api/ogp は http/https のみ許可、ローカル/プライベートIP拒否、タイムアウト・本文サイズ上限・レート制限あり（2026-07-11 実URL取得/localhost拒否を確認）
 - [ ] 本番 URL で未認証 curl により API 401/404 を実地確認
 - [ ] Supabase Dashboard > Advisors（Security/Performance）の警告ゼロ確認
 
 ## 5. 品質ゲート
 
-- [x] `tsc --noEmit` エラーゼロ（strict）
-- [x] `eslint src` エラーゼロ（warning 12 件: 未使用変数等、既存コード由来。リリースブロッカーではない）
-- [ ] `npm run build` 成功（※サンドボックスではネイティブクラッシュのためローカル Mac で要実行）
+- [x] `tsc --noEmit` エラーゼロ（strict、2026-07-11 確認）
+- [x] `eslint src` エラーゼロ（warning 12 件: 既存の `<img>` / `_limit` 警告。リリースブロッカーではない、2026-07-11 確認）
+- [x] `npx next build --webpack` 成功（2026-07-11 確認。Node の `module.register()` deprecation warning のみ）
+- [x] ローカル本番モードのスモーク確認（2026-07-11）
+  - `/` 未ログイン時に `/auth/login?next=%2F` へ 307
+  - `/api/ogp?url=https://ogp.me/` が `https://ogp.me/logo.png` を返す
+  - `/api/ogp?url=http://localhost:4649/` は `{ image: null }`
 - [ ] モバイル 375px 表示確認（feed / search / compose / auth 各画面）
 - [ ] Lighthouse モバイル ≥ 80
 - [ ] エラーメッセージ日本語表示確認（400/401/404/500）
@@ -63,7 +68,6 @@
 
 ## 7. 既知の残課題（リリース後でよい）
 
-- 画像アップロード UI（`uploadPostImage()` は実装済み、ComposerScreen に画像選択 UI が未実装）
 - ProfileScreen の集計値（いいね数等）ハードコード → API 化
 - 検索ログ insert が fire-and-forget（serverless 環境で稀に欠損し得る。統計用途なので許容）
 - いいねトグルの同時実行で稀に 500（PK 重複）→ 23505 を liked 扱いにする改善余地

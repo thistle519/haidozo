@@ -272,21 +272,29 @@ export async function signOut(): Promise<void> {
 
 // ── uploadPostImage ───────────────────────────────────────────────────────────
 
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+// MIME タイプ → 拡張子マップ。保存パスの拡張子は file.name（ユーザー入力）ではなく
+// file.type から導出することで、二重拡張子や偽装拡張子による混同を防ぐ。
+// NOTE: ここでの type/size 検証は UX 目的（早期フィードバック）であり、
+//       最終防衛線はサーバー／Supabase Storage のバケットポリシー側にある。
+const TYPE_TO_EXT: Record<string, string> = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+};
 const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
 
 export async function uploadPostImage(
   file: File,
   userId: string,
 ): Promise<string> {
-  if (!ALLOWED_TYPES.includes(file.type)) {
+  const ext = TYPE_TO_EXT[file.type];
+  if (!ext) {
     throw new Error("jpeg・png・webp 形式の画像を選択してください");
   }
   if (file.size > MAX_SIZE) {
     throw new Error("画像は5MB以下にしてください");
   }
 
-  const ext = file.name.split(".").pop() ?? "jpg";
   const path = `${userId}/${crypto.randomUUID()}.${ext}`;
 
   const supabase = createClient();
@@ -309,14 +317,15 @@ export async function uploadAvatarImage(
   file: File,
   userId: string,
 ): Promise<string> {
-  if (!ALLOWED_TYPES.includes(file.type)) {
+  // 拡張子は file.type から導出（file.name には依存しない。M-2 参照）
+  const ext = TYPE_TO_EXT[file.type];
+  if (!ext) {
     throw new Error("jpeg・png・webp 形式の画像を選択してください");
   }
   if (file.size > MAX_SIZE) {
     throw new Error("画像は5MB以下にしてください");
   }
 
-  const ext = file.name.split(".").pop() ?? "jpg";
   const path = `${userId}/${crypto.randomUUID()}.${ext}`;
 
   const supabase = createClient();

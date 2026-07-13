@@ -4,6 +4,7 @@ import type { Post } from "@/types";
 import Avatar from "@/components/ui/Avatar";
 import PostTags from "@/components/ui/PostTags";
 import Icon from "@/components/ui/Icon";
+import LikeButton from "@/components/ui/LikeButton";
 import { useOgpImage } from "@/lib/useOgpImage";
 
 interface PostDetailScreenProps {
@@ -54,29 +55,13 @@ export default function PostDetailScreen({ post, posts, liked, onLike }: PostDet
       )}
 
       <div style={{ padding: "20px 20px 0" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+        <div className="animate-pop-in" style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
           <Avatar initial={post.initial} size={36} />
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: "var(--color-fg)" }}>{post.user}</div>
             <div style={{ fontSize: 12, color: "var(--color-fg-subtle)" }}>{post.date}</div>
           </div>
-          <button
-            onClick={() => onLike(post.id)}
-            className="btn-interactive"
-            style={{
-              display: "flex", alignItems: "center", gap: 5,
-              padding: "8px 14px", borderRadius: 100, border: "1.5px solid",
-              borderColor: liked ? "var(--color-accent)" : "var(--color-border)",
-              background: liked ? "var(--color-accent-light)" : "var(--color-surface)",
-              cursor: "pointer", fontSize: 13, fontWeight: 600,
-              color: liked ? "var(--color-accent)" : "var(--color-fg-muted)",
-              fontFamily: "inherit",
-              boxShadow: liked ? "0 2px 8px rgba(255, 90, 31, 0.15)" : "none",
-            }}
-          >
-            <Icon name={liked ? "heart-fill" : "heart"} size={15} color={liked ? "var(--color-accent)" : "var(--color-fg-muted)"} />
-            {post.likes}
-          </button>
+          <LikeButton liked={liked} count={post.likes} onToggle={() => onLike(post.id)} appearance="outline" iconSize={15} />
         </div>
 
         <div style={{ marginBottom: 16 }}>
@@ -91,7 +76,8 @@ export default function PostDetailScreen({ post, posts, liked, onLike }: PostDet
         </h1>
 
         {post.about && (
-          <section style={{
+          <section className="stagger-item" style={{
+            ["--stagger-i" as string]: 0,
             background: "var(--color-surface-alt)",
             borderRadius: 18, padding: "16px 18px", marginBottom: 12,
           }}>
@@ -100,7 +86,8 @@ export default function PostDetailScreen({ post, posts, liked, onLike }: PostDet
           </section>
         )}
 
-        <section style={{
+        <section className="stagger-item" style={{
+          ["--stagger-i" as string]: 1,
           background: "var(--color-surface)",
           border: "1.5px solid var(--color-border)",
           borderLeft: "3px solid var(--color-accent)",
@@ -113,7 +100,8 @@ export default function PostDetailScreen({ post, posts, liked, onLike }: PostDet
         </section>
 
         {post.reaction && (
-          <section style={{
+          <section className="stagger-item" style={{
+            ["--stagger-i" as string]: 2,
             background: "linear-gradient(135deg, var(--hz-sun-tint), #FFF8E8)",
             borderRadius: 18, padding: "16px 18px", marginBottom: 12,
             boxShadow: "inset 0 1px 2px rgba(255, 255, 255, 0.6)",

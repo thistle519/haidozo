@@ -7,7 +7,9 @@ import {
   unauthorized,
   validationError,
   serverError,
+  rateLimited,
 } from "@/lib/apiResponse";
+import { rateLimit } from "@/lib/rateLimit";
 import { postCreateSchema } from "@/lib/validation";
 import { toApiPost } from "@/types/db";
 import type { DbPostWithRelations } from "@/types/db";
@@ -73,6 +75,12 @@ export async function POST(request: NextRequest) {
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
       return unauthorized();
+    }
+
+    // 投稿作成のレート制限（ユーザー単位。1 分あたり 10 件まで）
+    const limit = rateLimit(`posts:create:${user.id}`, 10, 60_000);
+    if (!limit.ok) {
+      return rateLimited(limit.retryAfter);
     }
 
     let body: unknown;

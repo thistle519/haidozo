@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { ok, validationError, serverError } from "@/lib/apiResponse";
+import { ok, validationError, serverError, rateLimited } from "@/lib/apiResponse";
+import { rateLimit, clientKey } from "@/lib/rateLimit";
 import { searchQuerySchema } from "@/lib/validation";
 import { expandQuery } from "@/lib/searchUtils";
 import { toApiPost } from "@/types/db";
@@ -63,6 +64,12 @@ function buildOrFilter(terms: string[]): string {
  */
 export async function GET(request: NextRequest) {
   try {
+    // 検索は未ログインでも可のため IP 単位でレート制限（1 分あたり 60 回まで）
+    const rl = rateLimit(`search:${clientKey(request)}`, 60, 60_000);
+    if (!rl.ok) {
+      return rateLimited(rl.retryAfter);
+    }
+
     const { searchParams } = request.nextUrl;
 
     const parsed = searchQuerySchema.safeParse({

@@ -36,6 +36,14 @@ export default function BottomNav({ active, onNav }: BottomNavProps) {
         }}>
           {label}
         </span>
+        <span
+          className={isActive ? "animate-stamp-in" : undefined}
+          style={{
+            width: 4, height: 4, borderRadius: 100,
+            background: isActive ? "var(--color-accent)" : "transparent",
+            transition: "background 200ms ease",
+          }}
+        />
       </button>
     );
   };
@@ -74,7 +82,7 @@ export default function BottomNav({ active, onNav }: BottomNavProps) {
           background: "none", border: "none", fontFamily: "inherit",
         }}
       >
-        <div style={{
+        <div className="hover-wiggle" style={{
           width: 54, height: 54, borderRadius: 100,
           background: "linear-gradient(145deg, #FF6B35, var(--color-accent))",
           boxShadow: isSearchActive

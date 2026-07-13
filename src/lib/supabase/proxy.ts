@@ -41,8 +41,11 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isPublic = PUBLIC_PREFIXES.some((p) => pathname.startsWith(p));
 
-  // DEV: ?bypass=1 で認証スキップ（開発確認用・本番では無効）
-  const bypassDev = process.env.NODE_ENV === "development" && request.nextUrl.searchParams.has("bypass");
+  // DEV: 認証スキップは URL パラメータではなく明示的な環境変数で制御する。
+  // ENABLE_AUTH_BYPASS==="true" かつ 非本番時のみ有効。本番では常に無効。
+  const bypassDev =
+    process.env.NODE_ENV !== "production" &&
+    process.env.ENABLE_AUTH_BYPASS === "true";
 
   if (!user && !isPublic && !bypassDev) {
     const url = request.nextUrl.clone();

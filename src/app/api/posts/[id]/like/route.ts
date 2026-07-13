@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { ok, unauthorized, notFound, serverError } from "@/lib/apiResponse";
+import { ok, unauthorized, notFound, serverError, rateLimited } from "@/lib/apiResponse";
+import { rateLimit } from "@/lib/rateLimit";
 
 /** UUID v4 形式チェック */
 const UUID_RE =
@@ -32,6 +33,12 @@ export async function POST(
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
       return unauthorized();
+    }
+
+    // いいね連打対策のレート制限（ユーザー単位。1 分あたり 60 回まで）
+    const limit = rateLimit(`like:${user.id}`, 60, 60_000);
+    if (!limit.ok) {
+      return rateLimited(limit.retryAfter);
     }
 
     // 投稿の存在確認（通知生成のため投稿者 user_id も取得）

@@ -19,7 +19,7 @@ export default function LikesScreen({ posts, likes, onTapPost }: LikesScreenProp
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
         height: "60%", padding: "32px 40px", textAlign: "center", gap: 12,
       }}>
-        <div style={{
+        <div className="animate-floaty" style={{
           width: 72, height: 72, borderRadius: 100, background: "var(--color-accent-light)",
           display: "flex", alignItems: "center", justifyContent: "center",
         }}>
@@ -38,11 +38,13 @@ export default function LikesScreen({ posts, likes, onTapPost }: LikesScreenProp
       <div style={{ fontSize: 13, color: "var(--color-fg-muted)", marginBottom: 16 }}>
         {likedPosts.length}件のいいね
       </div>
-      {likedPosts.map((p) => (
+      {likedPosts.map((p, i) => (
         <div
           key={p.id}
           onClick={() => onTapPost(p)}
+          className="card-interactive stagger-item"
           style={{
+            ["--stagger-i" as string]: i,
             background: "var(--color-surface)", border: "1px solid var(--color-border)",
             borderRadius: 16, overflow: "hidden", marginBottom: 12,
             boxShadow: "var(--shadow-1)", cursor: "pointer", display: "flex",

@@ -4,6 +4,7 @@ import type { Post } from "@/types";
 import Avatar from "@/components/ui/Avatar";
 import PostTags from "@/components/ui/PostTags";
 import Icon from "@/components/ui/Icon";
+import LikeButton from "@/components/ui/LikeButton";
 import { useOgpImage } from "@/lib/useOgpImage";
 
 interface FeedScreenProps {
@@ -18,7 +19,7 @@ function FeatureCard({ post, liked, onLike, onTap }: { post: Post; liked: boolea
   return (
     <article
       onClick={() => onTap(post)}
-      className="card-interactive"
+      className="card-interactive animate-pop-in"
       style={{
         background: "var(--color-surface)",
         borderRadius: 22,
@@ -61,34 +62,21 @@ function FeatureCard({ post, liked, onLike, onTap }: { post: Post; liked: boolea
             <div style={{ fontSize: 13, fontWeight: 600, color: "var(--color-fg)" }}>{post.user}</div>
             <div style={{ fontSize: 11, color: "var(--color-fg-subtle)" }}>{post.date}</div>
           </div>
-          <button
-            onClick={(e) => { e.stopPropagation(); onLike(post.id); }}
-            className="tap-target"
-            style={{
-              display: "flex", alignItems: "center", gap: 4,
-              background: "var(--hz-orange-wash)",
-              border: "1px solid transparent", cursor: "pointer",
-              fontSize: 13, fontWeight: 600,
-              color: liked ? "var(--color-accent)" : "var(--color-fg-muted)",
-              padding: "6px 12px", borderRadius: 100,
-            }}
-          >
-            <Icon name={liked ? "heart-fill" : "heart"} size={16} color={liked ? "var(--color-accent)" : "var(--color-fg-muted)"} />
-            {post.likes}
-          </button>
+          <LikeButton liked={liked} count={post.likes} onToggle={() => onLike(post.id)} />
         </div>
       </div>
     </article>
   );
 }
 
-function RailCard({ post, onTap }: { post: Post; onTap: (post: Post) => void }) {
+function RailCard({ post, onTap, index = 0 }: { post: Post; onTap: (post: Post) => void; index?: number }) {
   const image = useOgpImage(post.url);
   return (
     <article
       onClick={() => onTap(post)}
-      className="card-interactive"
+      className="card-interactive stagger-item"
       style={{
+        ["--stagger-i" as string]: index,
         flexShrink: 0, width: 150,
         background: "var(--color-surface)",
         borderRadius: 16, overflow: "hidden",
@@ -123,12 +111,14 @@ function RailCard({ post, onTap }: { post: Post; onTap: (post: Post) => void }) 
   );
 }
 
-function RowCard({ post, liked, onTap }: { post: Post; liked: boolean; onTap: (post: Post) => void }) {
+function RowCard({ post, liked, onTap, index = 0 }: { post: Post; liked: boolean; onTap: (post: Post) => void; index?: number }) {
   const image = useOgpImage(post.url);
   return (
     <article
       onClick={() => onTap(post)}
+      className="stagger-item"
       style={{
+        ["--stagger-i" as string]: index,
         display: "flex", gap: 12, alignItems: "center",
         padding: "14px 0", borderBottom: "1px solid var(--color-border)",
         cursor: "pointer",
@@ -179,12 +169,10 @@ export default function FeedScreen({ posts, likes, onLike, onTapPost }: FeedScre
 
   return (
     <div style={{ padding: "20px 20px 110px" }}>
-      <div style={{
-        fontSize: 11, fontWeight: 800, color: "var(--color-accent)",
-        letterSpacing: "0.06em", marginBottom: 10,
-        textTransform: "uppercase" as const,
-      }}>
-        今日の「はい、どうぞ」
+      <div style={{ marginBottom: 12 }}>
+        <span className="hz-sticker hz-sticker--orange animate-stamp-in" style={{ fontSize: 11 }}>
+          今日の「はい、どうぞ」
+        </span>
       </div>
       <FeatureCard post={feature} liked={!!likes[feature.id]} onLike={onLike} onTap={onTapPost} />
 
@@ -198,14 +186,14 @@ export default function FeedScreen({ posts, likes, onLike, onTapPost }: FeedScre
             display: "flex", gap: 10, overflowX: "auto", scrollbarWidth: "none",
             margin: "0 -20px 28px", padding: "0 20px 4px",
           }}>
-            {rail.map((p) => <RailCard key={p.id} post={p} onTap={onTapPost} />)}
+            {rail.map((p, i) => <RailCard key={p.id} post={p} onTap={onTapPost} index={i} />)}
           </div>
         </>
       )}
 
       <div style={{ fontSize: 15, fontWeight: 800, color: "var(--color-fg)", marginBottom: 4, letterSpacing: "-0.01em" }}>新着の記録</div>
-      {rest.map((p) => (
-        <RowCard key={p.id} post={p} liked={!!likes[p.id]} onTap={onTapPost} />
+      {rest.map((p, i) => (
+        <RowCard key={p.id} post={p} liked={!!likes[p.id]} onTap={onTapPost} index={i} />
       ))}
     </div>
   );
